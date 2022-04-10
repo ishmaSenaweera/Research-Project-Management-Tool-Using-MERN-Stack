@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Admin = require("../models/adminModel");
+const Admin = require("../models/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -21,7 +21,7 @@ router.post("/register", async (req, res) => {
 
     // validation
 
-    if (!email || !password || !passwordVerify)
+    if (!name || !dob || !gender || !mobile || !nic || !email || !password || !passwordVerify)
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });

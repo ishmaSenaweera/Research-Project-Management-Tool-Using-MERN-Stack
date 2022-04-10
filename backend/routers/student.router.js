@@ -1,27 +1,42 @@
 const router = require("express").Router();
-const Student = require("../models/studentModel");
+const Student = require("../models/student.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const adminAccess = require("../middleware/adminAccess");
+const Token = require("../models/token.model");
+const emailUtil = require("../utils/email.util");
+const crypto = require("crypto");
 
 //register
 
 router.post("/register", async (req, res) => {
   try {
-
-    const {name} = req.body;
-    const {DoB} = Date.parse(req.body);
-    const {gender} = req.body;
-    const {specialization} = req.body;
-    const {branch} = req.body;
-    const {mobile} = req.body;
-    const {email} = req.body;
-    const {password} = req.body;
-    const {passwordVerify} = req.body;
+    const { name } = req.body;
+    const { DoB } = Date.parse(req.body);
+    const { gender } = req.body;
+    const { specialization } = req.body;
+    const { batch } = req.body;
+    const { branch } = req.body;
+    const { mobile } = req.body;
+    const { nic } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { passwordVerify } = req.body;
 
     // validation
 
-    if (!email || !password || !passwordVerify)
+    if (
+      !name ||
+      // !DoB ||
+      !gender ||
+      !specialization ||
+      !batch ||
+      !branch ||
+      !mobile ||
+      !nic ||
+      !email ||
+      !password ||
+      !passwordVerify
+    )
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -54,32 +69,26 @@ router.post("/register", async (req, res) => {
       DoB,
       gender,
       specialization,
+      batch,
       branch,
       mobile,
+      nic,
       email,
       passwordHash,
     });
 
     const savedStudent = await newStudent.save();
 
-    // sign the token
+    const token = await new Token({
+      userID: savedStudent._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
 
-    const token = jwt.sign(
-      {
-        student: savedStudent._id,
-      },
-      process.env.KEY
-    );
+    const url = `Verify your email address \n${process.env.BASE_URL}login/${savedStudent._id}/verify/${token.token}`;
 
-    // send the token in a HTTP-only cookie
+    await emailUtil(savedStudent.email, "Email Verification", url);
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .send();
+    res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
     console.error(err);
     res.status(500).send();

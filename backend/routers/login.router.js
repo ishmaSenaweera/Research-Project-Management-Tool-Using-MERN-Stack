@@ -1,8 +1,9 @@
 const router = require("express").Router();
-const Student = require("../models/studentModel");
-const Admin = require("../models/adminModel");
+const Student = require("../models/student.model");
+const Admin = require("../models/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Token = require("../models/token.model");
 
 // log in
 
@@ -34,6 +35,10 @@ router.post("/login", async (req, res) => {
     if (existingUser === null) {
       type = null;
       return res.status(401).json({ errorMessage: "Wrong email or password." });
+    }
+
+    if (existingUser.verified === false){
+      return res.status(401).json({ errorMessage: "Unverified email. Please verify your email" });
     }
 
     const passwordCorrect = await bcrypt.compare(
@@ -112,6 +117,36 @@ router.get("/loggedIn", async (req, res) => {
     res.send(type);
   } catch (err) {
     res.json(false);
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//log out
+
+router.get("/:id/verify/:token", async (req, res) => {
+  try {
+    const existingUser = await Student.findById(req.params.id);
+
+    if (!existingUser)
+      return res.status(400).json({ errorMessage: "Invalid Link" });
+
+    const token = await Token.findOne({
+      userID: existingUser._id,
+      token: req.params.token,
+    });
+
+    if (!token) return res.status(400).json({ errorMessage: "Invalid Link" });
+
+    await Student.findByIdAndUpdate(existingUser._id, {
+      verified: true,
+    }).exec();
+    await token.remove();
+
+    res.status(200).send({ Message: "Successfully verified your email" });
+  } catch (error) {
+    console.error(err);
+    res.status(500).send();
   }
 });
 

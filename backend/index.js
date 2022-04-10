@@ -25,3 +25,9 @@ mongoose.connect(
     console.log("Successfully Connected to MongoDB");
   }
 );
+
+  // set up routes
+
+  app.use("/login", require("./routers/loginRouter"));
+  app.use("/admin", require("./routers/adminRouter"));
+  app.use("/student", require("./routers/studentRouter"));

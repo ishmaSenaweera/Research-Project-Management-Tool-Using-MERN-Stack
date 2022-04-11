@@ -84,11 +84,77 @@ router.post("/register", async (req, res) => {
       token: crypto.randomBytes(32).toString("hex"),
     }).save();
 
-    const url = `Verify your email address \n${process.env.BASE_URL}login/${savedStudent._id}/verify/${token.token}`;
+    const url = `Verify your email address \n${process.env.BASE_URL}login/verify/${savedStudent._id}/3a69f9/${token.token}`;
 
     await emailUtil(savedStudent.email, "Email Verification", url);
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//delete student
+
+router.delete("/delete", async (req, res) => {
+  try {
+    const { id } = req.body;
+    await Student.findByIdAndDelete(id);
+    res.send(true);
+  } catch (err) {
+    res.json(false);
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//update student
+
+router.post("/update", async (req, res) => {
+  try {
+    const { id } = req.body.id;
+
+    await Student.findByIdAndUpdate(id, {
+      name: req.body.name,
+      DoB: Date.parse(req.body.DoB),
+      gender: req.body.gender,
+      specialization: req.body.specialization,
+      batch: req.body.batch,
+      branch: req.body.branch,
+      mobile: Number(req.body.mobile),
+      nic: Number(req.body.nic),
+      email: req.body.email,
+    }).exec();
+
+    res.send(true);
+  } catch (err) {
+    res.json(false);
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//get student
+
+router.get("/info", async (req, res) => {
+  try {
+    const { user } = req.body.id;
+
+    const student = await Student.findById(user);
+    res.json(student);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//get all students
+
+router.get("/", async (req, res) => {
+  try {
+    const student = await Student.find();
+    res.json(student);
   } catch (err) {
     console.error(err);
     res.status(500).send();

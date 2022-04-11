@@ -37,8 +37,10 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
 
-    if (existingUser.verified === false){
-      return res.status(401).json({ errorMessage: "Unverified email. Please verify your email" });
+    if (existingUser.verified === false) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Unverified email. Please verify your email" });
     }
 
     const passwordCorrect = await bcrypt.compare(
@@ -90,31 +92,14 @@ router.get("/logout", (req, res) => {
 router.get("/loggedIn", async (req, res) => {
   try {
     const token = req.cookies.token;
-    var type = null;
 
     if (!token) return res.json(false);
 
     const state = jwt.verify(token, process.env.KEY);
 
-    var existingUser = await Student.findById(state.user);
-    type = "student";
+    const type = await checkUser(state.user);
 
-    if (existingUser === null) {
-      existingUser = await Student.findById(state.user);
-      type = "staff";
-    }
-
-    if (existingUser === null) {
-      existingUser = await Admin.findById(state.user);
-      type = "admin";
-    }
-
-    if (existingUser === null) {
-      type = null;
-      return res.status(404).json({ errorMessage: "User not found" });
-    }
-
-    res.send(type);
+    res.send(type.type);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -122,11 +107,13 @@ router.get("/loggedIn", async (req, res) => {
   }
 });
 
-//log out
+//verify email
 
-router.get("/:id/verify/:token", async (req, res) => {
+router.get("/verify/:id/3a69f9/:token", async (req, res) => {
   try {
-    const existingUser = await Student.findById(req.params.id);
+    const user = await checkUser(req.params.id);
+
+    const existingUser = user.existingUser;
 
     if (!existingUser)
       return res.status(400).json({ errorMessage: "Invalid Link" });
@@ -149,5 +136,29 @@ router.get("/:id/verify/:token", async (req, res) => {
     res.status(500).send();
   }
 });
+
+// check user by id
+
+async function checkUser(id) {
+  var existingUser = await Student.findById(id);
+  type = "student";
+
+  if (existingUser === null) {
+    existingUser = await Student.findById(id);
+    type = "staff";
+  }
+
+  if (existingUser === null) {
+    existingUser = await Admin.findById(id);
+    type = "admin";
+  }
+
+  if (existingUser === null) {
+    type = null;
+    return res.status(404).json({ errorMessage: "User not found" });
+  }
+
+  return { type, existingUser };
+}
 
 module.exports = router;

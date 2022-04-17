@@ -1,25 +1,42 @@
 const router = require("express").Router();
-const Admin = require("../models/admin.model");
+const Student = require("../../models/login/student.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Token = require("../../models/login/token.model");
+const emailUtil = require("../../utils/email.util");
+const crypto = require("crypto");
 
-//register admin
+//register
 
 router.post("/register", async (req, res) => {
   try {
-
-    const {name} = req.body;
-    const {dob} = Date.parse(req.body);
-    const {gender} = req.body;
-    const {mobile} = req.body;
-    const {nic} = req.body;
-    const {email} = req.body;
-    const {password} = req.body;
-    const {passwordVerify} = req.body;
+    const { name } = req.body;
+    const { dob } = Date.parse(req.body);
+    const { gender } = req.body;
+    const { specialization } = req.body;
+    const { batch } = req.body;
+    const { branch } = req.body;
+    const { mobile } = req.body;
+    const { nic } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { passwordVerify } = req.body;
 
     // validation
 
-    if (!name || !dob || !gender || !mobile || !nic || !email || !password || !passwordVerify)
+    if (
+      !name ||
+      // !DoB ||
+      !gender ||
+      !specialization ||
+      !batch ||
+      !branch ||
+      !mobile ||
+      !nic ||
+      !email ||
+      !password ||
+      !passwordVerify
+    )
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -34,7 +51,7 @@ router.post("/register", async (req, res) => {
         errorMessage: "Please enter the same password twice.",
       });
 
-    const existingStudent = await Admin.findOne({ email });
+    const existingStudent = await Student.findOne({ email });
     if (existingStudent)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -47,48 +64,42 @@ router.post("/register", async (req, res) => {
 
     // save a new user account to the db
 
-    const newAdmin = new Admin({
+    const newStudent = new Student({
       name,
       dob,
       gender,
+      specialization,
+      batch,
+      branch,
       mobile,
       nic,
       email,
       passwordHash,
     });
 
-    const savedAdmin = await newAdmin.save();
+    const savedStudent = await newStudent.save();
 
-    // sign the token
+    const token = await new Token({
+      userID: savedStudent._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
 
-    const token = jwt.sign(
-      {
-        admin: savedAdmin._id,
-      },
-      process.env.KEY
-    );
+    const url = `Dear ${savedStudent.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedStudent._id}/${token.token}`;
+    await emailUtil(savedStudent.email, "Email Verification", url);
 
-    // send the token in a HTTP-only cookie
-
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .send();
+    res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
 });
 
-//delete admin
+//delete student
 
 router.delete("/delete", async (req, res) => {
   try {
     const { id } = req.body;
-    await Admin.findByIdAndDelete(id);
+    await Student.findByIdAndDelete(id);
     res.send(true);
   } catch (err) {
     res.json(false);
@@ -97,16 +108,19 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
-//update admin
+//update student
 
 router.post("/update", async (req, res) => {
   try {
     const { id } = req.body;
 
-    await Admin.findByIdAndUpdate(id, {
+    await Student.findByIdAndUpdate(id, {
       name: req.body.name,
       dob: Date.parse(req.body.DoB),
       gender: req.body.gender,
+      specialization: req.body.specialization,
+      batch: req.body.batch,
+      branch: req.body.branch,
       mobile: req.body.mobile,
       nic: req.body.nic,
       email: req.body.email,
@@ -120,26 +134,26 @@ router.post("/update", async (req, res) => {
   }
 });
 
-//get admin
+//get student
 
 router.get("/info", async (req, res) => {
   try {
     const { id } = req.body;
 
-    const admin = await Admin.findById(id);
-    res.json(admin);
+    const student = await Student.findById(id);
+    res.json(student);
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
 });
 
-//get all admin
+//get all students
 
 router.get("/", async (req, res) => {
   try {
-    const admin = await Admin.find();
-    res.json(admin);
+    const student = await Student.find();
+    res.json(student);
   } catch (err) {
     console.error(err);
     res.status(500).send();

@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const Student = require("../models/student.model");
-const Admin = require("../models/admin.model");
+const Student = require("../../models/login/student.model");
+const Admin = require("../../models/login/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Token = require("../models/token.model");
-const emailUtil = require("../utils/email.util");
+const Token = require("../../models/login/token.model");
+const emailUtil = require("../../utils/email.util");
 
 // log in
 

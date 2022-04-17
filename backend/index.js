@@ -39,6 +39,7 @@ mongoose.connect(
 
 // set up routes
 
-app.use("/login", require("./routers/login.router"));
-app.use("/admin", require("./routers/admin.router"));
-app.use("/student", require("./routers/student.router"));
+app.use("/login", require("./routers/login/login.router"));
+app.use("/admin", require("./routers/login/admin.router"));
+app.use("/student", require("./routers/login/student.router"));
+app.use("/staff", require("./routers/login/staff.router"));

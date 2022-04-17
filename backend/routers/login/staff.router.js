@@ -1,26 +1,38 @@
 const router = require("express").Router();
 const Staff = require("../../models/login/staff.model");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const Token = require("../../models/login/token.model");
+const emailUtil = require("../../utils/email.util");
+const crypto = require("crypto");
+const func = require("../../utils/func.util.js");
 
 //register staff
 
 router.post("/register", async (req, res) => {
   try {
-
-    const {name} = req.body;
-    const {dob} = Date.parse(req.body);
-    const {gender} = req.body;
-    const {type} = req.body;
-    const {mobile} = req.body;
-    const {nic} = req.body;
-    const {email} = req.body;
-    const {password} = req.body;
-    const {passwordVerify} = req.body;
+    const { name } = req.body;
+    const { dob } = req.body;
+    const { gender } = req.body;
+    const { type } = req.body;
+    const { mobile } = req.body;
+    const { nic } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { passwordVerify } = req.body;
 
     // validation
 
-    if (!name || !dob || !gender || !type || !mobile || !nic || !email || !password || !passwordVerify)
+    if (
+      !name ||
+      !dob ||
+      !gender ||
+      !type ||
+      !mobile ||
+      !nic ||
+      !email ||
+      !password ||
+      !passwordVerify
+    )
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -35,8 +47,9 @@ router.post("/register", async (req, res) => {
         errorMessage: "Please enter the same password twice.",
       });
 
-    const existingStudent = await Staff.findOne({ email });
-    if (existingStudent)
+    const user = await func.findUser({ email });
+    const existingStaff = user.existingUser;
+    if (existingStaff)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
       });
@@ -61,24 +74,17 @@ router.post("/register", async (req, res) => {
 
     const savedStaff = await newStaff.save();
 
-    // sign the token
+    //email verification
 
-    const token = jwt.sign(
-      {
-        staff: savedStaff._id,
-      },
-      process.env.KEY
-    );
+    const token = await new Token({
+      userID: savedStaff._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
 
-    // send the token in a HTTP-only cookie
+    const url = `Dear ${savedStaff.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedStaff._id}/${token.token}`;
+    await emailUtil(savedStaff.email, "Email Verification", url);
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .send();
+    res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -107,7 +113,7 @@ router.post("/update", async (req, res) => {
 
     await Staff.findByIdAndUpdate(id, {
       name: req.body.name,
-      dob: Date.parse(req.body.DoB),
+      dob: req.body.DoB,
       gender: req.body.gender,
       type: req.body.type,
       mobile: req.body.mobile,
@@ -130,6 +136,11 @@ router.get("/info", async (req, res) => {
     const { id } = req.body;
 
     const staff = await Staff.findById(id);
+
+    if (staff.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
+
     res.json(staff);
   } catch (err) {
     console.error(err);
@@ -142,6 +153,11 @@ router.get("/info", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const staff = await Staff.find();
+
+    if (staff.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
+
     res.json(staff);
   } catch (err) {
     console.error(err);

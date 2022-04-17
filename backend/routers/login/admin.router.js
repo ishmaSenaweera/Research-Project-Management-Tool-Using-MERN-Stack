@@ -1,25 +1,36 @@
 const router = require("express").Router();
 const Admin = require("../../models/login/admin.model");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const Token = require("../../models/login/token.model");
+const emailUtil = require("../../utils/email.util");
+const crypto = require("crypto");
+const func = require("../../utils/func.util.js");
 
 //register admin
 
 router.post("/register", async (req, res) => {
   try {
-
-    const {name} = req.body;
-    const {dob} = Date.parse(req.body);
-    const {gender} = req.body;
-    const {mobile} = req.body;
-    const {nic} = req.body;
-    const {email} = req.body;
-    const {password} = req.body;
-    const {passwordVerify} = req.body;
+    const { name } = req.body;
+    const { dob } = req.body;
+    const { gender } = req.body;
+    const { mobile } = req.body;
+    const { nic } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { passwordVerify } = req.body;
 
     // validation
 
-    if (!name || !dob || !gender || !mobile || !nic || !email || !password || !passwordVerify)
+    if (
+      !name ||
+      !dob ||
+      !gender ||
+      !mobile ||
+      !nic ||
+      !email ||
+      !password ||
+      !passwordVerify
+    )
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -34,8 +45,9 @@ router.post("/register", async (req, res) => {
         errorMessage: "Please enter the same password twice.",
       });
 
-    const existingStudent = await Admin.findOne({ email });
-    if (existingStudent)
+    const user = await func.findUser({ email });
+    const existingAdmin = user.existingUser;
+    if (existingAdmin)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
       });
@@ -59,24 +71,17 @@ router.post("/register", async (req, res) => {
 
     const savedAdmin = await newAdmin.save();
 
-    // sign the token
+    //email verification
 
-    const token = jwt.sign(
-      {
-        admin: savedAdmin._id,
-      },
-      process.env.KEY
-    );
+    const token = await new Token({
+      userID: savedAdmin._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
 
-    // send the token in a HTTP-only cookie
+    const url = `Dear ${savedAdmin.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedAdmin._id}/${token.token}`;
+    await emailUtil(savedAdmin.email, "Email Verification", url);
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .send();
+    res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -105,7 +110,7 @@ router.post("/update", async (req, res) => {
 
     await Admin.findByIdAndUpdate(id, {
       name: req.body.name,
-      dob: Date.parse(req.body.DoB),
+      dob: req.body.DoB,
       gender: req.body.gender,
       mobile: req.body.mobile,
       nic: req.body.nic,

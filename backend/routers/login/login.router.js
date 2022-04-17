@@ -1,10 +1,12 @@
 const router = require("express").Router();
 const Student = require("../../models/login/student.model");
 const Admin = require("../../models/login/admin.model");
+const Staff = require("../../models/login/staff.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
+const func = require("../../utils/func.util.js");
 
 // log in
 
@@ -20,21 +22,10 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
 
-    var existingUser = await Student.findOne({ email });
-    type = "student";
+    var user = await func.findUser({ email });
+    const existingUser = user.existingUser;
 
-    if (existingUser === null) {
-      existingUser = await Student.findOne({ email });
-      type = "staff";
-    }
-
-    if (existingUser === null) {
-      existingUser = await Admin.findOne({ email });
-      type = "admin";
-    }
-
-    if (existingUser === null) {
-      type = null;
+    if (user.type === null) {
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
 
@@ -98,7 +89,11 @@ router.get("/loggedIn", async (req, res) => {
 
     const state = jwt.verify(token, process.env.KEY);
 
-    const type = await checkUser(state.user);
+    const type = await func.findUserById(state.user);
+
+    if (type.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
 
     res.send(type.type);
   } catch (err) {
@@ -112,9 +107,15 @@ router.get("/loggedIn", async (req, res) => {
 
 router.get("/verify/:id/:token", async (req, res) => {
   try {
-    const user = await checkUser(req.params.id);
+    const user = await func.findUserById(req.params.id);
+
+    if (user.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
 
     const existingUser = user.existingUser;
+
+    console.log(user.type);
 
     if (!existingUser)
       return res.status(400).json({ errorMessage: "Invalid Link" });
@@ -126,9 +127,20 @@ router.get("/verify/:id/:token", async (req, res) => {
 
     if (!token) return res.status(400).json({ errorMessage: "Invalid Link" });
 
-    await Student.findByIdAndUpdate(existingUser._id, {
-      verified: true,
-    }).exec();
+    if (user.type === "Admin") {
+      await Admin.findByIdAndUpdate(existingUser._id, {
+        verified: true,
+      }).exec();
+    } else if (user.type === "Staff") {
+      await Staff.findByIdAndUpdate(existingUser._id, {
+        verified: true,
+      }).exec();
+    } else if (user.type === "Student") {
+      await Student.findByIdAndUpdate(existingUser._id, {
+        verified: true,
+      }).exec();
+    }
+
     await token.remove();
 
     const message = `Dear ${existingUser.name},\nCongratulations, your account has been successfully activated.`;
@@ -140,29 +152,5 @@ router.get("/verify/:id/:token", async (req, res) => {
     res.status(500).send();
   }
 });
-
-// check user by id
-
-async function checkUser(id) {
-  var existingUser = await Student.findById(id);
-  type = "student";
-
-  if (existingUser === null) {
-    existingUser = await Student.findById(id);
-    type = "staff";
-  }
-
-  if (existingUser === null) {
-    existingUser = await Admin.findById(id);
-    type = "admin";
-  }
-
-  if (existingUser === null) {
-    type = null;
-    return res.status(404).json({ errorMessage: "User not found" });
-  }
-
-  return { type, existingUser };
-}
 
 module.exports = router;

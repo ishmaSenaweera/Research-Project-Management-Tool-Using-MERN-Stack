@@ -1,17 +1,17 @@
 const router = require("express").Router();
 const Student = require("../../models/login/student.model");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
+const func = require("../../utils/func.util.js");
 
 //register
 
 router.post("/register", async (req, res) => {
   try {
     const { name } = req.body;
-    const { dob } = Date.parse(req.body);
+    const { dob } = req.body;
     const { gender } = req.body;
     const { specialization } = req.body;
     const { batch } = req.body;
@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
 
     if (
       !name ||
-      // !DoB ||
+      !DoB ||
       !gender ||
       !specialization ||
       !batch ||
@@ -51,7 +51,8 @@ router.post("/register", async (req, res) => {
         errorMessage: "Please enter the same password twice.",
       });
 
-    const existingStudent = await Student.findOne({ email });
+    const user = await func.findUser({ email });
+    const existingStudent = user.existingUser;
     if (existingStudent)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -78,6 +79,8 @@ router.post("/register", async (req, res) => {
     });
 
     const savedStudent = await newStudent.save();
+
+    //email verification
 
     const token = await new Token({
       userID: savedStudent._id,
@@ -116,7 +119,7 @@ router.post("/update", async (req, res) => {
 
     await Student.findByIdAndUpdate(id, {
       name: req.body.name,
-      dob: Date.parse(req.body.DoB),
+      dob: req.body.DoB,
       gender: req.body.gender,
       specialization: req.body.specialization,
       batch: req.body.batch,
@@ -141,6 +144,11 @@ router.get("/info", async (req, res) => {
     const { id } = req.body;
 
     const student = await Student.findById(id);
+
+    if (student.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
+
     res.json(student);
   } catch (err) {
     console.error(err);
@@ -153,6 +161,11 @@ router.get("/info", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const student = await Student.find();
+
+    if (student.type === null) {
+      res.status(401).json({ errorMessage: "User not found" });
+    }
+
     res.json(student);
   } catch (err) {
     console.error(err);

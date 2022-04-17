@@ -5,8 +5,10 @@ const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
-const Joi = require("joi");
-const passwordComplexity = require("joi-password-complexity");
+const {
+  studentSchemaRegister,
+  studentSchemaUpdate,
+} = require("../../utils/valid.util");
 
 //register
 
@@ -14,24 +16,7 @@ router.post("/register", async (req, res) => {
   try {
     // validation
 
-    const schema = Joi.object({
-      name: Joi.string().required().label("name"),
-      dob: Joi.string().required().label("dob"),
-      gender: Joi.string().required().label("gender"),
-      specialization: Joi.string().required().label("specialization"),
-      batch: Joi.string().required().label("batch"),
-      branch: Joi.string().required().label("branch"),
-      mobile: Joi.string().required().label("mobile"),
-      nic: Joi.string().required().label("nic"),
-      email: Joi.string().min(5).max(255).required().email().label("email"),
-      password: passwordComplexity().required().label("password"),
-      passwordVerify: passwordComplexity()
-        .valid(Joi.ref("password"))
-        .required()
-        .label("passwordVerify"),
-    });
-
-    const result = await schema.validateAsync(req.body);
+    const result = await studentSchemaRegister.validateAsync(req.body);
 
     const user = await func.findUser({ email: result.email });
     const existingStudent = user.existingUser;
@@ -105,23 +90,30 @@ router.post("/update", async (req, res) => {
   try {
     const { id } = req.body;
 
+    const result = await studentSchemaUpdate.validateAsync(req.body);
+
     await Student.findByIdAndUpdate(id, {
-      name: req.body.name,
-      dob: req.body.DoB,
-      gender: req.body.gender,
-      specialization: req.body.specialization,
-      batch: req.body.batch,
-      branch: req.body.branch,
-      mobile: req.body.mobile,
-      nic: req.body.nic,
-      email: req.body.email,
+      name: result.name,
+      dob: result.DoB,
+      gender: result.gender,
+      specialization: result.specialization,
+      batch: result.batch,
+      branch: result.branch,
+      mobile: result.mobile,
+      nic: result.nic,
+      email: result.email,
     }).exec();
 
     res.send(true);
   } catch (err) {
-    res.json(false);
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 

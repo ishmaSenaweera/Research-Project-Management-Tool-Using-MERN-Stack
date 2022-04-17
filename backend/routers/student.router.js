@@ -11,7 +11,7 @@ const crypto = require("crypto");
 router.post("/register", async (req, res) => {
   try {
     const { name } = req.body;
-    const { DoB } = Date.parse(req.body);
+    const { dob } = Date.parse(req.body);
     const { gender } = req.body;
     const { specialization } = req.body;
     const { batch } = req.body;
@@ -66,7 +66,7 @@ router.post("/register", async (req, res) => {
 
     const newStudent = new Student({
       name,
-      DoB,
+      dob,
       gender,
       specialization,
       batch,
@@ -84,8 +84,7 @@ router.post("/register", async (req, res) => {
       token: crypto.randomBytes(32).toString("hex"),
     }).save();
 
-    const url = `Verify your email address \n${process.env.BASE_URL}login/verify/${savedStudent._id}/3a69f9/${token.token}`;
-
+    const url = `Dear ${savedStudent.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedStudent._id}/${token.token}`;
     await emailUtil(savedStudent.email, "Email Verification", url);
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
@@ -113,17 +112,17 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const { id } = req.body.id;
+    const { id } = req.body;
 
     await Student.findByIdAndUpdate(id, {
       name: req.body.name,
-      DoB: Date.parse(req.body.DoB),
+      dob: Date.parse(req.body.DoB),
       gender: req.body.gender,
       specialization: req.body.specialization,
       batch: req.body.batch,
       branch: req.body.branch,
-      mobile: Number(req.body.mobile),
-      nic: Number(req.body.nic),
+      mobile: req.body.mobile,
+      nic: req.body.nic,
       email: req.body.email,
     }).exec();
 
@@ -139,9 +138,9 @@ router.post("/update", async (req, res) => {
 
 router.get("/info", async (req, res) => {
   try {
-    const { user } = req.body.id;
+    const { id } = req.body;
 
-    const student = await Student.findById(user);
+    const student = await Student.findById(id);
     res.json(student);
   } catch (err) {
     console.error(err);

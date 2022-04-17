@@ -4,6 +4,7 @@ const Admin = require("../models/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../models/token.model");
+const emailUtil = require("../utils/email.util");
 
 // log in
 
@@ -109,7 +110,7 @@ router.get("/loggedIn", async (req, res) => {
 
 //verify email
 
-router.get("/verify/:id/3a69f9/:token", async (req, res) => {
+router.get("/verify/:id/:token", async (req, res) => {
   try {
     const user = await checkUser(req.params.id);
 
@@ -129,6 +130,9 @@ router.get("/verify/:id/3a69f9/:token", async (req, res) => {
       verified: true,
     }).exec();
     await token.remove();
+
+    const message = `Dear ${existingUser.name},\nCongratulations, your account has been successfully activated.`;
+    await emailUtil(existingUser.email, "Successfully Verified", message);
 
     res.status(200).send({ Message: "Successfully verified your email" });
   } catch (error) {

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Admin = require("../models/admin.model");
+const Staff = require("../models/staff.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -11,6 +11,7 @@ router.post("/register", async (req, res) => {
     const {name} = req.body;
     const {dob} = Date.parse(req.body);
     const {gender} = req.body;
+    const {type} = req.body;
     const {mobile} = req.body;
     const {nic} = req.body;
     const {email} = req.body;
@@ -19,7 +20,7 @@ router.post("/register", async (req, res) => {
 
     // validation
 
-    if (!name || !dob || !gender || !mobile || !nic || !email || !password || !passwordVerify)
+    if (!name || !dob || !gender || !type || !mobile || !nic || !email || !password || !passwordVerify)
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
@@ -34,7 +35,7 @@ router.post("/register", async (req, res) => {
         errorMessage: "Please enter the same password twice.",
       });
 
-    const existingStudent = await Admin.findOne({ email });
+    const existingStudent = await Staff.findOne({ email });
     if (existingStudent)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -47,23 +48,24 @@ router.post("/register", async (req, res) => {
 
     // save a new user account to the db
 
-    const newAdmin = new Admin({
+    const newStaff = new Staff({
       name,
       dob,
       gender,
+      type,
       mobile,
       nic,
       email,
       passwordHash,
     });
 
-    const savedAdmin = await newAdmin.save();
+    const savedStaff = await newStaff.save();
 
     // sign the token
 
     const token = jwt.sign(
       {
-        admin: savedAdmin._id,
+        staff: savedStaff._id,
       },
       process.env.KEY
     );
@@ -88,7 +90,7 @@ router.post("/register", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   try {
     const { id } = req.body;
-    await Admin.findByIdAndDelete(id);
+    await Staff.findByIdAndDelete(id);
     res.send(true);
   } catch (err) {
     res.json(false);
@@ -103,10 +105,11 @@ router.post("/update", async (req, res) => {
   try {
     const { id } = req.body;
 
-    await Admin.findByIdAndUpdate(id, {
+    await Staff.findByIdAndUpdate(id, {
       name: req.body.name,
       dob: Date.parse(req.body.DoB),
       gender: req.body.gender,
+      type: req.body.type,
       mobile: req.body.mobile,
       nic: req.body.nic,
       email: req.body.email,
@@ -126,8 +129,8 @@ router.get("/info", async (req, res) => {
   try {
     const { id } = req.body;
 
-    const admin = await Admin.findById(id);
-    res.json(admin);
+    const staff = await Staff.findById(id);
+    res.json(staff);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -138,8 +141,8 @@ router.get("/info", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const admin = await Admin.find();
-    res.json(admin);
+    const staff = await Staff.find();
+    res.json(staff);
   } catch (err) {
     console.error(err);
     res.status(500).send();

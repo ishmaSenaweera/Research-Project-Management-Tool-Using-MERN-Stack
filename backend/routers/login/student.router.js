@@ -5,54 +5,37 @@ const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
 
 //register
 
 router.post("/register", async (req, res) => {
   try {
-    const { name } = req.body;
-    const { dob } = req.body;
-    const { gender } = req.body;
-    const { specialization } = req.body;
-    const { batch } = req.body;
-    const { branch } = req.body;
-    const { mobile } = req.body;
-    const { nic } = req.body;
-    const { email } = req.body;
-    const { password } = req.body;
-    const { passwordVerify } = req.body;
-
     // validation
 
-    if (
-      !name ||
-      !DoB ||
-      !gender ||
-      !specialization ||
-      !batch ||
-      !branch ||
-      !mobile ||
-      !nic ||
-      !email ||
-      !password ||
-      !passwordVerify
-    )
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
+    const schema = Joi.object({
+      name: Joi.string().required().label("name"),
+      dob: Joi.string().required().label("dob"),
+      gender: Joi.string().required().label("gender"),
+      specialization: Joi.string().required().label("specialization"),
+      batch: Joi.string().required().label("batch"),
+      branch: Joi.string().required().label("branch"),
+      mobile: Joi.string().required().label("mobile"),
+      nic: Joi.string().required().label("nic"),
+      email: Joi.string().min(5).max(255).required().email().label("email"),
+      password: passwordComplexity().required().label("password"),
+      passwordVerify: passwordComplexity()
+        .valid(Joi.ref("password"))
+        .required()
+        .label("passwordVerify"),
+    });
 
-    if (password.length < 6)
-      return res.status(400).json({
-        errorMessage: "Please enter a password of at least 6 characters.",
-      });
+    const result = await schema.validateAsync(req.body);
 
-    if (password !== passwordVerify)
-      return res.status(400).json({
-        errorMessage: "Please enter the same password twice.",
-      });
-
-    const user = await func.findUser({ email });
+    const user = await func.findUser({ email: result.email });
     const existingStudent = user.existingUser;
+
     if (existingStudent)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -61,21 +44,21 @@ router.post("/register", async (req, res) => {
     // hash the password
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(result.password, salt);
 
     // save a new user account to the db
 
-    const newStudent = new Student({
-      name,
-      dob,
-      gender,
-      specialization,
-      batch,
-      branch,
-      mobile,
-      nic,
-      email,
-      passwordHash,
+    const newStudent = await new Student({
+      name: result.name,
+      dob: result.dob,
+      gender: result.gender,
+      specialization: result.specialization,
+      batch: result.batch,
+      branch: result.branch,
+      mobile: result.mobile,
+      nic: result.nic,
+      email: result.email,
+      passwordHash: passwordHash,
     });
 
     const savedStudent = await newStudent.save();
@@ -92,8 +75,13 @@ router.post("/register", async (req, res) => {
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 

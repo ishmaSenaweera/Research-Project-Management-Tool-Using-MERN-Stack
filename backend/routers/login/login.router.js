@@ -7,22 +7,16 @@ const jwt = require("jsonwebtoken");
 const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
+const { loginSchema } = require("../../utils/valid.util");
 
 // log in
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    var type = "";
-
     // validate
+    const validated = await loginSchema.validateAsync(req.body);
 
-    if (!email || !password)
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
-
-    var user = await func.findUser({ email });
+    const user = await func.findUser({ email: validated.email });
     const existingUser = user.existingUser;
 
     if (user.type === null) {
@@ -61,8 +55,13 @@ router.post("/login", async (req, res) => {
       })
       .send(type);
   } catch (err) {
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 

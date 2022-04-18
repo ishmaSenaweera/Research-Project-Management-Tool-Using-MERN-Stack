@@ -6,8 +6,8 @@ const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
 const {
-  studentSchemaRegister,
-  studentSchemaUpdate,
+  studentRegisterSchema,
+  studentUpdateSchema,
 } = require("../../utils/valid.util");
 
 //register
@@ -16,9 +16,9 @@ router.post("/register", async (req, res) => {
   try {
     // validation
 
-    const result = await studentSchemaRegister.validateAsync(req.body);
+    const validated = await studentSchemaRegister.validateAsync(req.body);
 
-    const user = await func.findUser({ email: result.email });
+    const user = await func.findUser({ email: validated.email });
     const existingStudent = user.existingUser;
 
     if (existingStudent)
@@ -29,20 +29,20 @@ router.post("/register", async (req, res) => {
     // hash the password
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(result.password, salt);
+    const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
 
     const newStudent = await new Student({
-      name: result.name,
-      dob: result.dob,
-      gender: result.gender,
-      specialization: result.specialization,
-      batch: result.batch,
-      branch: result.branch,
-      mobile: result.mobile,
-      nic: result.nic,
-      email: result.email,
+      name: validated.name,
+      dob: validated.dob,
+      gender: validated.gender,
+      specialization: validated.specialization,
+      batch: validated.batch,
+      branch: validated.branch,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
       passwordHash: passwordHash,
     });
 
@@ -88,20 +88,18 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const { id } = req.body;
+    const validated = await studentSchemaUpdate.validateAsync(req.body);
 
-    const result = await studentSchemaUpdate.validateAsync(req.body);
-
-    await Student.findByIdAndUpdate(id, {
-      name: result.name,
-      dob: result.DoB,
-      gender: result.gender,
-      specialization: result.specialization,
-      batch: result.batch,
-      branch: result.branch,
-      mobile: result.mobile,
-      nic: result.nic,
-      email: result.email,
+    await Student.findByIdAndUpdate(validated.id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      specialization: validated.specialization,
+      batch: validated.batch,
+      branch: validated.branch,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
     }).exec();
 
     res.send(true);

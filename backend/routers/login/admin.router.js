@@ -5,48 +5,22 @@ const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
+const {
+  adminRegisterSchema,
+  adminUpdateSchema,
+} = require("../../utils/valid.util");
 
 //register admin
 
 router.post("/register", async (req, res) => {
   try {
-    const { name } = req.body;
-    const { dob } = req.body;
-    const { gender } = req.body;
-    const { mobile } = req.body;
-    const { nic } = req.body;
-    const { email } = req.body;
-    const { password } = req.body;
-    const { passwordVerify } = req.body;
-
     // validation
 
-    if (
-      !name ||
-      !dob ||
-      !gender ||
-      !mobile ||
-      !nic ||
-      !email ||
-      !password ||
-      !passwordVerify
-    )
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
+    const validated = await adminRegisterSchema.validateAsync(req.body);
 
-    if (password.length < 6)
-      return res.status(400).json({
-        errorMessage: "Please enter a password of at least 6 characters.",
-      });
-
-    if (password !== passwordVerify)
-      return res.status(400).json({
-        errorMessage: "Please enter the same password twice.",
-      });
-
-    const user = await func.findUser({ email });
+    const user = await func.findUser({ email: validated.email });
     const existingAdmin = user.existingUser;
+
     if (existingAdmin)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -55,18 +29,18 @@ router.post("/register", async (req, res) => {
     // hash the password
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
 
-    const newAdmin = new Admin({
-      name,
-      dob,
-      gender,
-      mobile,
-      nic,
-      email,
-      passwordHash,
+    const newAdmin = await new Admin({
+      name: validated.name,
+      dob: validated.dob,
+      gender: validated.gender,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
+      passwordHash: passwordHash,
     });
 
     const savedAdmin = await newAdmin.save();
@@ -83,8 +57,13 @@ router.post("/register", async (req, res) => {
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 
@@ -106,15 +85,15 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const { id } = req.body;
+    const validated = await adminUpdateSchema.validateAsync(req.body);
 
-    await Admin.findByIdAndUpdate(id, {
-      name: req.body.name,
-      dob: req.body.DoB,
-      gender: req.body.gender,
-      mobile: req.body.mobile,
-      nic: req.body.nic,
-      email: req.body.email,
+    await Admin.findByIdAndUpdate(validated.id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
     }).exec();
 
     res.send(true);

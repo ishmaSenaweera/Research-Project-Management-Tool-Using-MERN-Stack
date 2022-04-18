@@ -5,50 +5,22 @@ const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
+const {
+  staffRegisterSchema,
+  staffUpdateSchema,
+} = require("../../utils/valid.util");
 
 //register staff
 
 router.post("/register", async (req, res) => {
   try {
-    const { name } = req.body;
-    const { dob } = req.body;
-    const { gender } = req.body;
-    const { type } = req.body;
-    const { mobile } = req.body;
-    const { nic } = req.body;
-    const { email } = req.body;
-    const { password } = req.body;
-    const { passwordVerify } = req.body;
-
     // validation
 
-    if (
-      !name ||
-      !dob ||
-      !gender ||
-      !type ||
-      !mobile ||
-      !nic ||
-      !email ||
-      !password ||
-      !passwordVerify
-    )
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
+    const validated = await staffRegisterSchema.validateAsync(req.body);
 
-    if (password.length < 6)
-      return res.status(400).json({
-        errorMessage: "Please enter a password of at least 6 characters.",
-      });
-
-    if (password !== passwordVerify)
-      return res.status(400).json({
-        errorMessage: "Please enter the same password twice.",
-      });
-
-    const user = await func.findUser({ email });
+    const user = await func.findUser({ email: validated.email });
     const existingStaff = user.existingUser;
+
     if (existingStaff)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -61,15 +33,15 @@ router.post("/register", async (req, res) => {
 
     // save a new user account to the db
 
-    const newStaff = new Staff({
-      name,
-      dob,
-      gender,
-      type,
-      mobile,
-      nic,
-      email,
-      passwordHash,
+    const newStaff = await new Staff({
+      name: validated.name,
+      dob: validated.dob,
+      gender: validated.gender,
+      type: validated.type,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
+      passwordHash: passwordHash,
     });
 
     const savedStaff = await newStaff.save();
@@ -86,8 +58,13 @@ router.post("/register", async (req, res) => {
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 
@@ -109,23 +86,28 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const { id } = req.body;
+    const validated = await staffUpdateSchema.validateAsync(req.body);
 
-    await Staff.findByIdAndUpdate(id, {
-      name: req.body.name,
-      dob: req.body.DoB,
-      gender: req.body.gender,
-      type: req.body.type,
-      mobile: req.body.mobile,
-      nic: req.body.nic,
-      email: req.body.email,
+    await Staff.findByIdAndUpdate(validated.id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      type: validated.type,
+      mobile: validated.mobile,
+      nic: validated.nic,
+      email: validated.email,
     }).exec();
 
     res.send(true);
   } catch (err) {
-    res.json(false);
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 

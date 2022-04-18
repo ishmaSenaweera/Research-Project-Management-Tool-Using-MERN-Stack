@@ -23,14 +23,21 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
 
+    //email verification if user not verified
+
     if (existingUser.verified === false) {
-      return res
-        .status(401)
-        .json({ errorMessage: "Unverified email. Please verify your email" });
+      const token = await func.getVerifyToken(existingUser._id);
+
+      const url = `Dear ${existingUser.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${existingUser._id}/${token.token}`;
+      await emailUtil(existingUser.email, "Email Verification", url);
+      return res.status(401).json({
+        errorMessage:
+          "Unverified email. Verification Email sent to your email.",
+      });
     }
 
     const passwordCorrect = await bcrypt.compare(
-      password,
+      validated.password,
       existingUser.passwordHash
     );
     if (!passwordCorrect)
@@ -109,7 +116,7 @@ router.get("/verify/:id/:token", async (req, res) => {
     const user = await func.findUserById(req.params.id);
 
     if (user.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
+      return res.status(401).json({ errorMessage: "User not found" });
     }
 
     const existingUser = user.existingUser;

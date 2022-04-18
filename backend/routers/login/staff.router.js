@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const Staff = require("../../models/login/staff.model");
 const bcrypt = require("bcryptjs");
-const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
-const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
 const {
   staffRegisterSchema,
@@ -48,10 +46,7 @@ router.post("/register", async (req, res) => {
 
     //email verification
 
-    const token = await new Token({
-      userID: savedStaff._id,
-      token: crypto.randomBytes(32).toString("hex"),
-    }).save();
+    const token = await func.getVerifyToken(savedStaff._id);
 
     const url = `Dear ${savedStaff.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedStaff._id}/${token.token}`;
     await emailUtil(savedStaff.email, "Email Verification", url);
@@ -73,8 +68,12 @@ router.post("/register", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   try {
     const { id } = req.body;
-    await Staff.findByIdAndDelete(id);
+    const result = await Staff.findByIdAndDelete(id);
+
     res.send(true);
+
+    const message = `Dear ${result.name},\nYour account has been successfully deleted.`;
+    await emailUtil(result.email, "Successfully Deleted", message);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -95,10 +94,11 @@ router.post("/update", async (req, res) => {
       type: validated.type,
       mobile: validated.mobile,
       nic: validated.nic,
-      email: validated.email,
     }).exec();
-
     res.send(true);
+
+    const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
+    await emailUtil(validated.email, "Successfully Updated", message);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -118,11 +118,6 @@ router.get("/info", async (req, res) => {
     const { id } = req.body;
 
     const staff = await Staff.findById(id);
-
-    if (staff.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.json(staff);
   } catch (err) {
     console.error(err);
@@ -135,11 +130,6 @@ router.get("/info", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const staff = await Staff.find();
-
-    if (staff.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.json(staff);
   } catch (err) {
     console.error(err);

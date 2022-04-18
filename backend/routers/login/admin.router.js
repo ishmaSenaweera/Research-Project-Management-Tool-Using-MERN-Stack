@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const Admin = require("../../models/login/admin.model");
 const bcrypt = require("bcryptjs");
-const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
-const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
 const {
   adminRegisterSchema,
@@ -47,10 +45,7 @@ router.post("/register", async (req, res) => {
 
     //email verification
 
-    const token = await new Token({
-      userID: savedAdmin._id,
-      token: crypto.randomBytes(32).toString("hex"),
-    }).save();
+    const token = await func.getVerifyToken(savedAdmin._id);
 
     const url = `Dear ${savedAdmin.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedAdmin._id}/${token.token}`;
     await emailUtil(savedAdmin.email, "Email Verification", url);
@@ -72,8 +67,12 @@ router.post("/register", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   try {
     const { id } = req.body;
-    await Admin.findByIdAndDelete(id);
+    const result = await Admin.findByIdAndDelete(id);
+
     res.send(true);
+
+    const message = `Dear ${result.name},\nYour account has been successfully deleted.`;
+    await emailUtil(result.email, "Successfully Deleted", message);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -93,14 +92,20 @@ router.post("/update", async (req, res) => {
       gender: validated.gender,
       mobile: validated.mobile,
       nic: validated.nic,
-      email: validated.email,
     }).exec();
-
     res.send(true);
+
+    const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
+    await emailUtil(validated.email, "Successfully Updated", message);
   } catch (err) {
-    res.json(false);
-    console.error(err);
-    res.status(500).send();
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
   }
 });
 

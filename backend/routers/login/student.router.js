@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const Student = require("../../models/login/student.model");
 const bcrypt = require("bcryptjs");
-const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
-const crypto = require("crypto");
 const func = require("../../utils/func.util.js");
 const {
   studentRegisterSchema,
@@ -16,7 +14,7 @@ router.post("/register", async (req, res) => {
   try {
     // validation
 
-    const validated = await studentSchemaRegister.validateAsync(req.body);
+    const validated = await studentRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingStudent = user.existingUser;
@@ -50,10 +48,7 @@ router.post("/register", async (req, res) => {
 
     //email verification
 
-    const token = await new Token({
-      userID: savedStudent._id,
-      token: crypto.randomBytes(32).toString("hex"),
-    }).save();
+    const token = await func.getVerifyToken(savedStudent._id);
 
     const url = `Dear ${savedStudent.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedStudent._id}/${token.token}`;
     await emailUtil(savedStudent.email, "Email Verification", url);
@@ -75,8 +70,12 @@ router.post("/register", async (req, res) => {
 router.delete("/delete", async (req, res) => {
   try {
     const { id } = req.body;
-    await Student.findByIdAndDelete(id);
+    const result = await Student.findByIdAndDelete(id);
+
     res.send(true);
+
+    const message = `Dear ${result.name},\nYour account has been successfully deleted.`;
+    await emailUtil(result.email, "Successfully Deleted", message);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -88,7 +87,7 @@ router.delete("/delete", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const validated = await studentSchemaUpdate.validateAsync(req.body);
+    const validated = await studentUpdateSchema.validateAsync(req.body);
 
     await Student.findByIdAndUpdate(validated.id, {
       name: validated.name,
@@ -99,10 +98,12 @@ router.post("/update", async (req, res) => {
       branch: validated.branch,
       mobile: validated.mobile,
       nic: validated.nic,
-      email: validated.email,
     }).exec();
 
     res.send(true);
+
+    const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
+    await emailUtil(validated.email, "Successfully Updated", message);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -122,11 +123,6 @@ router.get("/info", async (req, res) => {
     const { id } = req.body;
 
     const student = await Student.findById(id);
-
-    if (student.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.json(student);
   } catch (err) {
     console.error(err);
@@ -139,11 +135,6 @@ router.get("/info", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const student = await Student.find();
-
-    if (student.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.json(student);
   } catch (err) {
     console.error(err);

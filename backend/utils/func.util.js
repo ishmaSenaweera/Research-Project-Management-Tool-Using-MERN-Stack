@@ -1,6 +1,9 @@
 const Student = require("../models/login/student.model");
 const Admin = require("../models/login/admin.model");
 const Staff = require("../models/login/staff.model");
+const Token = require("../models/login/token.model");
+const emailUtil = require("../utils/email.util");
+const crypto = require("crypto");
 
 // check user by id
 
@@ -48,7 +51,20 @@ async function findUser(input) {
   return { type, existingUser };
 }
 
+async function getVerifyToken(id) {
+  const result = await Token.findOne({ userID: id });
+
+  if (result) await result.remove();
+
+  const token = await new Token({
+    userID: id,
+    token: crypto.randomBytes(32).toString("hex"),
+  }).save();
+
+  return token;
+}
 module.exports = {
   findUserById,
   findUser,
+  getVerifyToken,
 };

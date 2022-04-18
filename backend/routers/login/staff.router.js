@@ -25,7 +25,7 @@ router.post("/register", adminAccess, async (req, res) => {
     // hash the password
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
 
@@ -53,7 +53,7 @@ router.post("/register", adminAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -61,15 +61,16 @@ router.post("/register", adminAccess, async (req, res) => {
   }
 });
 
-//delete staff
+//only loggedin staff can access
+//delete loggedin staff account
 
-router.delete("/delete", staffAccess, async (req, res) => {
+router.delete("/account/delete", staffAccess, async (req, res) => {
   try {
-    const { id } = req.body;
-    const result = await Staff.findByIdAndDelete(id);
+    const result = await Staff.findByIdAndDelete(req.body.user._id);
 
     res.send(true);
 
+    //send
     const message = `Dear ${result.name},\nYour account has been successfully deleted.`;
     await emailUtil(result.email, "Successfully Deleted", message);
   } catch (err) {
@@ -79,28 +80,22 @@ router.delete("/delete", staffAccess, async (req, res) => {
   }
 });
 
-//update staff
+//only loggedin staff can access
+//update loggedin staff account
 
-router.post("/update", staffAccess, async (req, res) => {
+router.post("/account/update", staffAccess, async (req, res) => {
   try {
     const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
-    await Staff.findByIdAndUpdate(validated.id, {
-      name: validated.name,
-      dob: validated.DoB,
-      gender: validated.gender,
-      type: validated.type,
-      mobile: validated.mobile,
-      nic: validated.nic,
-    }).exec();
-    res.send(true);
+    const result = await update(req.body.user._id, validated);
+    res.send(result);
 
     const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
     await emailUtil(validated.email, "Successfully Updated", message);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errormessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);
@@ -109,13 +104,12 @@ router.post("/update", staffAccess, async (req, res) => {
   }
 });
 
-//get staff
+//only loggedin staff can access
+//get loggedin staff account
 
-router.get("/info", staffAccess, async (req, res) => {
+router.get("/account", staffAccess, async (req, res) => {
   try {
-    const { id } = req.body;
-
-    const staff = await Staff.findById(id);
+    const staff = req.body.user;
     res.json(staff);
   } catch (err) {
     console.error(err);
@@ -123,6 +117,20 @@ router.get("/info", staffAccess, async (req, res) => {
   }
 });
 
+//only admin can access
+//get staff
+
+router.get("/info", adminAccess, async (req, res) => {
+  try {
+    const staff = req.body.user;
+    res.json(staff);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//only admin can access
 //get all staff
 
 router.get("/", adminAccess, async (req, res) => {
@@ -134,5 +142,66 @@ router.get("/", adminAccess, async (req, res) => {
     res.status(500).send();
   }
 });
+
+//only admin can access
+//delete staff account
+
+router.delete("/delete", adminAccess, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const result = await Staff.findByIdAndDelete(id);
+
+    res.send(true);
+
+    const message = `Dear ${result.name},\nYour account has been deleted by admin.`;
+    await emailUtil(result.email, "Successfully Deleted By Admin", message);
+  } catch (err) {
+    res.json(false);
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//only admin can access
+//update staff account
+
+router.post("/update", adminAccess, async (req, res) => {
+  try {
+    const validated = await valid.staffUpdateSchema.validateAsync(req.body);
+
+    const result = await update(validated.id, validated);
+    res.send(result);
+
+    const message = `Dear ${validated.name},\nYour account has been updated by admin.`;
+    await emailUtil(validated.email, "Successfully Updated By Admin", message);
+  } catch (err) {
+    if (err.isJoi === true) {
+      console.error(err);
+      res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
+  }
+});
+
+//update staff details
+async function update(id, validated) {
+  try {
+    await Staff.findByIdAndUpdate(id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      type: validated.type,
+      mobile: validated.mobile,
+      nic: validated.nic,
+    }).exec();
+    return true;
+  } catch (error) {
+    console.error(err);
+    return false;
+  }
+}
 
 module.exports = router;

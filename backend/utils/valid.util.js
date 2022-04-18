@@ -27,7 +27,6 @@ const studentRegisterSchema = Joi.object({
 
 // validate student update
 const studentUpdateSchema = Joi.object({
-  id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.string().required().label("dob"),
   gender: Joi.string().valid("male", "female").required().label("gender"),
@@ -64,11 +63,10 @@ const adminRegisterSchema = Joi.object({
     .valid(Joi.ref("password"))
     .required()
     .label("passwordVerify"),
-});
+}).unknown(true);
 
 // validate admin update
 const adminUpdateSchema = Joi.object({
-  id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.string().required().label("dob"),
   gender: Joi.string().valid("male", "female").required().label("gender"),
@@ -106,11 +104,10 @@ const staffRegisterSchema = Joi.object({
     .valid(Joi.ref("password"))
     .required()
     .label("passwordVerify"),
-});
+}).unknown(true);
 
 // validate staff update
 const staffUpdateSchema = Joi.object({
-  id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.date().required().label("dob"),
   gender: Joi.string().valid("male", "female").required().label("gender"),

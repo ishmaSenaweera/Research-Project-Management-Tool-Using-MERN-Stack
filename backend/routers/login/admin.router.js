@@ -60,12 +60,13 @@ router.post("/register", adminAccess, async (req, res) => {
   }
 });
 
-//delete admin
+//only loggedin admin can access
+//delete loggedin admin account
 
-router.delete("/delete", adminAccess, async (req, res) => {
+router.delete("/account/delete", adminAccess, async (req, res) => {
   try {
-    const { id } = req.body;
-    const result = await Admin.findByIdAndDelete(id);
+    const { _id } = req.body.user._id;
+    const result = await Admin.findByIdAndDelete(_id);
 
     res.send(true);
 
@@ -78,20 +79,15 @@ router.delete("/delete", adminAccess, async (req, res) => {
   }
 });
 
-//update admin
+//only loggedin admin can access
+//update loggedin admin account
 
-router.post("/update", adminAccess, async (req, res) => {
+router.post("/account/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.adminUpdateSchema.validateAsync(req.body);
 
-    await Admin.findByIdAndUpdate(validated.id, {
-      name: validated.name,
-      dob: validated.DoB,
-      gender: validated.gender,
-      mobile: validated.mobile,
-      nic: validated.nic,
-    }).exec();
-    res.send(true);
+    const result = await update(req.body.user._id, validated);
+    res.send(result);
 
     const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
     await emailUtil(validated.email, "Successfully Updated", message);
@@ -107,6 +103,20 @@ router.post("/update", adminAccess, async (req, res) => {
   }
 });
 
+//only loggedin admin can access
+//get loggedin admin account
+
+router.get("/account", adminAccess, async (req, res) => {
+  try {
+    const admin = req.body.user;
+    res.json(admin);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//only admin can access
 //get admin
 
 router.get("/info", adminAccess, async (req, res) => {
@@ -121,6 +131,7 @@ router.get("/info", adminAccess, async (req, res) => {
   }
 });
 
+//only admin can access
 //get all admin
 
 router.get("/", adminAccess, async (req, res) => {
@@ -132,5 +143,65 @@ router.get("/", adminAccess, async (req, res) => {
     res.status(500).send();
   }
 });
+
+//only admin can access
+//delete admin
+
+router.delete("/delete", adminAccess, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const result = await Admin.findByIdAndDelete(id);
+
+    res.send(true);
+
+    const message = `Dear ${result.name},\nYour account has been deleted by admin.`;
+    await emailUtil(result.email, "Successfully Deleted By Admin", message);
+  } catch (err) {
+    res.json(false);
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+//only admin can access
+//update admin
+
+router.post("/update", adminAccess, async (req, res) => {
+  try {
+    const validated = await valid.adminUpdateSchema.validateAsync(req.body);
+
+    const result = await update(validated.id, validated);
+    res.send(result);
+
+    const message = `Dear ${validated.name},\nYour account has been updated by admin.`;
+    await emailUtil(validated.email, "Successfully Updated By Admin", message);
+  } catch (err) {
+    if (err.isJoi === true) {
+      console.error(err);
+      return res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
+  }
+});
+
+//update admin details
+async function update(id, validated) {
+  try {
+    await Admin.findByIdAndUpdate(id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      mobile: validated.mobile,
+      nic: validated.nic,
+    }).exec();
+    return true;
+  } catch (error) {
+    console.error(err);
+    return false;
+  }
+}
 
 module.exports = router;

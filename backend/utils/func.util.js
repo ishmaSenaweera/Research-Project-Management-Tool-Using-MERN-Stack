@@ -50,6 +50,7 @@ async function findUser(input) {
   return { type, existingUser };
 }
 
+// create verification token
 async function getVerifyToken(id) {
   const result = await Token.findOne({ userID: id });
 
@@ -62,6 +63,8 @@ async function getVerifyToken(id) {
 
   return token;
 }
+
+
 module.exports = {
   findUserById,
   findUser,

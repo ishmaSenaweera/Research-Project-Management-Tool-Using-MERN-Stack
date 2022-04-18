@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const func = require("../utils/func.util");
 
+//check loggedin user is a Student
 async function studentAccess(req, res, next) {
   try {
     const result = await checkToken(req);
@@ -17,6 +18,7 @@ async function studentAccess(req, res, next) {
   }
 }
 
+//check loggedin user is a Admin
 async function adminAccess(req, res, next) {
   try {
     const result = await checkToken(req);
@@ -34,6 +36,7 @@ async function adminAccess(req, res, next) {
   }
 }
 
+//check loggedin user is a Staff
 async function staffAccess(req, res, next) {
   try {
     const result = await checkToken(req);
@@ -50,6 +53,7 @@ async function staffAccess(req, res, next) {
   }
 }
 
+//verify token
 async function checkToken(req) {
   try {
     const token = req.cookies.token;

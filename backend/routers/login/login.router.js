@@ -7,14 +7,14 @@ const jwt = require("jsonwebtoken");
 const Token = require("../../models/login/token.model");
 const emailUtil = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
-const { loginSchema } = require("../../utils/valid.util");
+const valid = require("../../utils/valid.util");
 
 // log in
 
 router.post("/login", async (req, res) => {
   try {
     // validate
-    const validated = await loginSchema.validateAsync(req.body);
+    const validated = await valid.loginSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingUser = user.existingUser;

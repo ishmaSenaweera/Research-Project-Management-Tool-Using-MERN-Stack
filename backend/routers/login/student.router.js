@@ -3,10 +3,11 @@ const Student = require("../../models/login/student.model");
 const bcrypt = require("bcryptjs");
 const emailUtil = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
+const valid = require("../../utils/valid.util");
 const {
-  studentRegisterSchema,
-  studentUpdateSchema,
-} = require("../../utils/valid.util");
+  studentAccess,
+  adminAccess,
+} = require("../../middleware/accessChecker");
 
 //register
 
@@ -14,7 +15,7 @@ router.post("/register", async (req, res) => {
   try {
     // validation
 
-    const validated = await studentRegisterSchema.validateAsync(req.body);
+    const validated = await valid.studentRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingStudent = user.existingUser;
@@ -67,7 +68,7 @@ router.post("/register", async (req, res) => {
 
 //delete student
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", studentAccess, async (req, res) => {
   try {
     const { id } = req.body;
     const result = await Student.findByIdAndDelete(id);
@@ -85,9 +86,9 @@ router.delete("/delete", async (req, res) => {
 
 //update student
 
-router.post("/update", async (req, res) => {
+router.post("/update", studentAccess, async (req, res) => {
   try {
-    const validated = await studentUpdateSchema.validateAsync(req.body);
+    const validated = await valid.studentUpdateSchema.validateAsync(req.body);
 
     await Student.findByIdAndUpdate(validated.id, {
       name: validated.name,
@@ -118,7 +119,7 @@ router.post("/update", async (req, res) => {
 
 //get student
 
-router.get("/info", async (req, res) => {
+router.get("/info", studentAccess, async (req, res) => {
   try {
     const { id } = req.body;
 
@@ -132,7 +133,7 @@ router.get("/info", async (req, res) => {
 
 //get all students
 
-router.get("/", async (req, res) => {
+router.get("/", adminAccess, async (req, res) => {
   try {
     const student = await Student.find();
     res.json(student);

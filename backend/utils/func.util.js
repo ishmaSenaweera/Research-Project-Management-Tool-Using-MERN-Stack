@@ -2,7 +2,6 @@ const Student = require("../models/login/student.model");
 const Admin = require("../models/login/admin.model");
 const Staff = require("../models/login/staff.model");
 const Token = require("../models/login/token.model");
-const emailUtil = require("../utils/email.util");
 const crypto = require("crypto");
 
 // check user by id

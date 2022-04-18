@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
+// validate student registration
 const studentRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.string().required().label("dob"),
@@ -24,6 +25,7 @@ const studentRegisterSchema = Joi.object({
     .label("passwordVerify"),
 });
 
+// validate student update
 const studentUpdateSchema = Joi.object({
   id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
@@ -41,8 +43,9 @@ const studentUpdateSchema = Joi.object({
     .email()
     .rule({ message: "Invalid E-mail address" })
     .label("email"),
-});
+}).unknown(true);
 
+// validate admin registration
 const adminRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.string().required().label("dob"),
@@ -63,6 +66,7 @@ const adminRegisterSchema = Joi.object({
     .label("passwordVerify"),
 });
 
+// validate admin update
 const adminUpdateSchema = Joi.object({
   id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
@@ -77,8 +81,9 @@ const adminUpdateSchema = Joi.object({
     .email()
     .rule({ message: "Invalid E-mail address" })
     .label("email"),
-});
+}).unknown(true);
 
+// validate staff registration
 const staffRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.date().required().label("dob"),
@@ -103,6 +108,7 @@ const staffRegisterSchema = Joi.object({
     .label("passwordVerify"),
 });
 
+// validate staff update
 const staffUpdateSchema = Joi.object({
   id: Joi.string().required().label("id"),
   name: Joi.string().min(2).max(30).required().label("name"),
@@ -121,8 +127,9 @@ const staffUpdateSchema = Joi.object({
     .email()
     .rule({ message: "Invalid E-mail address" })
     .label("email"),
-});
+}).unknown(true);
 
+// validate login
 const loginSchema = Joi.object({
   email: Joi.string()
     .min(5)

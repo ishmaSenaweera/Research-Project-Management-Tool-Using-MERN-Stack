@@ -3,18 +3,16 @@ const Admin = require("../../models/login/admin.model");
 const bcrypt = require("bcryptjs");
 const emailUtil = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
-const {
-  adminRegisterSchema,
-  adminUpdateSchema,
-} = require("../../utils/valid.util");
+const valid = require("../../utils/valid.util");
+const { adminAccess } = require("../../middleware/accessChecker");
 
 //register admin
 
-router.post("/register", async (req, res) => {
+router.post("/register", adminAccess, async (req, res) => {
   try {
     // validation
 
-    const validated = await adminRegisterSchema.validateAsync(req.body);
+    const validated = await valid.adminRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingAdmin = user.existingUser;
@@ -64,7 +62,7 @@ router.post("/register", async (req, res) => {
 
 //delete admin
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
     const result = await Admin.findByIdAndDelete(id);
@@ -82,9 +80,9 @@ router.delete("/delete", async (req, res) => {
 
 //update admin
 
-router.post("/update", async (req, res) => {
+router.post("/update", adminAccess, async (req, res) => {
   try {
-    const validated = await adminUpdateSchema.validateAsync(req.body);
+    const validated = await valid.adminUpdateSchema.validateAsync(req.body);
 
     await Admin.findByIdAndUpdate(validated.id, {
       name: validated.name,
@@ -111,7 +109,7 @@ router.post("/update", async (req, res) => {
 
 //get admin
 
-router.get("/info", async (req, res) => {
+router.get("/info", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
 
@@ -125,7 +123,7 @@ router.get("/info", async (req, res) => {
 
 //get all admin
 
-router.get("/", async (req, res) => {
+router.get("/", adminAccess, async (req, res) => {
   try {
     const admin = await Admin.find();
     res.json(admin);

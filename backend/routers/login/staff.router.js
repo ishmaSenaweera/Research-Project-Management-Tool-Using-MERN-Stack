@@ -3,18 +3,16 @@ const Staff = require("../../models/login/staff.model");
 const bcrypt = require("bcryptjs");
 const emailUtil = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
-const {
-  staffRegisterSchema,
-  staffUpdateSchema,
-} = require("../../utils/valid.util");
+const valid = require("../../utils/valid.util");
+const { staffAccess, adminAccess } = require("../../middleware/accessChecker");
 
 //register staff
 
-router.post("/register", async (req, res) => {
+router.post("/register", adminAccess, async (req, res) => {
   try {
     // validation
 
-    const validated = await staffRegisterSchema.validateAsync(req.body);
+    const validated = await valid.staffRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingStaff = user.existingUser;
@@ -65,7 +63,7 @@ router.post("/register", async (req, res) => {
 
 //delete staff
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", staffAccess, async (req, res) => {
   try {
     const { id } = req.body;
     const result = await Staff.findByIdAndDelete(id);
@@ -83,9 +81,9 @@ router.delete("/delete", async (req, res) => {
 
 //update staff
 
-router.post("/update", async (req, res) => {
+router.post("/update", staffAccess, async (req, res) => {
   try {
-    const validated = await staffUpdateSchema.validateAsync(req.body);
+    const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
     await Staff.findByIdAndUpdate(validated.id, {
       name: validated.name,
@@ -113,7 +111,7 @@ router.post("/update", async (req, res) => {
 
 //get staff
 
-router.get("/info", async (req, res) => {
+router.get("/info", staffAccess, async (req, res) => {
   try {
     const { id } = req.body;
 
@@ -127,7 +125,7 @@ router.get("/info", async (req, res) => {
 
 //get all staff
 
-router.get("/", async (req, res) => {
+router.get("/", adminAccess, async (req, res) => {
   try {
     const staff = await Staff.find();
     res.json(staff);

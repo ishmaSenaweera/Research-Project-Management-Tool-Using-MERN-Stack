@@ -5,7 +5,7 @@ const Staff = require("../../models/login/staff.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../../models/login/token.model");
-const emailUtil = require("../../utils/email.util");
+const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 
@@ -28,8 +28,13 @@ router.post("/login", async (req, res) => {
     if (existingUser.verified === false) {
       const token = await func.getVerifyToken(existingUser._id);
 
-      const url = `Dear ${existingUser.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${existingUser._id}/${token.token}`;
-      await emailUtil(existingUser.email, "Email Verification", url);
+      await email.sendVeri(
+        existingUser.email,
+        existingUser.name,
+        existingUser._id,
+        token.token
+      );
+
       return res.status(401).json({
         errorMessage:
           "Unverified email. Verification Email sent to your email.",
@@ -53,10 +58,11 @@ router.post("/login", async (req, res) => {
     );
 
     // send the token in a HTTP-only cookie
-
+    var expiryTime = new Date(Number(new Date()) + (6*60*60*1000)); //after 6 hours cookie will be expire
     res
       .cookie("token", token, {
         httpOnly: true,
+        expires: expiryTime,
         secure: true,
         sameSite: "none",
       })
@@ -149,8 +155,7 @@ router.get("/verify/:id/:token", async (req, res) => {
 
     await token.remove();
 
-    const message = `Dear ${existingUser.name},\nCongratulations, your account has been successfully activated.`;
-    await emailUtil(existingUser.email, "Successfully Verified", message);
+    await email.sendsuccVeri(existingUser.email, existingUser.name);
 
     res.status(200).send({ Message: "Successfully verified your email" });
   } catch (error) {

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Admin = require("../../models/login/admin.model");
 const bcrypt = require("bcryptjs");
-const emailUtil = require("../../utils/email.util");
+const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 const { adminAccess } = require("../../middleware/accessChecker");
@@ -45,8 +45,12 @@ router.post("/register", adminAccess, async (req, res) => {
 
     const token = await func.getVerifyToken(savedAdmin._id);
 
-    const url = `Dear ${savedAdmin.name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${savedAdmin._id}/${token.token}`;
-    await emailUtil(savedAdmin.email, "Email Verification", url);
+    await email.sendVeri(
+      savedAdmin.email,
+      savedAdmin.name,
+      savedAdmin._id,
+      token.token
+    );
 
     res.status(201).send({ Message: "Verification Email sent to your email." });
   } catch (err) {
@@ -70,8 +74,7 @@ router.delete("/account/delete", adminAccess, async (req, res) => {
 
     res.send(true);
 
-    const message = `Dear ${result.name},\nYour account has been successfully deleted.`;
-    await emailUtil(result.email, "Successfully Deleted", message);
+    await email.sendsuccDel(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -89,8 +92,7 @@ router.post("/account/update", adminAccess, async (req, res) => {
     const result = await update(req.body.user._id, validated);
     res.send(result);
 
-    const message = `Dear ${validated.name},\nYour account has been successfully updated.`;
-    await emailUtil(validated.email, "Successfully Updated", message);
+    await email.sendsuccUp(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -154,8 +156,7 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
     res.send(true);
 
-    const message = `Dear ${result.name},\nYour account has been deleted by admin.`;
-    await emailUtil(result.email, "Successfully Deleted By Admin", message);
+    await email.sendsuccDelAd(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -173,8 +174,7 @@ router.post("/update", adminAccess, async (req, res) => {
     const result = await update(validated.id, validated);
     res.send(result);
 
-    const message = `Dear ${validated.name},\nYour account has been updated by admin.`;
-    await emailUtil(validated.email, "Successfully Updated By Admin", message);
+    await email.sendsuccUpAd(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);

@@ -138,6 +138,12 @@ const loginSchema = Joi.object({
   password: passwordComplexity().required().label("password"),
 });
 
+// validate change password
+const changePasswordSchema = Joi.object({
+  password: passwordComplexity().required().label("password"),
+  newpassword: passwordComplexity().required().label("newpassword"),
+}).unknown(true);
+
 module.exports = {
   studentRegisterSchema,
   studentUpdateSchema,
@@ -146,4 +152,5 @@ module.exports = {
   staffRegisterSchema,
   staffUpdateSchema,
   loginSchema,
+  changePasswordSchema,
 };

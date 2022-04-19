@@ -64,9 +64,84 @@ async function getVerifyToken(id) {
   return token;
 }
 
+//update admin details
+async function updateAdmin(id, validated) {
+  try {
+    await Admin.findByIdAndUpdate(id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      mobile: validated.mobile,
+      nic: validated.nic,
+    }).exec();
+    return true;
+  } catch (error) {
+    console.error(err);
+    return false;
+  }
+}
+
+//update staff details
+async function updateStaff(id, validated) {
+  try {
+    await Staff.findByIdAndUpdate(id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      type: validated.type,
+      mobile: validated.mobile,
+      nic: validated.nic,
+    }).exec();
+    return true;
+  } catch (error) {
+    console.error(err);
+    return false;
+  }
+}
+
+//update student details
+async function updateStudent(id, validated) {
+  try {
+    await Student.findByIdAndUpdate(id, {
+      name: validated.name,
+      dob: validated.DoB,
+      gender: validated.gender,
+      specialization: validated.specialization,
+      batch: validated.batch,
+      branch: validated.branch,
+      mobile: validated.mobile,
+      nic: validated.nic,
+    }).exec();
+    return true;
+  } catch (error) {
+    console.error(err);
+    return false;
+  }
+}
+
+//remove cookie from the browser session
+async function removeCookie(req, res) {
+  try {
+    res
+      .cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true,
+        sameSite: "none",
+      })
+      .send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
 
 module.exports = {
   findUserById,
   findUser,
   getVerifyToken,
+  updateAdmin,
+  updateStaff,
+  updateStudent,
+  removeCookie,
 };

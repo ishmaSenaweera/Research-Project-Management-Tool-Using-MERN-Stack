@@ -42,7 +42,7 @@ async function sendVeri(email, name, id, token) {
 }
 
 //send Successfully Verified email
-async function sendsuccVeri(email, name) {
+async function sendSuccVeri(email, name) {
   try {
     const message = `Dear ${name},\nCongratulations, your account has been successfully activated.`;
     const result = await sentEmail(email, "Successfully Verified", message);
@@ -55,7 +55,7 @@ async function sendsuccVeri(email, name) {
 }
 
 //send Successfully Updated email
-async function sendsuccUp(email, name) {
+async function sendSuccUp(email, name) {
   try {
     const message = `Dear ${name},\nYour account has been successfully updated.`;
     const result = await sentEmail(email, "Successfully Updated", message);
@@ -67,8 +67,21 @@ async function sendsuccUp(email, name) {
   }
 }
 
+//send Successfully change password email
+async function sendSuccChPas(email, name) {
+  try {
+    const message = `Dear ${name},\nYour account password has been successfully changed.`;
+    const result = await sentEmail(email, "Successfully Password Changed", message);
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}
+
 //send Successfully Deleted email
-async function sendsuccDel(email, name) {
+async function sendSuccDel(email, name) {
   try {
     const message = `Dear ${name},\nYour account has been successfully deleted.`;
     const result = await sentEmail(email, "Successfully Deleted", message);
@@ -81,7 +94,7 @@ async function sendsuccDel(email, name) {
 }
 
 //send Successfully Updated By Admin email
-async function sendsuccUpAd(email, name) {
+async function sendSuccUpAd(email, name) {
   try {
     const message = `Dear ${name},\nYour account has been updated by admin.`;
     const result = await sentEmail(email, "Successfully Updated By Admin", message);
@@ -94,7 +107,7 @@ async function sendsuccUpAd(email, name) {
 }
 
 //send Successfully Deleted By Admin email
-async function sendsuccDelAd(email, name) {
+async function sendSuccDelAd(email, name) {
   try {
     const message = `Dear ${name},\nYour account has been deleted by admin.`;
     const result = await sentEmail(email, "Successfully Deleted By Admin", message);
@@ -109,9 +122,10 @@ async function sendsuccDelAd(email, name) {
 module.exports = {
   sentEmail,
   sendVeri,
-  sendsuccVeri,
-  sendsuccUp,
-  sendsuccDel,
-  sendsuccUpAd,
-  sendsuccDelAd,
+  sendSuccVeri,
+  sendSuccUp,
+  sendSuccChPas,
+  sendSuccDel,
+  sendSuccUpAd,
+  sendSuccDelAd,
 };

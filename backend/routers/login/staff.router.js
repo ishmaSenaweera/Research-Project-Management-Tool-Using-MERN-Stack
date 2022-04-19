@@ -74,7 +74,7 @@ router.delete("/account/delete", staffAccess, async (req, res) => {
 
     res.send(true);
 
-    await email.sendsuccDel(result.email, result.name);
+    await email.sendSuccDel(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -89,10 +89,47 @@ router.post("/account/update", staffAccess, async (req, res) => {
   try {
     const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
-    const result = await update(req.body.user._id, validated);
+    const result = await func.updateStaff(req.body.user._id, validated);
     res.send(result);
 
-    await email.sendsuccUp(validated.email, validated.name);
+    await email.sendSuccUp(validated.email, validated.name);
+  } catch (err) {
+    if (err.isJoi === true) {
+      console.error(err);
+      res.status(422).send({ errormessage: err.details[0].message });
+    } else {
+      res.json(false);
+      console.error(err);
+      res.status(500).send(err);
+    }
+  }
+});
+
+//only loggedin staff can access
+//update loggedin staff password
+
+router.post("/account/changepassword", staffAccess, async (req, res) => {
+  try {
+    const validated = await valid.changePasswordSchema.validateAsync(req.body);
+
+    // hash the password
+    const isPasswordCorrect = await bcrypt.compare(
+      validated.password,
+      validated.user.passwordHash
+    );
+    if (!isPasswordCorrect)
+      return res.status(401).json({ errorMessage: "Wrong Current Password." });
+
+    // hash the password
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(validated.newpassword, salt);
+
+    await Staff.findByIdAndUpdate(validated.user._id, {
+      passwordHash: passwordHash,
+    }).exec();
+
+    await func.removeCookie(req, res);
+    await email.sendSuccChPas(validated.user.email, validated.user.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -154,7 +191,7 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
     res.send(true);
 
-    await email.sendsuccDelAd(result.email, result.name);
+    await email.sendSuccDelAd(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -169,10 +206,10 @@ router.post("/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
-    const result = await update(validated.id, validated);
+    const result = await func.updateStaff(validated.id, validated);
     res.send(result);
 
-    await email.sendsuccUpAd(validated.email, validated.name);
+    await email.sendSuccUpAd(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -184,23 +221,5 @@ router.post("/update", adminAccess, async (req, res) => {
     }
   }
 });
-
-//update staff details
-async function update(id, validated) {
-  try {
-    await Staff.findByIdAndUpdate(id, {
-      name: validated.name,
-      dob: validated.DoB,
-      gender: validated.gender,
-      type: validated.type,
-      mobile: validated.mobile,
-      nic: validated.nic,
-    }).exec();
-    return true;
-  } catch (error) {
-    console.error(err);
-    return false;
-  }
-}
 
 module.exports = router;

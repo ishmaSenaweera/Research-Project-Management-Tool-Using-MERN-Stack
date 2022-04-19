@@ -10,7 +10,6 @@ const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 
 // log in
-
 router.post("/login", async (req, res) => {
   try {
     // validate
@@ -20,21 +19,22 @@ router.post("/login", async (req, res) => {
     const existingUser = user.existingUser;
 
     if (user.type === null) {
+      await func.removeCookie(req, res);
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
 
     //email verification if user not verified
-
     if (existingUser.verified === false) {
-      const token = await func.getVerifyToken(existingUser._id);
+      const verifyToken = await func.getVerifyToken(existingUser._id);
 
       await email.sendVeri(
         existingUser.email,
         existingUser.name,
         existingUser._id,
-        token.token
+        verifyToken.token
       );
 
+      await func.removeCookie(req, res);
       return res.status(401).json({
         errorMessage:
           "Unverified email. Verification Email sent to your email.",
@@ -45,11 +45,11 @@ router.post("/login", async (req, res) => {
       validated.password,
       existingUser.passwordHash
     );
-    if (!passwordCorrect)
+    if (!passwordCorrect) {
+      await func.removeCookie(req, res);
       return res.status(401).json({ errorMessage: "Wrong email or password." });
-
+    }
     // sign the token
-
     const token = jwt.sign(
       {
         user: existingUser._id,
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
     );
 
     // send the token in a HTTP-only cookie
-    var expiryTime = new Date(Number(new Date()) + (6*60*60*1000)); //after 6 hours cookie will be expire
+    var expiryTime = new Date(Number(new Date()) + 6 * 60 * 60 * 1000); //after 6 hours cookie will be expire
     res
       .cookie("token", token, {
         httpOnly: true,
@@ -68,6 +68,7 @@ router.post("/login", async (req, res) => {
       })
       .send(type);
   } catch (err) {
+    await func.removeCookie(req, res);
     if (err.isJoi === true) {
       console.error(err);
       return res.status(422).send({ errormessage: err.details[0].message });
@@ -79,20 +80,11 @@ router.post("/login", async (req, res) => {
 });
 
 //log out
-
-router.get("/logout", (req, res) => {
-  res
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0),
-      secure: true,
-      sameSite: "none",
-    })
-    .send();
+router.get("/logout", async (req, res) => {
+  await func.removeCookie(req, res);
 });
 
 //check loggedin
-
 router.get("/loggedIn", async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -116,7 +108,6 @@ router.get("/loggedIn", async (req, res) => {
 });
 
 //verify email
-
 router.get("/verify/:id/:token", async (req, res) => {
   try {
     const user = await func.findUserById(req.params.id);
@@ -126,8 +117,6 @@ router.get("/verify/:id/:token", async (req, res) => {
     }
 
     const existingUser = user.existingUser;
-
-    console.log(user.type);
 
     if (!existingUser)
       return res.status(400).json({ errorMessage: "Invalid Link" });
@@ -154,8 +143,7 @@ router.get("/verify/:id/:token", async (req, res) => {
     }
 
     await token.remove();
-
-    await email.sendsuccVeri(existingUser.email, existingUser.name);
+    await email.sendSuccVeri(existingUser.email, existingUser.name);
 
     res.status(200).send({ Message: "Successfully verified your email" });
   } catch (error) {

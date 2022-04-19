@@ -4,18 +4,13 @@ const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
-const {
-  studentAccess,
-  adminAccess,
-} = require("../../middleware/accessChecker");
+const { adminAccess } = require("../../middleware/accessChecker");
 
 //anyone can access
 //register
-
 router.post("/register", async (req, res) => {
   try {
     // validation
-
     const validated = await valid.studentRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
@@ -27,12 +22,10 @@ router.post("/register", async (req, res) => {
       });
 
     // hash the password
-
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
-
     const newStudent = await new Student({
       name: validated.name,
       dob: validated.dob,
@@ -49,7 +42,6 @@ router.post("/register", async (req, res) => {
     const savedStudent = await newStudent.save();
 
     //email verification
-
     const token = await func.getVerifyToken(savedStudent._id);
 
     await email.sendVeri(
@@ -71,99 +63,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-//only loggedin student can access
-//delete loggedin student account
-
-router.delete("/account/delete", studentAccess, async (req, res) => {
-  try {
-    const result = await Student.findByIdAndDelete(req.body.user._id);
-
-    res.send(true);
-
-    await email.sendSuccDel(result.email, result.name);
-  } catch (err) {
-    res.json(false);
-    console.error(err);
-    res.status(500).send();
-  }
-});
-
-//only loggedin student can access
-//update loggedin student account
-
-router.post("/account/update", studentAccess, async (req, res) => {
-  try {
-    const validated = await valid.studentUpdateSchema.validateAsync(req.body);
-
-    const result = await func.updateStudent(req.body.user._id, validated);
-    res.send(result);
-
-    await email.sendSuccUp(validated.email, validated.name);
-  } catch (err) {
-    if (err.isJoi === true) {
-      console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
-    } else {
-      res.json(false);
-      console.error(err);
-      res.status(500).send(err);
-    }
-  }
-});
-
-//only loggedin student can access
-//update loggedin student password
-
-router.post("/account/changepassword", studentAccess, async (req, res) => {
-  try {
-    const validated = await valid.changePasswordSchema.validateAsync(req.body);
-
-    // hash the password
-    const isPasswordCorrect = await bcrypt.compare(
-      validated.password,
-      validated.user.passwordHash
-    );
-    if (!isPasswordCorrect)
-      return res.status(401).json({ errorMessage: "Wrong Current Password." });
-
-    // hash the password
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(validated.newpassword, salt);
-
-    await Student.findByIdAndUpdate(validated.user._id, {
-      passwordHash: passwordHash,
-    }).exec();
-
-    await func.removeCookie(req, res);
-    await email.sendSuccChPas(validated.user.email, validated.user.name);
-  } catch (err) {
-    if (err.isJoi === true) {
-      console.error(err);
-      res.status(422).send({ errormessage: err.details[0].message });
-    } else {
-      res.json(false);
-      console.error(err);
-      res.status(500).send(err);
-    }
-  }
-});
-
-//only loggedin student can access
-//get loggedin student account
-
-router.get("/account", studentAccess, async (req, res) => {
-  try {
-    const student = req.body.user;
-    res.json(student);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-});
-
 //only admin can access
 //get student
-
 router.get("/info", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
@@ -178,7 +79,6 @@ router.get("/info", adminAccess, async (req, res) => {
 
 //only admin can access
 //get all students
-
 router.get("/", adminAccess, async (req, res) => {
   try {
     const student = await Student.find();
@@ -191,7 +91,6 @@ router.get("/", adminAccess, async (req, res) => {
 
 //only admin can access
 //delete student
-
 router.delete("/delete", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
@@ -209,7 +108,6 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
 //only admin can access
 //update student
-
 router.post("/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.studentUpdateSchema.validateAsync(req.body);

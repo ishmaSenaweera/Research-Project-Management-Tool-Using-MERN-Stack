@@ -43,3 +43,4 @@ app.use("/login", require("./routers/login/login.router"));
 app.use("/admin", require("./routers/login/admin.router"));
 app.use("/student", require("./routers/login/student.router"));
 app.use("/staff", require("./routers/login/staff.router"));
+app.use("/account", require("./routers/login/user.router"));

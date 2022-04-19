@@ -120,7 +120,7 @@ async function updateStudent(id, validated) {
 }
 
 //remove cookie from the browser session
-async function removeCookie(req, res) {
+async function removeCookie(res) {
   try {
     res
       .cookie("token", "", {

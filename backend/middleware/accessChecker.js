@@ -1,22 +1,22 @@
 const jwt = require("jsonwebtoken");
 const func = require("../utils/func.util");
 
-//check loggedin user is a Student
-async function studentAccess(req, res, next) {
-  try {
-    const result = await checkToken(req);
+// //check loggedin user is a Student
+// async function studentAccess(req, res, next) {
+//   try {
+//     const result = await checkToken(req);
 
-    if (!result || result.type !== "Student")
-      return res.status(401).json({ errorMessage: "Unauthorized" });
+//     if (!result || result.type !== "Student")
+//       return res.status(401).json({ errorMessage: "Unauthorized" });
 
-    req.body.user = result.existingUser;
+//     req.body.user = result.existingUser;
 
-    next();
-  } catch (err) {
-    console.error(err);
-    res.status(401).json({ errorMessage: "Unauthorized" });
-  }
-}
+//     next();
+//   } catch (err) {
+//     console.error(err);
+//     res.status(401).json({ errorMessage: "Unauthorized" });
+//   }
+// }
 
 //check loggedin user is a Admin
 async function adminAccess(req, res, next) {
@@ -36,15 +36,32 @@ async function adminAccess(req, res, next) {
   }
 }
 
-//check loggedin user is a Staff
-async function staffAccess(req, res, next) {
+// //check loggedin user is a Staff member
+// async function staffAccess(req, res, next) {
+//   try {
+//     const result = await checkToken(req);
+
+//     if (!result || result.type !== "Staff")
+//       return res.status(401).json({ errorMessage: "Unauthorized" });
+
+//     req.body.user = result.existingUser;
+
+//     next();
+//   } catch (err) {
+//     console.error(err);
+//     res.status(401).json({ errorMessage: "Unauthorized" });
+//   }
+// }
+
+//check loggedin user
+async function userAccess(req, res, next) {
   try {
     const result = await checkToken(req);
 
-    if (!result || result.type !== "Staff")
-      return res.status(401).json({ errorMessage: "Unauthorized" });
+    if (!result) return res.status(401).json({ errorMessage: "Unauthorized" });
 
     req.body.user = result.existingUser;
+    req.body.type = result.type;
 
     next();
   } catch (err) {
@@ -68,4 +85,4 @@ async function checkToken(req) {
   }
 }
 
-module.exports = { adminAccess, studentAccess, staffAccess };
+module.exports = { adminAccess, userAccess };

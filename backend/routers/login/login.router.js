@@ -19,7 +19,6 @@ router.post("/login", async (req, res) => {
     const existingUser = user.existingUser;
 
     if (user.type === null) {
-      await func.removeCookie(req, res);
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
 
@@ -34,7 +33,6 @@ router.post("/login", async (req, res) => {
         verifyToken.token
       );
 
-      await func.removeCookie(req, res);
       return res.status(401).json({
         errorMessage:
           "Unverified email. Verification Email sent to your email.",
@@ -46,7 +44,6 @@ router.post("/login", async (req, res) => {
       existingUser.passwordHash
     );
     if (!passwordCorrect) {
-      await func.removeCookie(req, res);
       return res.status(401).json({ errorMessage: "Wrong email or password." });
     }
     // sign the token
@@ -68,7 +65,6 @@ router.post("/login", async (req, res) => {
       })
       .send(type);
   } catch (err) {
-    await func.removeCookie(req, res);
     if (err.isJoi === true) {
       console.error(err);
       return res.status(422).send({ errormessage: err.details[0].message });
@@ -81,7 +77,7 @@ router.post("/login", async (req, res) => {
 
 //log out
 router.get("/logout", async (req, res) => {
-  await func.removeCookie(req, res);
+  await func.removeCookie(res);
 });
 
 //check loggedin

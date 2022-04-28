@@ -1,46 +1,150 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 function Register() {
+  const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [batch, setBatch] = useState("");
+  const [branch, setBranch] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [nic, setNic] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVerify, setPasswordVerify] = useState("");
 
+  async function register(e) {
+    e.preventDefault();
 
-    
+    try {
+      const registerData = {
+        name,
+        dob,
+        gender,
+        specialization,
+        batch,
+        branch,
+        mobile,
+        nic,
+        email,
+        password,
+        passwordVerify,
+      };
+
+      console.log(registerData);
+
+      await axios.post(
+        "http://localhost:5000/student/register",
+        registerData
+      );
+      alert("Verification Email Sent successfully");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
-      <div>
-      <h1>Log in to your account</h1>
-      <form>
+    <div>
+      <h1>Student Registration</h1>
+      <form onSubmit={register}>
         <div>
-          <input type="text" placeholder="Name" />
+          <label>Name: </label>
+          <input
+            type="text"
+            placeholder="Name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
         </div>
         <div>
-          <input type="date" placeholder="dob" />
+          <label>Date of birth: </label>
+          <input
+            type="date"
+            placeholder="dob"
+            onChange={(e) => setDob(e.target.value)}
+            value={dob}
+          />
+        </div>
+        <div onChange={(e) => setGender(e.target.value)} value={gender}>
+          <label>Gender: </label>
+          <input type="radio" value="male" name="gender" /> Male
+          <input type="radio" value="female" name="gender" /> Female
         </div>
         <div>
-          <input type="radio" value="Male" name="gender" /> Male
-          <input type="radio" value="Female" name="gender" /> Female
+          <label>Specialization: </label>
+          <input
+            type="text"
+            placeholder="Specialization"
+            onChange={(e) => setSpecialization(e.target.value)}
+            value={specialization}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Specialization" />
+          <label>Batch: </label>
+          <input
+            type="text"
+            placeholder="Batch"
+            onChange={(e) => setBatch(e.target.value)}
+            value={batch}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Batch" />
+          <label>Branch: </label>
+          <input
+            type="text"
+            placeholder="Branch"
+            onChange={(e) => setBranch(e.target.value)}
+            value={branch}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Branch" />
+          <label>Mobile Number: </label>
+          <input
+            type="text"
+            oninput="numberOnly(this.id);"
+            placeholder="Mobile Number"
+            maxlength="10"
+            onChange={(e) => setMobile(e.target.value)}
+            value={mobile}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Mobile Number" />
+          <label>Nic: </label>
+          <input
+            type="text"
+            placeholder="Nic"
+            maxlength="11"
+            onChange={(e) => setNic(e.target.value)}
+            value={nic}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Nic" />
+          <label>E-mail: </label>
+          <input
+            type="email"
+            placeholder="E-mail"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
         </div>
         <div>
-          <input type="email" placeholder="E-mail" />
+          <label>Password: </label>
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
         </div>
         <div>
-          <input type="password" placeholder="Password" />
-        </div>
-        <div>
-          <input type="password" placeholder="Password" />
+          <label>Verify Password: </label>
+          <input
+            type="password"
+            placeholder="Verify Password"
+            onChange={(e) => setPasswordVerify(e.target.value)}
+            value={passwordVerify}
+          />
         </div>
         <button type="submit">Register</button>
       </form>

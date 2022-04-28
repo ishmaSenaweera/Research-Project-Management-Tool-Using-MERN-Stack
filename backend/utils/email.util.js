@@ -31,7 +31,7 @@ async function sentEmail(email, subject, text) {
 //send email verification
 async function sendVeri(email, name, id, token) {
   try {
-    const url = `Dear ${name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${id}/${token}`;
+    const url = `Dear ${name},\nVerify your email address \n${process.env.BASE_URL}verify/${id}/${token}`;
     const result = await sentEmail(email, "Email Verification", url);
 
     return result;

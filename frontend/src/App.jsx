@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/layout/NavBar";
-import Login from "./components/login/Login";
-import Register from "./components/login/Register";
+import Login from "./components/userManagement/auth/Login";
+import Register from "./components/userManagement/auth/Register";
 
 function App() {
   return (

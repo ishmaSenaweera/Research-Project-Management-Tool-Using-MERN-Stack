@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:1234"],
     credentials: true,
   })
 );
@@ -39,7 +39,7 @@ mongoose.connect(
 
 // set up routes
 
-app.use("/login", require("./routers/login/login.router"));
+app.use("/auth", require("./routers/login/login.router"));
 app.use("/admin", require("./routers/login/admin.router"));
 app.use("/student", require("./routers/login/student.router"));
 app.use("/staff", require("./routers/login/staff.router"));

@@ -15,8 +15,8 @@ function Verify() {
 
       setIsVerify(true);
       console.log("Verified");
-      // window.alert("Successfully Verified!");
-      //navigate("/");
+      window.alert("Successfully Verified!");
+      navigate("/");
     } catch (err) {
       setIsVerify(false);
       console.error(err);

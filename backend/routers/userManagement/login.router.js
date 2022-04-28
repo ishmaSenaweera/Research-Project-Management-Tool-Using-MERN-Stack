@@ -91,10 +91,6 @@ router.get("/loggedIn", async (req, res) => {
 
     const type = await func.findUserById(state.user);
 
-    if (type.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.send(type.type);
   } catch (err) {
     res.json(false);
@@ -115,14 +111,14 @@ router.get("/verify/:id/:token", async (req, res) => {
     const existingUser = user.existingUser;
 
     if (!existingUser)
-      return res.status(400).json({ errorMessage: "Invalid Link" });
+      return res.status(400).json({ errorMessage: "Invalid1 Link" });
 
     const token = await Token.findOne({
       userID: existingUser._id,
       token: req.params.token,
     });
 
-    if (!token) return res.status(400).json({ errorMessage: "Invalid Link" });
+    if (!token) return res.status(400).json({ errorMessage: "Invalid2 Link" });
 
     if (user.type === "Admin") {
       await Admin.findByIdAndUpdate(existingUser._id, {
@@ -139,7 +135,7 @@ router.get("/verify/:id/:token", async (req, res) => {
     }
 
     await token.remove();
-    await email.sendSuccVeri(existingUser.email, existingUser.name);
+    email.sendSuccVeri(existingUser.email, existingUser.name);
 
     res.status(200).send({ Message: "Successfully verified your email" });
   } catch (err) {

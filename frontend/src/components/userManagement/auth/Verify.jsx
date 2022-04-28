@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Verify() {
   const [isVerify, setIsVerify] = useState("");
   const param = useParams();
 
+  const navigate = useNavigate();
+
   async function verifyUrl() {
     try {
       const url = `http://localhost:5000/auth/verify/${param.id}/${param.token}`;
+      await axios.get(url);
 
-        console.log(url);
-      const result = await axios.get(url);
-
-      console.log(result.data);
       setIsVerify(true);
+      console.log("Verified");
+      // window.alert("Successfully Verified!");
+      //navigate("/");
     } catch (err) {
       setIsVerify(false);
       console.error(err);
@@ -23,9 +25,16 @@ function Verify() {
 
   useEffect(() => {
     verifyUrl();
-  }, [param]);
+  }, []);
 
-  return <div>{isVerify ? <h1>Verified</h1> : <h1>404 not found</h1>}</div>;
+  return (
+    <div>
+      {console.log(isVerify)}
+      {isVerify === "" ? <h1>Loading...</h1> : ""}
+      {isVerify === true ? <h1>Successfully Verified!</h1> : ""}
+      {isVerify === false ? <h1>404 Not Found!</h1> : ""}
+    </div>
+  );
 }
 
 export default Verify;

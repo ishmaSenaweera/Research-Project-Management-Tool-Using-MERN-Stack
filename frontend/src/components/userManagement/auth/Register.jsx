@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/LoginContext";
 
 function Register() {
   const [name, setName] = useState("");
@@ -13,6 +15,9 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState("");
+
+  const navigate = useNavigate();
+  const { getLoggedIn } = useContext(AuthContext);
 
   async function register(e) {
     e.preventDefault();
@@ -34,11 +39,10 @@ function Register() {
 
       console.log(registerData);
 
-      await axios.post(
-        "http://localhost:5000/student/register",
-        registerData
-      );
+      await axios.post("http://localhost:5000/student/register", registerData);
       alert("Verification Email Sent successfully");
+      await getLoggedIn();
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
@@ -102,9 +106,8 @@ function Register() {
           <label>Mobile Number: </label>
           <input
             type="text"
-            oninput="numberOnly(this.id);"
             placeholder="Mobile Number"
-            maxlength="10"
+            maxLength="10"
             onChange={(e) => setMobile(e.target.value)}
             value={mobile}
           />
@@ -114,7 +117,7 @@ function Register() {
           <input
             type="text"
             placeholder="Nic"
-            maxlength="11"
+            maxLength="11"
             onChange={(e) => setNic(e.target.value)}
             value={nic}
           />

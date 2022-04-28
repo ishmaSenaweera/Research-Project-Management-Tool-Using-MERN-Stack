@@ -12,11 +12,18 @@ const { userAccess } = require("../../middleware/accessChecker");
 //delete loggedin account
 router.delete("/delete", userAccess, async (req, res) => {
   try {
-    const { _id } = req.body.user._id;
-    const result = await Admin.findByIdAndDelete(_id);
+    let result = false;
+    const type = req.body.type;
 
-    res.send(true);
-
+    if (type === "Admin") {
+      result = await Admin.findByIdAndDelete(req.body.user._id);
+    } else if (type === "Staff") {
+      result = await Staff.findByIdAndDelete(req.body.user._id);
+    } else if (type === "Student") {
+      result = await Student.findByIdAndDelete(req.body.user._id);
+    }
+    console.log(result);
+    await func.removeCookie(res);
     await email.sendSuccDel(result.email, result.name);
   } catch (err) {
     res.json(false);

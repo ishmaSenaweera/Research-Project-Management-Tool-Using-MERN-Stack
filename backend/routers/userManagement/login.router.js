@@ -137,8 +137,6 @@ router.get("/verify/:id/:token", async (req, res) => {
 
     await token.remove();
     email.sendSuccVeri(existingUser.email, existingUser.name);
-
-    res.status(200).send({ Message: "Successfully verified your email" });
   } catch (err) {
     console.error(err);
     res.status(500).send();

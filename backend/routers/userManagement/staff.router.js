@@ -91,9 +91,8 @@ router.delete("/delete", adminAccess, async (req, res) => {
     const { id } = req.body;
     const result = await Staff.findByIdAndDelete(id);
 
-    res.send(true);
-
     await email.sendSuccDelAd(result.email, result.name);
+    res.json(true);
   } catch (err) {
     res.json(false);
     console.error(err);

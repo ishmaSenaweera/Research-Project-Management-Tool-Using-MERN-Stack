@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
+import Home from "./components/userManagement/auth/Home";
 import NavBar from "./components/layout/NavBar";
 import Login from "./components/userManagement/auth/Login";
 import Register from "./components/userManagement/auth/Register";
@@ -11,6 +11,7 @@ import UserUpdate from "./components/userManagement/auth/UserUpdate";
 import AllStudents from "./components/userManagement/auth/AllStudents";
 import AllStaff from "./components/userManagement/auth/AllStaff";
 import StaffStudentAccount from "./components/userManagement/auth/StaffStudentAccount";
+import AddStaff from "./components/userManagement/auth/AddStaff";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -37,8 +38,12 @@ function SiteRouters() {
               <Route path="/account/update" element={<UserUpdate />} />
               <Route path="/students" element={<AllStudents />} />
               <Route path="/staffs" element={<AllStaff />} />
-              <Route path="/students/account" element={<StaffStudentAccount />} />
+              <Route
+                path="/students/account"
+                element={<StaffStudentAccount />}
+              />
               <Route path="/staffs/account" element={<StaffStudentAccount />} />
+              <Route path="/staffs/add" element={<AddStaff />} />
             </>
           ) : (
             ""

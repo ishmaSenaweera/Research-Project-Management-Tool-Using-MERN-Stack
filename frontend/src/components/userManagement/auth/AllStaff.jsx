@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
 function AllStaff() {
-
   const [staffData, setStaffData] = useState([]);
 
   const navigate = useNavigate();
@@ -20,8 +19,12 @@ function AllStaff() {
     }
   }
 
-  function click(params) {
+  function viewDetails(params) {
     navigate("/staffs/account", { state: params });
+  }
+
+  function addStaff() {
+    navigate("/staffs/add");
   }
 
   function staffList() {
@@ -32,7 +35,7 @@ function AllStaff() {
           <td>{currentStaff.email}</td>
           <td>{currentStaff.gender}</td>
           <td>
-            <button onClick={click.bind(this, currentStaff)}>View</button>
+            <button onClick={viewDetails.bind(this, currentStaff)}>View</button>
           </td>
         </tr>
       );
@@ -45,6 +48,7 @@ function AllStaff() {
 
   return (
     <div style={{ margin: "30px" }}>
+      <button onClick={addStaff}>Add</button>
       <table>
         <thead>
           <tr>

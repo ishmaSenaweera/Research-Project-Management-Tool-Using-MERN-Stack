@@ -18,7 +18,8 @@ function UserUpdate() {
   const [email, setEmail] = useState(state.email);
 
   const navigate = useNavigate();
-  const { getLoggedIn } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
+  console.log(loggedIn);
 
   async function update(e) {
     e.preventDefault();
@@ -75,33 +76,32 @@ function UserUpdate() {
           <input type="radio" value="male" name="gender" /> Male
           <input type="radio" value="female" name="gender" /> Female
         </div>
-        <div>
-          <label>Specialization: </label>
-          <input
-            type="text"
-            placeholder="Specialization"
-            onChange={(e) => setSpecialization(e.target.value)}
-            value={specialization}
-          />
-        </div>
-        <div>
-          <label>Batch: </label>
-          <input
-            type="text"
-            placeholder="Batch"
-            onChange={(e) => setBatch(e.target.value)}
-            value={batch}
-          />
-        </div>
-        <div>
-          <label>Branch: </label>
-          <input
-            type="text"
-            placeholder="Branch"
-            onChange={(e) => setBranch(e.target.value)}
-            value={branch}
-          />
-        </div>
+        {loggedIn === "Student" ? (
+        <><div>
+            <label>Specialization: </label>
+            <input
+              type="text"
+              placeholder="Specialization"
+              onChange={(e) => setSpecialization(e.target.value)}
+              value={specialization} />
+          </div><div>
+              <label>Batch: </label>
+              <input
+                type="text"
+                placeholder="Batch"
+                onChange={(e) => setBatch(e.target.value)}
+                value={batch} />
+            </div><div>
+              <label>Branch: </label>
+              <input
+                type="text"
+                placeholder="Branch"
+                onChange={(e) => setBranch(e.target.value)}
+                value={branch} />
+            </div></>
+           ) : (
+        ""
+      )}
         <div>
           <label>Mobile Number: </label>
           <input

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
 function UserAccount() {
-  const { getLoggedIn } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
 
   const [userData, setUserData] = useState("");
 
@@ -49,8 +49,8 @@ function UserAccount() {
         <h1>Account = {userData.name}</h1>
       </div>
 
-      {userData.batch ? (
-        <div>
+      {loggedIn === "Student" ? (
+        <>
           <div>
             <h1>batch: </h1>
             <h3> {userData.batch}</h3>
@@ -63,7 +63,7 @@ function UserAccount() {
             <h1>Branch: </h1>
             <h3> {userData.branch}</h3>
           </div>
-        </div>
+        </>
       ) : (
         ""
       )}

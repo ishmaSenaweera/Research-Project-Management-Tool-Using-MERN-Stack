@@ -21,7 +21,7 @@ function Login() {
         "http:///localhost:5000/auth/login",
         loginData
       );
-      //await getLoggedIn();
+      await getLoggedIn();
       //navigate("/home");
     } catch (err) {
       console.error(err);

@@ -7,7 +7,7 @@ const valid = require("../../utils/valid.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
 //register admin
-router.post("/register", adminAccess, async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     // validation
     const validated = await valid.adminRegisterSchema.validateAsync(req.body);

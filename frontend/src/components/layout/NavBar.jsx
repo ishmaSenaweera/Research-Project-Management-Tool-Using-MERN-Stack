@@ -26,6 +26,19 @@ function NavBar() {
         </>
       )}
 
+      {loggedIn === "Admin" ? (
+        <>
+          <Link to="/students">
+            <button>All Students</button>
+          </Link>
+          <Link to="/staffs">
+            <button>All Staff</button>
+          </Link>
+        </>
+      ) : (
+        ""
+      )}
+
       {loggedIn === "Student" ||
       loggedIn === "Staff" ||
       loggedIn === "Admin" ? (

@@ -102,6 +102,7 @@ router.get("/loggedIn", async (req, res) => {
 //verify email
 router.get("/verify/:id/:token", async (req, res) => {
   try {
+    await func.removeCookie(res);
     const user = await func.findUserById(req.params.id);
 
     if (user.type === null) {

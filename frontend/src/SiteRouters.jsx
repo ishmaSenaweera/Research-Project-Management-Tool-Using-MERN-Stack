@@ -8,6 +8,9 @@ import Verify from "./components/userManagement/auth/Verify";
 import AuthContext from "./components/context/LoginContext";
 import UserAccount from "./components/userManagement/auth/UserAccount";
 import UserUpdate from "./components/userManagement/auth/UserUpdate";
+import AllStudents from "./components/userManagement/auth/AllStudents";
+import AllStaff from "./components/userManagement/auth/AllStaff";
+import StaffStudentAccount from "./components/userManagement/auth/StaffStudentAccount";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -27,9 +30,21 @@ function SiteRouters() {
             ""
           )}
 
-          {loggedIn === "Student" ||
-          loggedIn === "Staff" ||
-          loggedIn === "Admin" ? (
+          {loggedIn === "Admin" ? (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/account" element={<UserAccount />} />
+              <Route path="/account/update" element={<UserUpdate />} />
+              <Route path="/students" element={<AllStudents />} />
+              <Route path="/staffs" element={<AllStaff />} />
+              <Route path="/students/account" element={<StaffStudentAccount />} />
+              <Route path="/staffs/account" element={<StaffStudentAccount />} />
+            </>
+          ) : (
+            ""
+          )}
+
+          {loggedIn === "Student" || loggedIn === "Staff" ? (
             <>
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<UserAccount />} />
@@ -38,6 +53,7 @@ function SiteRouters() {
           ) : (
             ""
           )}
+
           <Route path="*" element={<Login />} />
         </Routes>
       </BrowserRouter>

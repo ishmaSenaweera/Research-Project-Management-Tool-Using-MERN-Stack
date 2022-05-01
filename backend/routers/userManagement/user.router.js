@@ -23,8 +23,8 @@ router.delete("/delete", userAccess, async (req, res) => {
       result = await Student.findByIdAndDelete(req.body.user._id);
     }
     console.log(result);
+    email.sendSuccDel(result.email, result.name);
     await func.removeCookie(res);
-    await email.sendSuccDel(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -51,8 +51,8 @@ router.post("/update", userAccess, async (req, res) => {
       result = await func.updateStudent(req.body.user._id, validated);
     }
 
+    email.sendSuccUp(validated.email, validated.name);
     res.send(result);
-    await email.sendSuccUp(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -97,8 +97,8 @@ router.post("/changepassword", userAccess, async (req, res) => {
       }).exec();
     }
 
+    email.sendSuccChPas(validated.user.email, validated.user.name);
     await func.removeCookie(res);
-    await email.sendSuccChPas(validated.user.email, validated.user.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);

@@ -91,7 +91,7 @@ router.delete("/delete", adminAccess, async (req, res) => {
     const { id } = req.body;
     const result = await Staff.findByIdAndDelete(id);
 
-    await email.sendSuccDelAd(result.email, result.name);
+    email.sendSuccDelAd(result.email, result.name);
     res.json(true);
   } catch (err) {
     res.json(false);
@@ -107,9 +107,10 @@ router.post("/update", adminAccess, async (req, res) => {
     const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
     const result = await func.updateStaff(validated.id, validated);
-    res.send(result);
+    
 
-    await email.sendSuccUpAd(validated.email, validated.name);
+    email.sendSuccUpAd(validated.email, validated.name);
+    res.send(result);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);

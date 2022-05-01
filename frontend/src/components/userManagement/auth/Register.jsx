@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
 
 function Register() {
   const [name, setName] = useState("");
@@ -17,7 +16,6 @@ function Register() {
   const [passwordVerify, setPasswordVerify] = useState("");
 
   const navigate = useNavigate();
-  const { getLoggedIn } = useContext(AuthContext);
 
   async function register(e) {
     e.preventDefault();

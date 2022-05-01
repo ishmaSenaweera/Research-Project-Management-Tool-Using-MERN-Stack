@@ -96,9 +96,8 @@ router.delete("/delete", adminAccess, async (req, res) => {
     const { id } = req.body;
     const result = await Student.findByIdAndDelete(id);
 
+    email.sendSuccDelAd(result.email, result.name);
     res.send(true);
-
-    await email.sendSuccDelAd(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -113,9 +112,9 @@ router.post("/update", adminAccess, async (req, res) => {
     const validated = await valid.studentUpdateSchema.validateAsync(req.body);
 
     const result = await func.updateStudent(validated.id, validated);
-    res.send(result);
 
-    await email.sendSuccUpAd(validated.email, validated.name);
+    email.sendSuccUpAd(validated.email, validated.name);
+    res.send(result);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);

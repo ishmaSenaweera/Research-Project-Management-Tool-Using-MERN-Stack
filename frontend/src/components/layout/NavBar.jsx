@@ -10,7 +10,6 @@ function NavBar() {
 
   useEffect(async () => {
     await getLoggedIn();
-    console.log("Location changed");
   }, [location]);
 
   return (
@@ -33,6 +32,9 @@ function NavBar() {
           </Link>
           <Link to="/staffs">
             <button>All Staff</button>
+          </Link>
+          <Link to="/admins">
+            <button>All Admin</button>
           </Link>
         </>
       ) : (

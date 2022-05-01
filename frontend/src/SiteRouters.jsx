@@ -11,11 +11,15 @@ import UpdateUser from "./components/userManagement/User/UpdateUser";
 import AllStudents from "./components/userManagement/Student/AllStudents";
 import AllStaff from "./components/userManagement/Staff/AllStaff";
 import AddStaff from "./components/userManagement/Staff/AddStaff";
-import StaffStudentUpdate from "./components/userManagement/Staff/UpdateStaff";
-import StaffAccount from "./components/userManagement/Staff/AccountStaff";
+import UpdateStaff from "./components/userManagement/Staff/UpdateStaff";
+import AccountStaff from "./components/userManagement/Staff/AccountStaff";
 import UpdateStudent from "./components/userManagement/Student/UpdateStudent";
 import AccountStudent from "./components/userManagement/Student/AccountStudent";
 import ChangePassword from "./components/userManagement/User/ChangePassword";
+import AllAdmin from "./components/userManagement/Admin/AllAdmin";
+import AccountAdmin from "./components/userManagement/Admin/AccountAdmin";
+import UpdateAdmin from "./components/userManagement/Admin/UpdateAdmin";
+import AddAdmin from "./components/userManagement/Admin/AddAdmin";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -52,9 +56,14 @@ function SiteRouters() {
               <Route path="/students/update" element={<UpdateStudent />} />
 
               <Route path="/staffs" element={<AllStaff />} />
-              <Route path="/staffs/account" element={<StaffAccount />} />
+              <Route path="/staffs/account" element={<AccountStaff />} />
               <Route path="/staffs/add" element={<AddStaff />} />
-              <Route path="/staffs/update" element={<StaffStudentUpdate />} />
+              <Route path="/staffs/update" element={<UpdateStaff />} />
+
+              <Route path="/admins" element={<AllAdmin />} />
+              <Route path="/admins/account" element={<AccountAdmin />} />
+              <Route path="/admins/add" element={<AddAdmin />} />
+              <Route path="/admins/update" element={<UpdateAdmin />} />
 
               <Route path="*" element={<Home />} />
             </>

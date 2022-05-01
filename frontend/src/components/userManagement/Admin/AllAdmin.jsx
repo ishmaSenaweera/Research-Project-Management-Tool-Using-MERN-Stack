@@ -2,16 +2,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function AllStaff() {
-  const [staffData, setStaffData] = useState([]);
+function AllAdmin() {
+  const [adminData, setAdminData] = useState([]);
 
   const navigate = useNavigate();
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/staff/");
+      const result = await axios.get("http://localhost:5000/admin/");
 
-      setStaffData(result.data);
+      setAdminData(result.data);
     } catch (err) {
       //await getLoggedIn();
       console.log(err);
@@ -19,23 +19,23 @@ function AllStaff() {
   }
 
   function viewDetails(params) {
-    navigate("/staffs/account", { state: params });
+    navigate("/admins/account", { state: params });
   }
 
-  function addStaff() {
-    navigate("/staffs/add");
+  function addAdmin() {
+    navigate("/admins/add");
   }
 
-  function staffList() {
-    return staffData.map((currentStaff, index) => {
+  function adminList() {
+    return adminData.map((currentAdmin, index) => {
       return (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{currentStaff.name}</td>
-          <td>{currentStaff.email}</td>
-          <td>{currentStaff.gender}</td>
+          <td>{currentAdmin.name}</td>
+          <td>{currentAdmin.email}</td>
+          <td>{currentAdmin.gender}</td>
           <td>
-            <button onClick={viewDetails.bind(this, currentStaff)}>View</button>
+            <button onClick={viewDetails.bind(this, currentAdmin)}>View</button>
           </td>
         </tr>
       );
@@ -48,7 +48,7 @@ function AllStaff() {
 
   return (
     <div style={{ margin: "30px" }}>
-      <button onClick={addStaff}>Add</button>
+      <button onClick={addAdmin}>Add</button>
       <table>
         <thead>
           <tr>
@@ -58,11 +58,11 @@ function AllStaff() {
             <th>Gender</th>
           </tr>
         </thead>
-        <tbody>{staffList()}</tbody>
+        <tbody>{adminList()}</tbody>
       </table>
       <hr />
     </div>
   );
 }
 
-export default AllStaff;
+export default AllAdmin;

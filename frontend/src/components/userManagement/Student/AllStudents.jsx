@@ -25,7 +25,7 @@ function AllStudents() {
   function studentList() {
     return studentsData.map((currentStudent, index) => {
       return (
-        <tr key={currentStudent._id}>
+        <tr key={index}>
           <td>{index + 1}</td>
           <td>{currentStudent.name}</td>
           <td>{currentStudent.email}</td>

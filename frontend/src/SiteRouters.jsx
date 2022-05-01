@@ -7,11 +7,10 @@ import Register from "./components/userManagement/auth/Register";
 import Verify from "./components/userManagement/auth/Verify";
 import AuthContext from "./components/context/LoginContext";
 import UserAccount from "./components/userManagement/auth/UserAccount";
+import UserUpdate from "./components/userManagement/auth/UserUpdate";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
-  console.log(loggedIn);
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -28,18 +27,18 @@ function SiteRouters() {
             ""
           )}
 
-          {loggedIn !== "Student" ||
-          loggedIn !== "Staff" ||
-          loggedIn !== "Admin" ? (
+          {loggedIn === "Student" ||
+          loggedIn === "Staff" ||
+          loggedIn === "Admin" ? (
             <>
-              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<Home />} />
               <Route path="/account" element={<UserAccount />} />
+              <Route path="/account/update" element={<UserUpdate />} />
             </>
           ) : (
             ""
           )}
-
-          <Route path="*" element={<p>error</p>} />
+          <Route path="*" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>

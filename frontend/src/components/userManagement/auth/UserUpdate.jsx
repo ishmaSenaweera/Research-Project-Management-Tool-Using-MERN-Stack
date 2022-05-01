@@ -1,29 +1,30 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
-function Register() {
-  const [name, setName] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [batch, setBatch] = useState("");
-  const [branch, setBranch] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [nic, setNic] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordVerify, setPasswordVerify] = useState("");
+function UserUpdate() {
+  const { state } = useLocation();
+  const dobEdited = new Date(state.dob).toISOString().substring(0, 10);
+
+  const [name, setName] = useState(state.name);
+  const [dob, setDob] = useState(dobEdited);
+  const [gender, setGender] = useState(state.gender);
+  const [specialization, setSpecialization] = useState(state.specialization);
+  const [batch, setBatch] = useState(state.batch);
+  const [branch, setBranch] = useState(state.branch);
+  const [mobile, setMobile] = useState(state.mobile);
+  const [nic, setNic] = useState(state.nic);
+  const [email, setEmail] = useState(state.email);
 
   const navigate = useNavigate();
   const { getLoggedIn } = useContext(AuthContext);
 
-  async function register(e) {
+  async function update(e) {
     e.preventDefault();
 
     try {
-      const registerData = {
+      const updatedData = {
         name,
         dob,
         gender,
@@ -33,30 +34,29 @@ function Register() {
         mobile,
         nic,
         email,
-        password,
-        passwordVerify,
       };
 
-      console.log(registerData);
+      console.log(updatedData);
 
-      await axios.post("http://localhost:5000/student/register", registerData);
-      alert("Verification Email Sent successfully");
+      await axios.post("http://localhost:5000/account/update", updatedData);
+      alert("Updated Successfully");
       //await getLoggedIn();
-      navigate("/");
+      navigate("/account");
     } catch (err) {
+      //await getLoggedIn();
       console.error(err);
     }
   }
 
   return (
     <div>
-      <h1>Student Registration</h1>
-      <form onSubmit={register}>
+      <h1>Account Update</h1>
+      <form onSubmit={update}>
         <div>
           <label>Name: </label>
           <input
             type="text"
-            placeholder="Name"
+            placeholder={name}
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -123,36 +123,13 @@ function Register() {
           />
         </div>
         <div>
-          <label>E-mail: </label>
-          <input
-            type="email"
-            placeholder="E-mail"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
+          <label>Email: </label>
+          <input type="email" disabled placeholder="Email" value={email} />
         </div>
-        <div>
-          <label>Password: </label>
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </div>
-        <div>
-          <label>Verify Password: </label>
-          <input
-            type="password"
-            placeholder="Verify Password"
-            onChange={(e) => setPasswordVerify(e.target.value)}
-            value={passwordVerify}
-          />
-        </div>
-        <button type="submit">Register</button>
+        <button type="submit">Update</button>
       </form>
     </div>
   );
 }
 
-export default Register;
+export default UserUpdate;

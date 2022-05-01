@@ -17,6 +17,7 @@ function UserAccount() {
       setUserData(result.data);
       console.log(userData);
     } catch (err) {
+      //await getLoggedIn();
       console.log(err);
     }
   }
@@ -25,12 +26,17 @@ function UserAccount() {
     try {
       console.log("delete user");
       const result = await axios.delete("http://localhost:5000/account/delete");
-      await getLoggedIn();
+      //await getLoggedIn();
       navigate("/");
       console.log(result);
     } catch (err) {
+      //await getLoggedIn();
       console.log(err);
     }
+  }
+
+  async function updateUser() {
+    navigate("/account/update", { state: userData });
   }
 
   useEffect(() => {
@@ -90,7 +96,7 @@ function UserAccount() {
       >
         Delete
       </button>
-      <button>Edit</button>
+      <button onClick={updateUser}>Edit</button>
       <button>Change Password</button>
     </div>
   );

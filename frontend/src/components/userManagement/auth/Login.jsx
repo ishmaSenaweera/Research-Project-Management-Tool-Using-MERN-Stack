@@ -1,13 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
   const { getLoggedIn } = useContext(AuthContext);
 
   async function login(e) {
@@ -23,8 +21,8 @@ function Login() {
         "http:///localhost:5000/auth/login",
         loginData
       );
-      await getLoggedIn();
-      navigate("/home");
+      //await getLoggedIn();
+      //navigate("/home");
     } catch (err) {
       console.error(err);
     }

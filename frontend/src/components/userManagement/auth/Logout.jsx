@@ -11,7 +11,7 @@ function LogOut() {
   async function logOut() {
     try {
       await axios.get("http:///localhost:5000/auth/logout");
-      await getLoggedIn();
+      //await getLoggedIn();
       navigate("/");
     } catch (err) {
       console.error(err);

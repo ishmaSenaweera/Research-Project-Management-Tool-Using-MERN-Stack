@@ -15,9 +15,6 @@ function StaffStudentAccount() {
       const data = {
         id: state._id,
       };
-      console.log("delete user");
-      console.log(state._id);
-      console.log(data);
       const result = await axios.delete("http://localhost:5000/staff/delete", {
         data,
       });
@@ -31,7 +28,7 @@ function StaffStudentAccount() {
   }
 
   async function updateUser() {
-    navigate("/account/update", { state: state });
+    navigate("/staffs/update", { state: state });
   }
 
   return (

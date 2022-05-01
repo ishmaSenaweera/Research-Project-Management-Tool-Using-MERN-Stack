@@ -36,7 +36,7 @@ function AddStaff() {
       await axios.post("http://localhost:5000/staff/register", registerData);
       alert("Verification Email Sent successfully");
       await getLoggedIn();
-      navigate("/");
+      navigate("/staffs");
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +44,7 @@ function AddStaff() {
 
   return (
     <div>
-      <h1>Student Registration</h1>
+      <h1>Add Staff</h1>
       <form onSubmit={register}>
         <div>
           <label>Name: </label>

@@ -12,6 +12,7 @@ import AllStudents from "./components/userManagement/auth/AllStudents";
 import AllStaff from "./components/userManagement/auth/AllStaff";
 import StaffStudentAccount from "./components/userManagement/auth/StaffStudentAccount";
 import AddStaff from "./components/userManagement/auth/AddStaff";
+import StaffStudentUpdate from "./components/userManagement/auth/StaffStudentUpdate";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -44,6 +45,7 @@ function SiteRouters() {
               />
               <Route path="/staffs/account" element={<StaffStudentAccount />} />
               <Route path="/staffs/add" element={<AddStaff />} />
+              <Route path="/staffs/update" element={<StaffStudentUpdate />} />
             </>
           ) : (
             ""

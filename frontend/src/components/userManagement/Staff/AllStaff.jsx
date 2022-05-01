@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
 
 function AllStaff() {
   const [staffData, setStaffData] = useState([]);

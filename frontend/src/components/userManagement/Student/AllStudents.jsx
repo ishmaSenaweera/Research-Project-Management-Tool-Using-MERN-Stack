@@ -1,11 +1,8 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
 
 function AllStudents() {
-  const { loggedIn } = useContext(AuthContext);
-
   const [studentsData, setStudentsData] = useState([]);
 
   const navigate = useNavigate();
@@ -21,6 +18,10 @@ function AllStudents() {
     }
   }
 
+  function viewDetails(params) {
+    navigate("/students/account", { state: params });
+  }
+
   function studentList() {
     return studentsData.map((currentStudent, index) => {
       return (
@@ -31,6 +32,11 @@ function AllStudents() {
           <td>{currentStudent.batch}</td>
           <td>{currentStudent.specialization}</td>
           <td>{currentStudent.branch}</td>
+          <td>
+            <button onClick={viewDetails.bind(this, currentStudent)}>
+              View
+            </button>
+          </td>
         </tr>
       );
     });

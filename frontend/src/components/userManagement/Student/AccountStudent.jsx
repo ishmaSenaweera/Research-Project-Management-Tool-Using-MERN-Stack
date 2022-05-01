@@ -1,12 +1,8 @@
 import axios from "axios";
-import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
 
-function StaffStudentAccount() {
+function AccountStudent() {
   const { state } = useLocation();
-
-  const { loggedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -15,47 +11,41 @@ function StaffStudentAccount() {
       const data = {
         id: state._id,
       };
-      const result = await axios.delete("http://localhost:5000/staff/delete", {
-        data,
-      });
-      //await getLoggedIn();
-      navigate("/staffs");
+      const result = await axios.delete(
+        "http://localhost:5000/student/delete",
+        {
+          data,
+        }
+      );
+      navigate("/students");
       console.log(result);
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }
 
   async function updateUser() {
-    navigate("/staffs/update", { state: state });
+    console.log("student");
+    navigate("/students/update", { state: state });
   }
 
   return (
     <div>
       <div>
-        <h1>Account = {state.name}</h1>
+        <h1>Student Account = {state.name}</h1>
       </div>
-
-      {loggedIn === "Student" ? (
-        <>
-          <div>
-            <h1>batch: </h1>
-            <h3> {state.batch}</h3>
-          </div>
-          <div>
-            <h1>Specialization: </h1>
-            <h3> {state.specialization}</h3>
-          </div>
-          <div>
-            <h1>Branch: </h1>
-            <h3> {state.branch}</h3>
-          </div>
-        </>
-      ) : (
-        ""
-      )}
-
+      <div>
+        <h1>batch: </h1>
+        <h3> {state.batch}</h3>
+      </div>
+      <div>
+        <h1>Specialization: </h1>
+        <h3> {state.specialization}</h3>
+      </div>
+      <div>
+        <h1>Branch: </h1>
+        <h3> {state.branch}</h3>
+      </div>
       <div>
         <h1>dob: </h1>
         <h3> {state.dob}</h3>
@@ -90,4 +80,4 @@ function StaffStudentAccount() {
   );
 }
 
-export default StaffStudentAccount;
+export default AccountStudent;

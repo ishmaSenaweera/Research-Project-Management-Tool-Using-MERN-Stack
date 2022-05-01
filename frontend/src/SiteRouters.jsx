@@ -6,8 +6,8 @@ import Login from "./components/userManagement/auth/Login";
 import Register from "./components/userManagement/auth/Register";
 import Verify from "./components/userManagement/auth/Verify";
 import AuthContext from "./components/context/LoginContext";
-import UserAccount from "./components/userManagement/User/UserAccount";
-import UserUpdate from "./components/userManagement/User/UserUpdate";
+import AccountUser from "./components/userManagement/User/AccountUser";
+import UpdateUser from "./components/userManagement/User/UpdateUser";
 import AllStudents from "./components/userManagement/Student/AllStudents";
 import AllStaff from "./components/userManagement/Staff/AllStaff";
 import AddStaff from "./components/userManagement/Staff/AddStaff";
@@ -15,6 +15,7 @@ import StaffStudentUpdate from "./components/userManagement/Staff/UpdateStaff";
 import StaffAccount from "./components/userManagement/Staff/AccountStaff";
 import UpdateStudent from "./components/userManagement/Student/UpdateStudent";
 import AccountStudent from "./components/userManagement/Student/AccountStudent";
+import ChangePassword from "./components/userManagement/User/ChangePassword";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -39,10 +40,14 @@ function SiteRouters() {
           {loggedIn === "Admin" ? (
             <>
               <Route path="/" element={<Home />} />
-              <Route path="/account" element={<UserAccount />} />
-              <Route path="/account/update" element={<UserUpdate />} />
-              <Route path="/students" element={<AllStudents />} />
+              <Route path="/account" element={<AccountUser />} />
+              <Route path="/account/update" element={<UpdateUser />} />
+              <Route
+                path="/account/changepassword"
+                element={<ChangePassword />}
+              />
 
+              <Route path="/students" element={<AllStudents />} />
               <Route path="/students/account" element={<AccountStudent />} />
               <Route path="/students/update" element={<UpdateStudent />} />
 
@@ -60,8 +65,8 @@ function SiteRouters() {
           {loggedIn === "Student" || loggedIn === "Staff" ? (
             <>
               <Route path="/" element={<Home />} />
-              <Route path="/account" element={<UserAccount />} />
-              <Route path="/account/update" element={<UserUpdate />} />
+              <Route path="/account" element={<AccountUser />} />
+              <Route path="/account/update" element={<UpdateUser />} />
 
               <Route path="*" element={<Home />} />
             </>

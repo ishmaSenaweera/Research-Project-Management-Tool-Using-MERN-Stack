@@ -81,7 +81,7 @@ router.post("/changepassword", userAccess, async (req, res) => {
 
     // hash the password
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(validated.newpassword, salt);
+    const passwordHash = await bcrypt.hash(validated.newPassword, salt);
 
     if (validated.type === "Admin") {
       await Admin.findByIdAndUpdate(validated.user._id, {
@@ -104,7 +104,6 @@ router.post("/changepassword", userAccess, async (req, res) => {
       console.error(err);
       res.status(422).send({ errormessage: err.details[0].message });
     } else {
-      res.json(false);
       console.error(err);
       res.status(500).send(err);
     }

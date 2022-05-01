@@ -133,7 +133,11 @@ const loginSchema = Joi.object({
 // validate change password
 const changePasswordSchema = Joi.object({
   password: passwordComplexity().required().label("password"),
-  newpassword: passwordComplexity().required().label("newpassword"),
+  newPassword: passwordComplexity().required().label("newPassword"),
+  newPasswordVerify: passwordComplexity()
+    .valid(Joi.ref("newPassword"))
+    .required()
+    .label("newPasswordVerify"),
 }).unknown(true);
 
 module.exports = {

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
-function UserAccount() {
+function AccountUser() {
   const { loggedIn } = useContext(AuthContext);
 
   const [userData, setUserData] = useState("");
@@ -37,6 +37,10 @@ function UserAccount() {
 
   async function updateUser() {
     navigate("/account/update", { state: userData });
+  }
+  
+  async function changepassword() {
+    navigate("/account/changepassword");
   }
 
   useEffect(() => {
@@ -97,9 +101,9 @@ function UserAccount() {
         Delete
       </button>
       <button onClick={updateUser}>Edit</button>
-      <button>Change Password</button>
+      <button onClick={changepassword}>Change Password</button>
     </div>
   );
 }
 
-export default UserAccount;
+export default AccountUser;

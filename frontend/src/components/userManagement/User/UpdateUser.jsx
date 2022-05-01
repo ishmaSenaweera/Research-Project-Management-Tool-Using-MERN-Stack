@@ -3,7 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
-function UserUpdate() {
+function UpdateUser() {
   const { state } = useLocation();
   const dobEdited = new Date(state.dob).toISOString().substring(0, 10);
 
@@ -77,31 +77,38 @@ function UserUpdate() {
           <input type="radio" value="female" name="gender" /> Female
         </div>
         {loggedIn === "Student" ? (
-        <><div>
-            <label>Specialization: </label>
-            <input
-              type="text"
-              placeholder="Specialization"
-              onChange={(e) => setSpecialization(e.target.value)}
-              value={specialization} />
-          </div><div>
+          <>
+            <div>
+              <label>Specialization: </label>
+              <input
+                type="text"
+                placeholder="Specialization"
+                onChange={(e) => setSpecialization(e.target.value)}
+                value={specialization}
+              />
+            </div>
+            <div>
               <label>Batch: </label>
               <input
                 type="text"
                 placeholder="Batch"
                 onChange={(e) => setBatch(e.target.value)}
-                value={batch} />
-            </div><div>
+                value={batch}
+              />
+            </div>
+            <div>
               <label>Branch: </label>
               <input
                 type="text"
                 placeholder="Branch"
                 onChange={(e) => setBranch(e.target.value)}
-                value={branch} />
-            </div></>
-           ) : (
-        ""
-      )}
+                value={branch}
+              />
+            </div>
+          </>
+        ) : (
+          ""
+        )}
         <div>
           <label>Mobile Number: </label>
           <input
@@ -132,4 +139,4 @@ function UserUpdate() {
   );
 }
 
-export default UserUpdate;
+export default UpdateUser;

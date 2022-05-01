@@ -61,7 +61,6 @@ function AccountStaff() {
         Delete
       </button>
       <button onClick={updateUser}>Edit</button>
-      <button>Change Password</button>
     </div>
   );
 }

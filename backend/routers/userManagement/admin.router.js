@@ -51,7 +51,7 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -92,8 +92,6 @@ router.delete("/delete", adminAccess, async (req, res) => {
     const { id } = req.body;
     const result = await Admin.findByIdAndDelete(id);
 
-    
-
     email.sendSuccDelAd(result.email, result.name);
     res.send(true);
   } catch (err) {
@@ -105,19 +103,18 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
 //only admin can access
 //update admin
-router.post("/update", adminAccess, async (req, res) => {
+router.put("/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.adminUpdateSchema.validateAsync(req.body);
 
     const result = await func.updateAdmin(validated.id, validated);
-    
 
     email.sendSuccUpAd(validated.email, validated.name);
     res.send(result);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);

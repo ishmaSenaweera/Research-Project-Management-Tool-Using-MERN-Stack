@@ -10,10 +10,10 @@ const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 
 // log in
-router.post("/login", async (req, res) => {
+router.get("/login", async (req, res) => {
   try {
     // validate
-    const validated = await valid.loginSchema.validateAsync(req.body);
+    const validated = await valid.loginSchema.validateAsync(req.query);
 
     const user = await func.findUser({ email: validated.email });
     const existingUser = user.existingUser;
@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);

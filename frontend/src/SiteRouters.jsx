@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/userManagement/Home";
 import NavBar from "./components/layout/NavBar";
 import Login from "./components/userManagement/auth/Login";
-import Register from "./components/userManagement/auth/Register";
+import Register from "./components/userManagement/Student/Register";
 import Verify from "./components/userManagement/auth/Verify";
 import AuthContext from "./components/context/LoginContext";
 import AccountUser from "./components/userManagement/User/AccountUser";

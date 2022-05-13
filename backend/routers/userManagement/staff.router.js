@@ -1,22 +1,21 @@
 const router = require("express").Router();
-const Student = require("../../models/login/student.model");
+const Staff = require("../../models/userManagement/staff.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
-//anyone can access
-//register
-router.post("/register", async (req, res) => {
+//register staff
+router.post("/register", adminAccess, async (req, res) => {
   try {
     // validation
-    const validated = await valid.studentRegisterSchema.validateAsync(req.body);
+    const validated = await valid.staffRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
-    const existingStudent = user.existingUser;
+    const existingStaff = user.existingUser;
 
-    if (existingStudent)
+    if (existingStaff)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
       });
@@ -26,28 +25,26 @@ router.post("/register", async (req, res) => {
     const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
-    const newStudent = await new Student({
+    const newStaff = await new Staff({
       name: validated.name,
       dob: validated.dob,
       gender: validated.gender,
-      specialization: validated.specialization,
-      batch: validated.batch,
-      branch: validated.branch,
+      type: validated.type,
       mobile: validated.mobile,
       nic: validated.nic,
       email: validated.email,
       passwordHash: passwordHash,
     });
 
-    const savedStudent = await newStudent.save();
+    const savedStaff = await newStaff.save();
 
     //email verification
-    const token = await func.getVerifyToken(savedStudent._id);
+    const token = await func.getVerifyToken(savedStaff._id);
 
     await email.sendVeri(
-      savedStudent.email,
-      savedStudent.name,
-      savedStudent._id,
+      savedStaff.email,
+      savedStaff.name,
+      savedStaff._id,
       token.token
     );
 
@@ -55,7 +52,7 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -64,13 +61,11 @@ router.post("/register", async (req, res) => {
 });
 
 //only admin can access
-//get student
+//get staff
 router.get("/info", adminAccess, async (req, res) => {
   try {
-    const { id } = req.body;
-
-    const student = await Student.findById(id);
-    res.json(student);
+    const staff = req.body.user;
+    res.json(staff);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -78,11 +73,11 @@ router.get("/info", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//get all students
+//get all staff
 router.get("/", adminAccess, async (req, res) => {
   try {
-    const student = await Student.find();
-    res.json(student);
+    const staff = await Staff.find();
+    res.json(staff);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -90,15 +85,14 @@ router.get("/", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//delete student
+//delete staff account
 router.delete("/delete", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
-    const result = await Student.findByIdAndDelete(id);
+    const result = await Staff.findByIdAndDelete(id);
 
-    res.send(true);
-
-    await email.sendSuccDelAd(result.email, result.name);
+    email.sendSuccDelAd(result.email, result.name);
+    res.json(true);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -107,19 +101,20 @@ router.delete("/delete", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//update student
+//update staff account
 router.post("/update", adminAccess, async (req, res) => {
   try {
-    const validated = await valid.studentUpdateSchema.validateAsync(req.body);
+    const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
-    const result = await func.updateStudent(validated.id, validated);
+    const result = await func.updateStaff(validated.id, validated);
+    
+
+    email.sendSuccUpAd(validated.email, validated.name);
     res.send(result);
-
-    await email.sendSuccUpAd(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errormessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);

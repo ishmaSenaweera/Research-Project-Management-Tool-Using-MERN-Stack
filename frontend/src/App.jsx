@@ -1,9 +1,16 @@
+import axios from "axios";
 import React from "react";
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return <h1>Hello React World </h1>;
-  }
+import { AuthContextProvider } from "./components/context/LoginContext";
+import Routers from "./SiteRouters";
+
+axios.defaults.withCredentials = true;
+
+function App() {
+  return (
+    <AuthContextProvider>
+      <Routers />
+    </AuthContextProvider>
+  );
 }
+
+export default App;

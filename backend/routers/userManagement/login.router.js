@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const Student = require("../../models/login/student.model");
-const Admin = require("../../models/login/admin.model");
-const Staff = require("../../models/login/staff.model");
+const Student = require("../../models/userManagement/student.model");
+const Admin = require("../../models/userManagement/admin.model");
+const Staff = require("../../models/userManagement/staff.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Token = require("../../models/login/token.model");
+const Token = require("../../models/userManagement/token.model");
 const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
@@ -91,10 +91,6 @@ router.get("/loggedIn", async (req, res) => {
 
     const type = await func.findUserById(state.user);
 
-    if (type.type === null) {
-      res.status(401).json({ errorMessage: "User not found" });
-    }
-
     res.send(type.type);
   } catch (err) {
     res.json(false);
@@ -106,6 +102,7 @@ router.get("/loggedIn", async (req, res) => {
 //verify email
 router.get("/verify/:id/:token", async (req, res) => {
   try {
+    await func.removeCookie(res);
     const user = await func.findUserById(req.params.id);
 
     if (user.type === null) {
@@ -115,14 +112,14 @@ router.get("/verify/:id/:token", async (req, res) => {
     const existingUser = user.existingUser;
 
     if (!existingUser)
-      return res.status(400).json({ errorMessage: "Invalid Link" });
+      return res.status(400).json({ errorMessage: "Invalid1 Link" });
 
     const token = await Token.findOne({
       userID: existingUser._id,
       token: req.params.token,
     });
 
-    if (!token) return res.status(400).json({ errorMessage: "Invalid Link" });
+    if (!token) return res.status(400).json({ errorMessage: "Invalid2 Link" });
 
     if (user.type === "Admin") {
       await Admin.findByIdAndUpdate(existingUser._id, {
@@ -139,10 +136,8 @@ router.get("/verify/:id/:token", async (req, res) => {
     }
 
     await token.remove();
-    await email.sendSuccVeri(existingUser.email, existingUser.name);
-
-    res.status(200).send({ Message: "Successfully verified your email" });
-  } catch (error) {
+    email.sendSuccVeri(existingUser.email, existingUser.name);
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }

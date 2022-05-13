@@ -86,10 +86,6 @@ const staffRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.date().required().label("dob"),
   gender: Joi.string().valid("male", "female").required().label("gender"),
-  type: Joi.string()
-    .valid("supervisor", "coSupervisor", "panelMember")
-    .required()
-    .label("type"),
   mobile: Joi.string().length(10).required().label("mobile"),
   nic: Joi.string().length(11).required().label("nic"),
   email: Joi.string()
@@ -111,10 +107,6 @@ const staffUpdateSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("name"),
   dob: Joi.date().required().label("dob"),
   gender: Joi.string().valid("male", "female").required().label("gender"),
-  type: Joi.string()
-    .valid("supervisor", "coSupervisor", "panelMember")
-    .required()
-    .label("type"),
   mobile: Joi.string().length(10).required().label("mobile"),
   nic: Joi.string().length(11).required().label("nic"),
   email: Joi.string()
@@ -141,7 +133,11 @@ const loginSchema = Joi.object({
 // validate change password
 const changePasswordSchema = Joi.object({
   password: passwordComplexity().required().label("password"),
-  newpassword: passwordComplexity().required().label("newpassword"),
+  newPassword: passwordComplexity().required().label("newPassword"),
+  newPasswordVerify: passwordComplexity()
+    .valid(Joi.ref("newPassword"))
+    .required()
+    .label("newPasswordVerify"),
 }).unknown(true);
 
 module.exports = {

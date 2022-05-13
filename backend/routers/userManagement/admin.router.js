@@ -1,21 +1,21 @@
 const router = require("express").Router();
-const Staff = require("../../models/login/staff.model");
+const Admin = require("../../models/userManagement/admin.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
 const valid = require("../../utils/valid.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
-//register staff
-router.post("/register", adminAccess, async (req, res) => {
+//register admin
+router.post("/register", async (req, res) => {
   try {
     // validation
-    const validated = await valid.staffRegisterSchema.validateAsync(req.body);
+    const validated = await valid.adminRegisterSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
-    const existingStaff = user.existingUser;
+    const existingAdmin = user.existingUser;
 
-    if (existingStaff)
+    if (existingAdmin)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
       });
@@ -25,26 +25,25 @@ router.post("/register", adminAccess, async (req, res) => {
     const passwordHash = await bcrypt.hash(validated.password, salt);
 
     // save a new user account to the db
-    const newStaff = await new Staff({
+    const newAdmin = await new Admin({
       name: validated.name,
       dob: validated.dob,
       gender: validated.gender,
-      type: validated.type,
       mobile: validated.mobile,
       nic: validated.nic,
       email: validated.email,
       passwordHash: passwordHash,
     });
 
-    const savedStaff = await newStaff.save();
+    const savedAdmin = await newAdmin.save();
 
     //email verification
-    const token = await func.getVerifyToken(savedStaff._id);
+    const token = await func.getVerifyToken(savedAdmin._id);
 
     await email.sendVeri(
-      savedStaff.email,
-      savedStaff.name,
-      savedStaff._id,
+      savedAdmin.email,
+      savedAdmin.name,
+      savedAdmin._id,
       token.token
     );
 
@@ -52,7 +51,7 @@ router.post("/register", adminAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -61,11 +60,13 @@ router.post("/register", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//get staff
+//get admin
 router.get("/info", adminAccess, async (req, res) => {
   try {
-    const staff = req.body.user;
-    res.json(staff);
+    const { id } = req.body;
+
+    const admin = await Admin.findById(id);
+    res.json(admin);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -73,11 +74,11 @@ router.get("/info", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//get all staff
+//get all admin
 router.get("/", adminAccess, async (req, res) => {
   try {
-    const staff = await Staff.find();
-    res.json(staff);
+    const admin = await Admin.find();
+    res.json(admin);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -85,15 +86,16 @@ router.get("/", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//delete staff account
+//delete admin
 router.delete("/delete", adminAccess, async (req, res) => {
   try {
     const { id } = req.body;
-    const result = await Staff.findByIdAndDelete(id);
+    const result = await Admin.findByIdAndDelete(id);
 
+    
+
+    email.sendSuccDelAd(result.email, result.name);
     res.send(true);
-
-    await email.sendSuccDelAd(result.email, result.name);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -102,19 +104,20 @@ router.delete("/delete", adminAccess, async (req, res) => {
 });
 
 //only admin can access
-//update staff account
+//update admin
 router.post("/update", adminAccess, async (req, res) => {
   try {
-    const validated = await valid.staffUpdateSchema.validateAsync(req.body);
+    const validated = await valid.adminUpdateSchema.validateAsync(req.body);
 
-    const result = await func.updateStaff(validated.id, validated);
+    const result = await func.updateAdmin(validated.id, validated);
+    
+
+    email.sendSuccUpAd(validated.email, validated.name);
     res.send(result);
-
-    await email.sendSuccUpAd(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);

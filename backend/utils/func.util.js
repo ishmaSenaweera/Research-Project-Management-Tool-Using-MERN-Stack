@@ -1,7 +1,7 @@
-const Student = require("../models/login/student.model");
-const Admin = require("../models/login/admin.model");
-const Staff = require("../models/login/staff.model");
-const Token = require("../models/login/token.model");
+const Student = require("../models/userManagement/student.model");
+const Admin = require("../models/userManagement/admin.model");
+const Staff = require("../models/userManagement/staff.model");
+const Token = require("../models/userManagement/token.model");
 const crypto = require("crypto");
 
 // check user by id

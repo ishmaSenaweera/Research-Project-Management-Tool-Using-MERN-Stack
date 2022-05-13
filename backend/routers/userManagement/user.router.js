@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const Admin = require("../../models/login/admin.model");
-const Staff = require("../../models/login/staff.model");
-const Student = require("../../models/login/student.model");
+const Admin = require("../../models/userManagement/admin.model");
+const Staff = require("../../models/userManagement/staff.model");
+const Student = require("../../models/userManagement/student.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
 const func = require("../../utils/func.util.js");
@@ -12,12 +12,19 @@ const { userAccess } = require("../../middleware/accessChecker");
 //delete loggedin account
 router.delete("/delete", userAccess, async (req, res) => {
   try {
-    const { _id } = req.body.user._id;
-    const result = await Admin.findByIdAndDelete(_id);
+    let result = false;
+    const type = req.body.type;
 
-    res.send(true);
-
-    await email.sendSuccDel(result.email, result.name);
+    if (type === "Admin") {
+      result = await Admin.findByIdAndDelete(req.body.user._id);
+    } else if (type === "Staff") {
+      result = await Staff.findByIdAndDelete(req.body.user._id);
+    } else if (type === "Student") {
+      result = await Student.findByIdAndDelete(req.body.user._id);
+    }
+    console.log(result);
+    email.sendSuccDel(result.email, result.name);
+    await func.removeCookie(res);
   } catch (err) {
     res.json(false);
     console.error(err);
@@ -44,8 +51,8 @@ router.post("/update", userAccess, async (req, res) => {
       result = await func.updateStudent(req.body.user._id, validated);
     }
 
+    email.sendSuccUp(validated.email, validated.name);
     res.send(result);
-    await email.sendSuccUp(validated.email, validated.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
@@ -74,7 +81,7 @@ router.post("/changepassword", userAccess, async (req, res) => {
 
     // hash the password
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(validated.newpassword, salt);
+    const passwordHash = await bcrypt.hash(validated.newPassword, salt);
 
     if (validated.type === "Admin") {
       await Admin.findByIdAndUpdate(validated.user._id, {
@@ -90,14 +97,13 @@ router.post("/changepassword", userAccess, async (req, res) => {
       }).exec();
     }
 
+    email.sendSuccChPas(validated.user.email, validated.user.name);
     await func.removeCookie(res);
-    await email.sendSuccChPas(validated.user.email, validated.user.name);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
       res.status(422).send({ errormessage: err.details[0].message });
     } else {
-      res.json(false);
       console.error(err);
       res.status(500).send(err);
     }

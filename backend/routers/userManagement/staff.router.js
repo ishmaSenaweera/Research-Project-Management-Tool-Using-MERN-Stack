@@ -2,8 +2,8 @@ const router = require("express").Router();
 const Staff = require("../../models/userManagement/staff.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
 //register staff

@@ -42,8 +42,8 @@ function AllAdmin() {
     });
   }
 
-  useEffect(async () => {
-    await getData();
+  useEffect(() => {
+    getData();
   }, []);
 
   return (

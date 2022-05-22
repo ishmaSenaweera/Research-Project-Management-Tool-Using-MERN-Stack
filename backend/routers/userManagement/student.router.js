@@ -2,8 +2,8 @@ const router = require("express").Router();
 const Student = require("../../models/userManagement/student.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
 //anyone can access
@@ -28,6 +28,7 @@ router.post("/register", async (req, res) => {
     // save a new user account to the db
     const newStudent = await new Student({
       name: validated.name,
+      sid: validated.sid,
       dob: validated.dob,
       gender: validated.gender,
       specialization: validated.specialization,

@@ -8,8 +8,8 @@ function NavBar() {
 
   const location = useLocation();
 
-  useEffect(async () => {
-    await getLoggedIn();
+  useEffect(() => {
+    getLoggedIn();
   }, [location]);
 
   return (

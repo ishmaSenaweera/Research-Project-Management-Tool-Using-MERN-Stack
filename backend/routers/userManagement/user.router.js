@@ -4,8 +4,8 @@ const Staff = require("../../models/userManagement/staff.model");
 const Student = require("../../models/userManagement/student.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 const { userAccess } = require("../../middleware/accessChecker");
 
 //loggedin user can access

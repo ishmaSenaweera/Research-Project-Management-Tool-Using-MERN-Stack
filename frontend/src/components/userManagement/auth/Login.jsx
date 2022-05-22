@@ -17,7 +17,7 @@ function Login() {
         password,
       };
 
-      const result = await axios.get("http:///localhost:5000/auth/login", {
+      await axios.get("http:///localhost:5000/auth/login", {
         params: loginData,
       });
       await getLoggedIn();

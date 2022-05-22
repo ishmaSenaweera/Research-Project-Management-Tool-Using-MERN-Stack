@@ -6,8 +6,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../../models/userManagement/token.model");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 
 // log in
 router.get("/login", async (req, res) => {

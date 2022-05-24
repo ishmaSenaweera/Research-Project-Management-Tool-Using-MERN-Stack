@@ -36,6 +36,9 @@ function NavBar() {
           <Link to="/admins">
             <button>All Admin</button>
           </Link>
+          <Link to="/chat">
+            <button>Chat</button>
+          </Link>
         </>
       ) : (
         ""

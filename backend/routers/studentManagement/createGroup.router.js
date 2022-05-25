@@ -3,7 +3,7 @@ const Groups = require("../../models/studentManagement/createGroup.model");
 
 router.route("/addGroup").post((req,res)=>{
 
-    const id = req.body.id;
+    const gid = req.body.id;
     const student1 = req.body.student1;
     const student2 = req.body.student2;
     const student3 = req.body.student3;
@@ -12,7 +12,7 @@ router.route("/addGroup").post((req,res)=>{
 ;
 
     const newGroup = new Groups({
-        id,
+        gid,
         student1,
         student2,
         student3,

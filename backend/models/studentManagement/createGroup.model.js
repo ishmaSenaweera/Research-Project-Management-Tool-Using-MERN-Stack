@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const groupsSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
+    gid: { type: String, required: true },
     student1: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
     student2: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
     student3: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },

@@ -3,14 +3,14 @@ const mongoose = require("mongoose");
 const groupsSchema = new mongoose.Schema(
   {
     id: { type: String, required: true },
-    student1: { type: String, required: true },
-    student2: { type: String, required: true },
-    student3: { type: String, required: true },
-    student4: { type: String, required: true },
+    student1: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
+    student2: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
+    student3: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
+    student4: { type: mongoose.Schema.Types.ObjectId,ref: 'Student', required: true },
     researchTopic: { type: String, required: true },
-    topicEvaluationPanelID: { type: String, required: true },
-    supervisorID: { type: String, required: true },
-    cosupervisorID: { type: String, required: true },
+    topicEvaluationPanelID: { type: mongoose.Schema.Types.ObjectId },
+    supervisorID: { type: mongoose.Schema.Types.ObjectId, ref: 'Staff' },
+    cosupervisorID: { type: mongoose.Schema.Types.ObjectId, ref: 'Staff' },
   },
   {
     timestamps: true,

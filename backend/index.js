@@ -70,3 +70,5 @@ app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
+
+app.use("/groups", require("./routers/studentManagement/createGroup.router"));

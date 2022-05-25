@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Groups = require("../../models/studentManagement/createGroup.model");
 
-router.route("/groups").post((req,res)=>{
+router.route("/addGroup").post((req,res)=>{
 
     const id = req.body.id;
     const student1 = req.body.student1;
@@ -9,9 +9,7 @@ router.route("/groups").post((req,res)=>{
     const student3 = req.body.student3;
     const student4 = req.body.student4;
     const researchTopic = req.body.researchTopic;
-    const topicEvaluationPanelId = req.body.topicEvaluationPanelId;
-    const supervisorID = req.body.supervisorID;
-    const cosupervisorID = req.body.cosupervisorID;
+;
 
     const newGroup = new Groups({
         id,
@@ -20,15 +18,12 @@ router.route("/groups").post((req,res)=>{
         student3,
         student4,
         researchTopic,
-        topicEvaluationPanelId,
-        supervisorID,
-        cosupervisorID
     
     })
 
     //Pass object to mongoDB
     newGroup.save().then(()=>{
-        res.json("Studnet Group Added Successfully")
+        res.json("Student Group Added Successfully")
     }).catch((err)=>{
         console.log(err);
     })

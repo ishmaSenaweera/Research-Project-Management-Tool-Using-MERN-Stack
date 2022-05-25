@@ -39,7 +39,7 @@ function UpdateUser() {
 
       console.log(updatedData);
 
-      await axios.put("http://localhost:5000/account/update", updatedData);
+      await axios.put("http://localhost:8000/account/update", updatedData);
       alert("Updated Successfully");
       //await getLoggedIn();
       navigate("/account");

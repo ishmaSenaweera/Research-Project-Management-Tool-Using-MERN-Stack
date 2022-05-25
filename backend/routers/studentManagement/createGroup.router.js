@@ -3,13 +3,19 @@ const Groups = require("../../models/studentManagement/createGroup.model");
 
 router.route("/addGroup").post((req,res)=>{
 
-    const gid = req.body.id;
+    const gid = req.body.gid;
     const student1 = req.body.student1;
     const student2 = req.body.student2;
     const student3 = req.body.student3;
     const student4 = req.body.student4;
     const researchTopic = req.body.researchTopic;
-;
+;   
+    /*const user = await Groups.findById(userid).then((grpRegs) => {
+        res.status(200).send({status : "User Fetched",grpRegs})
+    }).catch((err)=>{
+        console.log(err.message);
+        res.status(500).send({status: "Error with fetch user", error : err.message});
+})*/
 
     const newGroup = new Groups({
         gid,

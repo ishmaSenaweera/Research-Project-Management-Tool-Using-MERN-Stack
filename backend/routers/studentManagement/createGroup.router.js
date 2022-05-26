@@ -33,7 +33,7 @@ router.route("/").post(async (req,res)=>{
         return res.status(400).json({msg:"research topic not found"})
     }
     let code = Math.random().toString(36).substring(2,8);
-    const gid = "GROUP-" + code.toLocaleUpperCase();
+    const gid = "G -" + code.toLocaleUpperCase();
 
     const gr = await Groups.findOne({gid:gid});
     if(gr){

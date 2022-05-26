@@ -18,7 +18,11 @@ function LogOut() {
     }
   }
 
-  return <button onClick={logOut}>Log out</button>;
+  return (
+    <button className="btn btn-danger account-button" onClick={logOut}>
+      Log out
+    </button>
+  );
 }
 
 export default LogOut;

@@ -13,7 +13,7 @@ function AccountUser() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/account/");
+      const result = await axios.get("http://localhost:8000/account/");
 
       setUserData(result.data);
       console.log(userData);
@@ -26,7 +26,7 @@ function AccountUser() {
   async function deleteUser() {
     try {
       console.log("delete user");
-      const result = await axios.delete("http://localhost:5000/account/delete");
+      const result = await axios.delete("http://localhost:8000/account/delete");
       //await getLoggedIn();
       navigate("/");
       console.log(result);

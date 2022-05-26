@@ -22,7 +22,7 @@ function ChangePassword() {
       console.log(updatedData);
 
       await axios.put(
-        "http://localhost:5000/account/changepassword",
+        "http://localhost:8000/account/changepassword",
         updatedData
       );
       alert("Changed Password Successfully");

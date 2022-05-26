@@ -9,7 +9,7 @@ function AllAdmin() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/admin/");
+      const result = await axios.get("http://localhost:8000/admin/");
 
       setAdminData(result.data);
     } catch (err) {

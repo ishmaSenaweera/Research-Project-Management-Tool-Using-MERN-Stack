@@ -8,8 +8,8 @@ function NavBar() {
 
   const location = useLocation();
 
-  useEffect(async () => {
-    await getLoggedIn();
+  useEffect(() => {
+    getLoggedIn();
   }, [location]);
 
   return (
@@ -35,6 +35,9 @@ function NavBar() {
           </Link>
           <Link to="/admins">
             <button>All Admin</button>
+          </Link>
+          <Link to="/chat">
+            <button>Chat</button>
           </Link>
         </>
       ) : (

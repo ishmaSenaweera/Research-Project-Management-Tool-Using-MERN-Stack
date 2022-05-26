@@ -12,7 +12,7 @@ function AccountAdmin() {
         id: state._id,
       };
 
-      const result = await axios.delete("http://localhost:5000/admin/delete", {
+      const result = await axios.delete("http://localhost:8000/admin/delete", {
         data,
       });
       navigate("/staffs");

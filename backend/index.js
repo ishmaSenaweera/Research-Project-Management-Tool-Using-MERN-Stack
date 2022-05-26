@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 const server = app.listen(PORT, () => console.log(`Successfully Server started on : ${PORT}`));
 
@@ -70,3 +70,5 @@ app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
+
+app.use("/groups", require("./routers/studentManagement/createGroup.router"));

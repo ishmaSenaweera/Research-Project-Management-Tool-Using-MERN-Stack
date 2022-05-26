@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
+var schemeRoutes = require("./routers/markingscheme/markingrouter");
+
 const { Server } = require("socket.io");
+
 
 dotenv.config();
 
@@ -70,5 +74,8 @@ app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
+
+app.use("/scheme", schemeRoutes);
+
 
 app.use("/groups", require("./routers/studentManagement/createGroup.router"));

@@ -21,7 +21,7 @@ class StudentView extends React.Component {
   }
 
   componentDidMount() {
-    const url = "http://localhost:1234/scheme";
+    const url = "http://localhost:8000/scheme";
     axios
       .get(url)
       .then((response) => this.setState({ scheme: response["data"] }));
@@ -34,7 +34,7 @@ class StudentView extends React.Component {
     doc.text("Marking Scheme Report", 40, 40);
     var data;
 
-    const url = "http://localhost:1234/scheme/" + id;
+    const url = "http://localhost:8000/scheme/" + id;
     await axios
       .get(url, {
         headers: { "Content-Type": "application/json" },
@@ -88,7 +88,7 @@ class StudentView extends React.Component {
   };
 
   onDelete(id) {
-    const url = "http://localhost:1234/scheme/";
+    const url = "http://localhost:8000/scheme/";
     axios.delete(url + id).then((res) => {
       ButterToast.raise({
         content: (

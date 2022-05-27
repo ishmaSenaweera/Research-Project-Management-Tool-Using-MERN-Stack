@@ -24,7 +24,7 @@ class AllScheme extends React.Component {
   }
 
   componentDidMount() {
-    const url = "http://localhost:1234/scheme";
+    const url = "http://localhost:8000/scheme";
     axios
       .get(url)
       .then((response) => this.setState({ scheme: response["data"] }));
@@ -192,7 +192,7 @@ class AllScheme extends React.Component {
       console.log(res);
       if (res) {
         console.log(this.state);
-        const url = "http://localhost:1234/scheme/" + this.state.id;
+        const url = "http://localhost:8000/scheme/" + this.state.id;
         const data = JSON.stringify({
           name: this.state.name,
           lecturer_in_charge: this.state.lecturer_in_charge,
@@ -226,7 +226,7 @@ class AllScheme extends React.Component {
   };
 
   onDelete(id) {
-    const url = "http://localhost:1234/scheme/";
+    const url = "http://localhost:8000/scheme/";
     axios.delete(url + id).then((res) => {
       ButterToast.raise({
         content: (

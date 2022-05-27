@@ -203,7 +203,7 @@ class Add extends React.Component {
       console.log(res);
       if (res) {
         console.log(this.state);
-        const url = "http://localhost:1234/scheme/";
+        const url = "http://localhost:8000/scheme/";
         const data = JSON.stringify({
           name: this.state.name,
           lecturer_in_charge: this.state.lecturer_in_charge,

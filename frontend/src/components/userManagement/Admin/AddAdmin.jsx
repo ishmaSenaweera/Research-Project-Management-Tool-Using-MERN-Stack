@@ -33,7 +33,7 @@ function AddAdmin() {
 
       console.log(registerData);
 
-      await axios.post("http://localhost:5000/admin/register", registerData);
+      await axios.post("http://localhost:8000/admin/register", registerData);
       alert("Verification Email Sent successfully");
       await getLoggedIn();
       navigate("/admins");

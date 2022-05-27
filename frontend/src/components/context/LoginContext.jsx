@@ -17,7 +17,7 @@ function AuthContextProvider(props) {
   async function getLoggedIn() {
     try {
       const loggedInRes = await axios.get(
-        "http://localhost:5000/auth/loggedin",
+        "http://localhost:8000/auth/loggedin",
         {
           withCredentials: true,
         }

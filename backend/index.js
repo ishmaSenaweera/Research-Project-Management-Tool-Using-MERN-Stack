@@ -4,12 +4,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-
-
-
 const { Server } = require("socket.io");
-
-
 
 dotenv.config();
 
@@ -52,8 +47,4 @@ app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
 
-
-
-
 app.use("/groups", require("./routers/studentManagement/createGroup.router"));
-

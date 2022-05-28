@@ -7,7 +7,6 @@ router.route("/").post(async (req,res)=>{
     const student2 = req.body.student2;
     const student3 = req.body.student3;
     const student4 = req.body.student4;
-    const researchTopic = req.body.researchTopic;
 
     let students = [student1,student2,student3,student4];
 
@@ -29,11 +28,12 @@ router.route("/").post(async (req,res)=>{
             return res.status(400).json({msg:"student not found"})
         }
     }
-    if(!researchTopic){
-        return res.status(400).json({msg:"research topic not found"})
-    }
+    // if(!researchTopic){
+    //     return res.status(400).json({msg:"research topic not found"})
+    // }
+    
     let code = Math.random().toString(36).substring(2,8);
-    const gid = "GROUP-" + code.toLocaleUpperCase();
+    const gid = "G -" + code.toLocaleUpperCase();
 
     const gr = await Groups.findOne({gid:gid});
     if(gr){
@@ -51,7 +51,6 @@ router.route("/").post(async (req,res)=>{
         student2:students[1],
         student3:students[2],
         student4:students[3],
-        researchTopic:researchTopic
     });
     await inserted.save();
     if(inserted){

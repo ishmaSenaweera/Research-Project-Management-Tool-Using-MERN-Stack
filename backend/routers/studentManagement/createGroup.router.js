@@ -7,7 +7,6 @@ router.route("/").post(async (req,res)=>{
     const student2 = req.body.student2;
     const student3 = req.body.student3;
     const student4 = req.body.student4;
-    const researchTopic = req.body.researchTopic;
 
     let students = [student1,student2,student3,student4];
 
@@ -51,7 +50,6 @@ router.route("/").post(async (req,res)=>{
         student2:students[1],
         student3:students[2],
         student4:students[3],
-        researchTopic:researchTopic
     });
     await inserted.save();
     if(inserted){

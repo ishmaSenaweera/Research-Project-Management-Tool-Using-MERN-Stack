@@ -28,9 +28,10 @@ router.route("/").post(async (req,res)=>{
             return res.status(400).json({msg:"student not found"})
         }
     }
-    if(!researchTopic){
-        return res.status(400).json({msg:"research topic not found"})
-    }
+    // if(!researchTopic){
+    //     return res.status(400).json({msg:"research topic not found"})
+    // }
+    
     let code = Math.random().toString(36).substring(2,8);
     const gid = "G -" + code.toLocaleUpperCase();
 

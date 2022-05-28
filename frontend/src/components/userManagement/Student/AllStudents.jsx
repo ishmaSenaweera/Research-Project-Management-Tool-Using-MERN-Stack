@@ -9,7 +9,7 @@ function AllStudents() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:8000/student/");
+      const result = await axios.get("http://localhost:5000/student/");
 
       setStudentsData(result.data);
     } catch (err) {
@@ -42,8 +42,8 @@ function AllStudents() {
     });
   }
 
-  useEffect(() => {
-    getData();
+  useEffect(async () => {
+    await getData();
   }, []);
 
   return (

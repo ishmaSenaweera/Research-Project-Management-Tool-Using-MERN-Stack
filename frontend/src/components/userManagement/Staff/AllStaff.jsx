@@ -9,7 +9,7 @@ function AllStaff() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:8000/staff/");
+      const result = await axios.get("http://localhost:5000/staff/");
 
       setStaffData(result.data);
     } catch (err) {
@@ -42,8 +42,8 @@ function AllStaff() {
     });
   }
 
-  useEffect(() => {
-    getData();
+  useEffect(async () => {
+    await getData();
   }, []);
 
   return (

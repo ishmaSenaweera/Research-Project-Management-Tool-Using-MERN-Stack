@@ -17,14 +17,14 @@ function Login() {
         password,
       };
 
-      await axios.get("http:///localhost:8000/auth/login", {
-        params: loginData,
-      });
+      const result = await axios.post(
+        "http:///localhost:5000/auth/login",
+        loginData
+      );
       await getLoggedIn();
       //navigate("/home");
     } catch (err) {
-      console.error(err.response.data.errorMessage);
-      alert(err.response.data.errorMessage);
+      console.error(err);
     }
   }
 

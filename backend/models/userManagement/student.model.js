@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const studentSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    sid: {type: String, required: true},
     dob: { type: Date, required: false },
     gender: { type: String, required: true },
     specialization: { type: String, required: true },

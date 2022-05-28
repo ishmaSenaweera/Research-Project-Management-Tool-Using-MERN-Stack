@@ -41,7 +41,7 @@ function UpdateStudent() {
 
       console.log(updatedData);
 
-      await axios.put("http://localhost:8000/student/update", updatedData);
+      await axios.post("http://localhost:5000/student/update", updatedData);
       alert("Updated Successfully");
       //await getLoggedIn();
       navigate("/students");

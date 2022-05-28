@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
 
-function AddAdmin() {
+function Register() {
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [batch, setBatch] = useState("");
+  const [branch, setBranch] = useState("");
   const [mobile, setMobile] = useState("");
   const [nic, setNic] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +16,6 @@ function AddAdmin() {
   const [passwordVerify, setPasswordVerify] = useState("");
 
   const navigate = useNavigate();
-  const { getLoggedIn } = useContext(AuthContext);
 
   async function register(e) {
     e.preventDefault();
@@ -24,6 +25,9 @@ function AddAdmin() {
         name,
         dob,
         gender,
+        specialization,
+        batch,
+        branch,
         mobile,
         nic,
         email,
@@ -33,10 +37,10 @@ function AddAdmin() {
 
       console.log(registerData);
 
-      await axios.post("http://localhost:5000/admin/register", registerData);
+      await axios.post("http://localhost:5000/student/register", registerData);
       alert("Verification Email Sent successfully");
-      await getLoggedIn();
-      navigate("/admins");
+      //await getLoggedIn();
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +48,7 @@ function AddAdmin() {
 
   return (
     <div>
-      <h1>Add Admin</h1>
+      <h1>Student Registration</h1>
       <form onSubmit={register}>
         <div>
           <label>Name: </label>
@@ -68,6 +72,33 @@ function AddAdmin() {
           <label>Gender: </label>
           <input type="radio" value="male" name="gender" /> Male
           <input type="radio" value="female" name="gender" /> Female
+        </div>
+        <div>
+          <label>Specialization: </label>
+          <input
+            type="text"
+            placeholder="Specialization"
+            onChange={(e) => setSpecialization(e.target.value)}
+            value={specialization}
+          />
+        </div>
+        <div>
+          <label>Batch: </label>
+          <input
+            type="text"
+            placeholder="Batch"
+            onChange={(e) => setBatch(e.target.value)}
+            value={batch}
+          />
+        </div>
+        <div>
+          <label>Branch: </label>
+          <input
+            type="text"
+            placeholder="Branch"
+            onChange={(e) => setBranch(e.target.value)}
+            value={branch}
+          />
         </div>
         <div>
           <label>Mobile Number: </label>
@@ -116,10 +147,10 @@ function AddAdmin() {
             value={passwordVerify}
           />
         </div>
-        <button type="submit">Add Admin</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
 }
 
-export default AddAdmin;
+export default Register;

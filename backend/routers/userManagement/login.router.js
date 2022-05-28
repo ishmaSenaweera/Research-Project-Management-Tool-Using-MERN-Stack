@@ -6,14 +6,14 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../../models/userManagement/token.model");
 const email = require("../../utils/email.util");
-const func = require("../../utils/functions.util.js");
-const valid = require("../../utils/validation.util");
+const func = require("../../utils/func.util.js");
+const valid = require("../../utils/valid.util");
 
 // log in
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     // validate
-    const validated = await valid.loginSchema.validateAsync(req.query);
+    const validated = await valid.loginSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingUser = user.existingUser;
@@ -67,7 +67,7 @@ router.get("/login", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errorMessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);

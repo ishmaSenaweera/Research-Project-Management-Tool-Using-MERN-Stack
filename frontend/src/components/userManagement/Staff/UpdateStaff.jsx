@@ -35,7 +35,7 @@ function UpdateStaff() {
 
       console.log(updatedData);
 
-      await axios.put("http://localhost:8000/staff/update", updatedData);
+      await axios.post("http://localhost:5000/staff/update", updatedData);
       alert("Updated Successfully");
       //await getLoggedIn();
       navigate("/staffs");

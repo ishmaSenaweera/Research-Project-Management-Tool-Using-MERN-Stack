@@ -4,8 +4,8 @@ const Staff = require("../../models/userManagement/staff.model");
 const Student = require("../../models/userManagement/student.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/functions.util.js");
-const valid = require("../../utils/validation.util");
+const func = require("../../utils/func.util.js");
+const valid = require("../../utils/valid.util");
 const { userAccess } = require("../../middleware/accessChecker");
 
 //loggedin user can access
@@ -34,7 +34,7 @@ router.delete("/delete", userAccess, async (req, res) => {
 
 //loggedin user can access
 //update loggedin account
-router.put("/update", userAccess, async (req, res) => {
+router.post("/update", userAccess, async (req, res) => {
   try {
     let validated = null;
     let result = false;
@@ -56,7 +56,7 @@ router.put("/update", userAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errorMessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);
@@ -67,7 +67,7 @@ router.put("/update", userAccess, async (req, res) => {
 
 //loggedin user can access
 //update loggedin password
-router.put("/changepassword", userAccess, async (req, res) => {
+router.post("/changepassword", userAccess, async (req, res) => {
   try {
     const validated = await valid.changePasswordSchema.validateAsync(req.body);
 
@@ -102,7 +102,7 @@ router.put("/changepassword", userAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      res.status(422).send({ errorMessage: err.details[0].message });
+      res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);

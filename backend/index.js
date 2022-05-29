@@ -17,7 +17,9 @@ const app = express();
 
 const PORT = process.env.PORT || 8000;
 
-const server = app.listen(PORT, () => console.log(`Successfully Server started on : ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`Successfully Server started on : ${PORT}`)
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -46,6 +48,7 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
+    console.log("send message" + data.room);
   });
 
   socket.on("disconnect", () => {

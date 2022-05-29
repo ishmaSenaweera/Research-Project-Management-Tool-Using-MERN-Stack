@@ -21,7 +21,7 @@ const studentRegisterSchema = Joi.object({
     .label("E-mail"),
   password: passwordComplexity().required().label("Password"),
   passwordVerify: passwordComplexity()
-    .valid(Joi.ref("Password"))
+    .valid(Joi.ref("password"))
     .required()
     .label("Password Verify"),
 });

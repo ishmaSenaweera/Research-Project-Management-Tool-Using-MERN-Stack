@@ -1,65 +1,60 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
+import { useNavigate } from "react-router-dom";
 
-function UpdateStudent() {
-  const { state } = useLocation();
-  const dobEdited = new Date(state.dob).toISOString().substring(0, 10);
-
-  const [id] = useState(state._id);
-  const [name, setName] = useState(state.name);
-  const [dob, setDob] = useState(dobEdited);
-  const [specialization, setSpecialization] = useState(state.specialization);
-  const [branch, setBranch] = useState(state.branch);
-  const [batch, setBatch] = useState(state.batch);
-  const [gender, setGender] = useState(state.gender);
-  const [mobile, setMobile] = useState(state.mobile);
-  const [nic, setNic] = useState(state.nic);
-  const [email] = useState(state.email);
+function Register() {
+  const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [batch, setBatch] = useState("");
+  const [branch, setBranch] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [nic, setNic] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVerify, setPasswordVerify] = useState("");
 
   const navigate = useNavigate();
-  const { loggedIn } = useContext(AuthContext);
-  console.log(loggedIn);
 
-  async function update(e) {
+  async function register(e) {
     e.preventDefault();
 
     try {
-      const updatedData = {
-        id,
+      const registerData = {
         name,
         dob,
-        specialization,
-        branch,
-        batch,
         gender,
+        specialization,
+        batch,
+        branch,
         mobile,
         nic,
         email,
+        password,
+        passwordVerify,
       };
 
-      console.log(updatedData);
+      console.log(registerData);
 
-      await axios.post("http://localhost:5000/student/update", updatedData);
-      alert("Updated Successfully");
+      await axios.post("http://localhost:5000/student/register", registerData);
+      alert("Verification Email Sent successfully");
       //await getLoggedIn();
-      navigate("/students");
+      navigate("/");
     } catch (err) {
-      //await getLoggedIn();
       console.error(err);
     }
   }
 
   return (
     <div>
-      <h1>Student Account Update</h1>
-      <form onSubmit={update}>
+      <h1>Student Registration</h1>
+      <form onSubmit={register}>
         <div>
           <label>Name: </label>
           <input
             type="text"
-            placeholder={name}
+            placeholder="Name"
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
@@ -126,13 +121,36 @@ function UpdateStudent() {
           />
         </div>
         <div>
-          <label>Email: </label>
-          <input type="email" disabled placeholder="Email" value={email} />
+          <label>E-mail: </label>
+          <input
+            type="email"
+            placeholder="E-mail"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
         </div>
-        <button type="submit">Update</button>
+        <div>
+          <label>Password: </label>
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+        </div>
+        <div>
+          <label>Verify Password: </label>
+          <input
+            type="password"
+            placeholder="Verify Password"
+            onChange={(e) => setPasswordVerify(e.target.value)}
+            value={passwordVerify}
+          />
+        </div>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
 }
 
-export default UpdateStudent;
+export default Register;

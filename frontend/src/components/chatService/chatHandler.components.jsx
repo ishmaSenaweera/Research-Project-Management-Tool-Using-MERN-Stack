@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import Chat from "./chat.components";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("http://localhost:8000");
 
 function ChatHandler() {
   const [username, setUsername] = useState("");

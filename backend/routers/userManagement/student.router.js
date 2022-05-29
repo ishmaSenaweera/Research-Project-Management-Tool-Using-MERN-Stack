@@ -2,8 +2,8 @@ const router = require("express").Router();
 const Student = require("../../models/userManagement/student.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/functions.util.js");
-const valid = require("../../utils/validation.util");
+const func = require("../../utils/func.util.js");
+const valid = require("../../utils/valid.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
 //anyone can access
@@ -28,7 +28,6 @@ router.post("/register", async (req, res) => {
     // save a new user account to the db
     const newStudent = await new Student({
       name: validated.name,
-      sid: validated.sid,
       dob: validated.dob,
       gender: validated.gender,
       specialization: validated.specialization,
@@ -56,7 +55,7 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errorMessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -108,7 +107,7 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
 //only admin can access
 //update student
-router.put("/update", adminAccess, async (req, res) => {
+router.post("/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.studentUpdateSchema.validateAsync(req.body);
 
@@ -119,7 +118,7 @@ router.put("/update", adminAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errorMessage: err.details[0].message });
+      return res.status(422).send({ errormessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);

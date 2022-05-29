@@ -42,8 +42,8 @@ function AllStaff() {
     });
   }
 
-  useEffect(() => {
-    getData();
+  useEffect(async () => {
+    await getData();
   }, []);
 
   return (

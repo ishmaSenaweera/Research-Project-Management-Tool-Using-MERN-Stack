@@ -33,7 +33,7 @@ function AddStaff() {
 
       console.log(registerData);
 
-      await axios.post("http://localhost:5000/staff/register", registerData);
+      await axios.post("http://localhost:8000/staff/register", registerData);
       alert("Verification Email Sent successfully");
       await getLoggedIn();
       navigate("/staffs");

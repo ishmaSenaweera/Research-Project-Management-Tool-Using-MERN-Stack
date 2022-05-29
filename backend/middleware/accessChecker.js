@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const func = require("../utils/func.util");
+const func = require("../utils/functions.util");
 
 // //check loggedin user is a Student
 // async function studentAccess(req, res, next) {

@@ -10,7 +10,7 @@ function LogOut() {
 
   async function logOut() {
     try {
-      await axios.get("http:///localhost:5000/auth/logout");
+      await axios.get("http:///localhost:8000/auth/logout");
       //await getLoggedIn();
       navigate("/");
     } catch (err) {
@@ -18,7 +18,11 @@ function LogOut() {
     }
   }
 
-  return <button onClick={logOut}>Log out</button>;
+  return (
+    <button className="btn btn-danger account-button" onClick={logOut}>
+      Log out
+    </button>
+  );
 }
 
 export default LogOut;

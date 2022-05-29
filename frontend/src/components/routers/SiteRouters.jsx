@@ -1,25 +1,26 @@
 import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/userManagement/Home";
-import NavBar from "./components/layout/NavBar";
-import Login from "./components/userManagement/auth/Login";
-import Register from "./components/userManagement/auth/Register";
-import Verify from "./components/userManagement/auth/Verify";
-import AuthContext from "./components/context/LoginContext";
-import AccountUser from "./components/userManagement/User/AccountUser";
-import UpdateUser from "./components/userManagement/User/UpdateUser";
-import AllStudents from "./components/userManagement/Student/AllStudents";
-import AllStaff from "./components/userManagement/Staff/AllStaff";
-import AddStaff from "./components/userManagement/Staff/AddStaff";
-import UpdateStaff from "./components/userManagement/Staff/UpdateStaff";
-import AccountStaff from "./components/userManagement/Staff/AccountStaff";
-import UpdateStudent from "./components/userManagement/Student/UpdateStudent";
-import AccountStudent from "./components/userManagement/Student/AccountStudent";
-import ChangePassword from "./components/userManagement/User/ChangePassword";
-import AllAdmin from "./components/userManagement/Admin/AllAdmin";
-import AccountAdmin from "./components/userManagement/Admin/AccountAdmin";
-import UpdateAdmin from "./components/userManagement/Admin/UpdateAdmin";
-import AddAdmin from "./components/userManagement/Admin/AddAdmin";
+import Home from "../userManagement/Home";
+import NavBar from "../layout/NavBar";
+import Login from "../userManagement/auth/Login";
+import Register from "../userManagement/Student/Register";
+import Verify from "../userManagement/auth/Verify";
+import AuthContext from "../context/LoginContext";
+import AccountUser from "../userManagement/User/AccountUser";
+import UpdateUser from "../userManagement/User/UpdateUser";
+import AllStudents from "../userManagement/Student/AllStudents";
+import AllStaff from "../userManagement/Staff/AllStaff";
+import AddStaff from "../userManagement/Staff/AddStaff";
+import UpdateStaff from "../userManagement/Staff/UpdateStaff";
+import AccountStaff from "../userManagement/Staff/AccountStaff";
+import UpdateStudent from "../userManagement/Student/UpdateStudent";
+import AccountStudent from "../userManagement/Student/AccountStudent";
+import ChangePassword from "../userManagement/User/ChangePassword";
+import AllAdmin from "../userManagement/Admin/AllAdmin";
+import AccountAdmin from "../userManagement/Admin/AccountAdmin";
+import UpdateAdmin from "../userManagement/Admin/UpdateAdmin";
+import AddAdmin from "../userManagement/Admin/AddAdmin";
+import ChatHandler from "../chatService/chatHandler.components";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -29,6 +30,7 @@ function SiteRouters() {
         <NavBar />
         <Routes>
           <Route path="/verify/:id/:token" element={<Verify />} />
+          <Route path="/chat" element={<ChatHandler />} />
 
           {loggedIn === false ? (
             <>

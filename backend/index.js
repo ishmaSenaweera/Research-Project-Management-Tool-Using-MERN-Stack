@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const { Server } = require("socket.io");
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Successfully Server started on : ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Successfully Server started on : ${PORT}`));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -22,6 +23,31 @@ app.use(
     credentials: true,
   })
 );
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:1234",
+    // credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
+});
 
 // connect to mongoDB
 

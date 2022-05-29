@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [name, setName] = useState("");
+  const [sid, setSid] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
   const [specialization, setSpecialization] = useState("");
@@ -23,6 +24,7 @@ function Register() {
     try {
       const registerData = {
         name,
+        sid,
         dob,
         gender,
         specialization,
@@ -42,7 +44,8 @@ function Register() {
       //await getLoggedIn();
       navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data.errorMessage);
+      alert(err.response.data.errorMessage);
     }
   }
 
@@ -55,8 +58,20 @@ function Register() {
           <input
             type="text"
             placeholder="Name"
+            required
             onChange={(e) => setName(e.target.value)}
             value={name}
+          />
+        </div>
+        <div>
+          <label>SLIIT ID: </label>
+          <input
+            type="text"
+            placeholder="SLIIT ID"
+            maxLength={10}
+            required
+            onChange={(e) => setSid(e.target.value)}
+            value={sid}
           />
         </div>
         <div>
@@ -64,6 +79,7 @@ function Register() {
           <input
             type="date"
             placeholder="dob"
+            required
             onChange={(e) => setDob(e.target.value)}
             value={dob}
           />
@@ -78,6 +94,7 @@ function Register() {
           <input
             type="text"
             placeholder="Specialization"
+            required
             onChange={(e) => setSpecialization(e.target.value)}
             value={specialization}
           />
@@ -87,6 +104,7 @@ function Register() {
           <input
             type="text"
             placeholder="Batch"
+            required
             onChange={(e) => setBatch(e.target.value)}
             value={batch}
           />
@@ -96,6 +114,7 @@ function Register() {
           <input
             type="text"
             placeholder="Branch"
+            required
             onChange={(e) => setBranch(e.target.value)}
             value={branch}
           />
@@ -106,6 +125,7 @@ function Register() {
             type="text"
             placeholder="Mobile Number"
             maxLength="10"
+            required
             onChange={(e) => setMobile(e.target.value)}
             value={mobile}
           />
@@ -116,6 +136,7 @@ function Register() {
             type="text"
             placeholder="Nic"
             maxLength="11"
+            required
             onChange={(e) => setNic(e.target.value)}
             value={nic}
           />
@@ -125,6 +146,7 @@ function Register() {
           <input
             type="email"
             placeholder="E-mail"
+            required
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -134,6 +156,7 @@ function Register() {
           <input
             type="password"
             placeholder="Password"
+            required
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
@@ -143,6 +166,7 @@ function Register() {
           <input
             type="password"
             placeholder="Verify Password"
+            required
             onChange={(e) => setPasswordVerify(e.target.value)}
             value={passwordVerify}
           />

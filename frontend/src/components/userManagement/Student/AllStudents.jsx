@@ -42,8 +42,8 @@ function AllStudents() {
     });
   }
 
-  useEffect(async () => {
-    await getData();
+  useEffect(() => {
+    getData();
   }, []);
 
   return (

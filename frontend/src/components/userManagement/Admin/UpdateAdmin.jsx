@@ -35,7 +35,7 @@ function UpdateAdmin() {
 
       console.log(updatedData);
 
-      await axios.post("http://localhost:5000/admin/update", updatedData);
+      await axios.put("http://localhost:8000/admin/update", updatedData);
       alert("Updated Successfully");
       //await getLoggedIn();
       navigate("/admins");

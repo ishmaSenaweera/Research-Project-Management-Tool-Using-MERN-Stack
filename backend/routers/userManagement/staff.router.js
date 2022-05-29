@@ -2,8 +2,8 @@ const router = require("express").Router();
 const Staff = require("../../models/userManagement/staff.model");
 const bcrypt = require("bcryptjs");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 const { adminAccess } = require("../../middleware/accessChecker");
 
 //register staff
@@ -52,7 +52,7 @@ router.post("/register", adminAccess, async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);
@@ -102,19 +102,18 @@ router.delete("/delete", adminAccess, async (req, res) => {
 
 //only admin can access
 //update staff account
-router.post("/update", adminAccess, async (req, res) => {
+router.put("/update", adminAccess, async (req, res) => {
   try {
     const validated = await valid.staffUpdateSchema.validateAsync(req.body);
 
     const result = await func.updateStaff(validated.id, validated);
-    
 
     email.sendSuccUpAd(validated.email, validated.name);
     res.send(result);
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      res.status(422).send({ errormessage: err.details[0].message });
+      res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       res.json(false);
       console.error(err);

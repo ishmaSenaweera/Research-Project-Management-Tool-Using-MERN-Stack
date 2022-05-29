@@ -1,42 +1,33 @@
 import React from "react";
 import "../App.css";
 import axios from "axios";
-import {
-  Grid,
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-} from "@material-ui/core";
+import MaterialTable from "material-table";
 import ButterToast, { Cinnamon } from "butter-toast";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 const initialState = {
+  id: "",
   name: "",
   lecturer_in_charge: "",
   module_name: "",
   creativity: "",
   concept: "",
   quality: "",
+  scheme: [],
 };
 
-class Add extends React.Component {
+class AllScheme extends React.Component {
   constructor(props) {
     super(props);
     this.state = initialState;
   }
 
-  handleChange = (e) => {
-    const isCheckbox = e.target.type === "checkbox";
-    this.setState({
-      [e.target.name]: isCheckbox ? e.target.checked : e.target.value,
-    });
-  };
-
-  onClear() {
-    this.setState(initialState);
+  componentDidMount() {
+    const url = "http://localhost:1234/scheme";
+    axios
+      .get(url)
+      .then((response) => this.setState({ scheme: response["data"] }));
   }
 
   validation = async () => {
@@ -196,14 +187,12 @@ class Add extends React.Component {
     return true;
   };
 
-  SubmitForm = async (e) => {
-    e.preventDefault();
-
+  SubmitForm = async () => {
     this.validation().then(async (res) => {
       console.log(res);
       if (res) {
         console.log(this.state);
-        const url = "http://localhost:1234/scheme/";
+        const url = "http://localhost:1234/scheme/" + this.state.id;
         const data = JSON.stringify({
           name: this.state.name,
           lecturer_in_charge: this.state.lecturer_in_charge,
@@ -214,17 +203,18 @@ class Add extends React.Component {
         });
         console.log(data);
         await axios
-          .post(url, data, {
+          .put(url, data, {
             headers: { "Content-Type": "application/json" },
           })
           .then((res) => {
             console.log(res.data);
+            this.componentDidMount();
             this.setState(initialState);
             ButterToast.raise({
               content: (
                 <Cinnamon.Crisp
                   title="Success!"
-                  content="Insert Successful!"
+                  content="Update Successful!"
                   scheme={Cinnamon.Crisp.SCHEME_GREEN}
                   icon={<CheckCircleOutlineIcon />}
                 />
@@ -235,130 +225,77 @@ class Add extends React.Component {
     });
   };
 
-  render() {
-    return (
-      <div className="App">
-        <Typography gutterBottom variant="h3" align="center">
-          Marking Scheme Management
-        </Typography>
-        <Grid>
-          <Card
-            style={{ maxWidth: 450, padding: "20px 5px", margin: "0 auto" }}
-          >
-            <CardContent>
-              <Typography gutterBottom variant="h5">
-                Add Marking Scheme
-              </Typography>
-              <br />
-              <form autoComplete="off" onSubmit={this.SubmitForm}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="text"
-                      placeholder="Marking Scheme Name"
-                      label="Marking Scheme Name"
-                      variant="outlined"
-                      name="name"
-                      value={this.state.name}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="text"
-                      placeholder="Lecturer In Charge"
-                      label="Lecturer In Charge"
-                      variant="outlined"
-                      name="lecturer_in_charge"
-                      value={this.state.lecturer_in_charge}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="text"
-                      placeholder="Module Name"
-                      label="Module Name"
-                      variant="outlined"
-                      name="module_name"
-                      value={this.state.module_name}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="number"
-                      placeholder="Marks for Creativity"
-                      label="Marks for Creativity"
-                      variant="outlined"
-                      min="1"
-                      max="100"
-                      name="creativity"
-                      value={this.state.creativity}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="number"
-                      placeholder="Marks for Using Concept"
-                      label="Marks for Using Concept"
-                      variant="outlined"
-                      min="1"
-                      max="100"
-                      name="concept"
-                      value={this.state.concept}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="number"
-                      placeholder="Marks for Quality of the Content"
-                      label="Marks for Quality of the Content"
-                      variant="outlined"
-                      min="1"
-                      max="100"
-                      name="quality"
-                      value={this.state.quality}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
+  onDelete(id) {
+    const url = "http://localhost:1234/scheme/";
+    axios.delete(url + id).then((res) => {
+      ButterToast.raise({
+        content: (
+          <Cinnamon.Crisp
+            title="Success!"
+            content="Delete Successful!"
+            scheme={Cinnamon.Crisp.SCHEME_GREEN}
+            icon={<CheckCircleOutlineIcon />}
+          />
+        ),
+      });
+      this.componentDidMount();
+    });
+  }
 
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => this.onClear()}
-                      fullWidth
-                    >
-                      Clear
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
+  render() {
+    const { scheme } = this.state;
+    console.log(scheme);
+    const columns = [
+      { title: "Name", field: "name" },
+      { title: "Lecturer in charge", field: "lecturer_in_charge" },
+      { title: "Module Name", field: "module_name" },
+      { title: "Marks for Creativity", field: "creativity", type: "numeric" },
+      { title: "Marks for Using Concept", field: "concept", type: "numeric" },
+      {
+        title: "Marks for Quality of the Content",
+        field: "quality",
+        type: "numeric",
+      },
+    ];
+    return (
+      <div>
+        <MaterialTable
+          title="Marking Scheme Table"
+          columns={columns}
+          data={scheme}
+          options={{
+            filtering: true,
+            sorting: true,
+            actionsColumnIndex: -1,
+          }}
+          editable={{
+            onRowUpdate: (newRow, oldRow) =>
+              new Promise(async (resolve, reject) => {
+                console.log(newRow);
+                await this.setState({
+                  id: oldRow._id,
+                  name: newRow.name,
+                  lecturer_in_charge: newRow.lecturer_in_charge,
+                  module_name: newRow.module_name,
+                  creativity: newRow.creativity,
+                  concept: newRow.concept,
+                  quality: newRow.quality,
+                });
+                this.SubmitForm();
+                console.log(oldRow._id);
+                setTimeout(() => resolve(), 300);
+              }),
+            onRowDelete: (selectedRow) =>
+              new Promise((resolve, reject) => {
+                console.log(selectedRow);
+                this.onDelete(selectedRow._id);
+                setTimeout(() => resolve(), 300);
+              }),
+          }}
+        />
       </div>
     );
   }
 }
 
-export default Add;
+export default AllScheme;

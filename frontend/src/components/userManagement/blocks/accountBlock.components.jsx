@@ -6,7 +6,6 @@ const BlockAccount = (props) => {
   const { userData } = props;
   const { type } = props;
   const { heading } = props;
-  console.log(userData);
 
   return (
     <div className="main">
@@ -63,7 +62,7 @@ const BlockAccount = (props) => {
             )}
             <tr>
               <td>
-                <h3>DoB</h3>
+                <h3>Date of birth</h3>
               </td>
               <td>
                 <h3>{userData.dobEdited}</h3>
@@ -101,10 +100,24 @@ const BlockAccount = (props) => {
                 <h3>{userData.email}</h3>
               </td>
             </tr>
+            <tr>
+              <td>
+                <h3>Verified</h3>
+              </td>
+              {userData.verified === true && (
+                <td>
+                  <h3>E-mail Verified</h3>
+                </td>
+              )}
+              {userData.verified === false && (
+                <td>
+                  <h3>E-mail Not Verified</h3>
+                </td>
+              )}
+            </tr>
           </tbody>
         </Table>
         <button className="btn btn-primary account-button" onClick={props.edit}>
-          <i className="fas fa-pen"></i>
           Edit
         </button>
         {heading === "User Account" ? (
@@ -113,7 +126,6 @@ const BlockAccount = (props) => {
               className="btn btn-warning account-button"
               onClick={props.changepassword}
             >
-              <i className="fas fa-regular fa-key"></i>
               Change Password
             </button>
           </>
@@ -124,7 +136,6 @@ const BlockAccount = (props) => {
           className="btn btn-danger account-button"
           onClick={props.delete}
         >
-          <i className="fas fa-user-slash"></i>
           Delete
         </button>
       </div>

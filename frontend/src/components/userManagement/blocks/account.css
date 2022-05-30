@@ -33,15 +33,19 @@
   border: none;
   outline: none;
 }
-
-.email {
-  height: 25px;
-  width: 25px;
-  font-size: 20px;
-  position: absolute;
-  padding: 14px 0 0 25px;
+.form-radio {
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 5px 0px rgb(202, 197, 197);
+  border: none;
+  outline: none;
+  padding: 10px;
+  margin: 10px;
 }
+.form-radio-space {
+  margin: 10px;
 
+}
 .name {
   padding-left: 10px;
   font-size: 20px;
@@ -76,7 +80,7 @@
 }
 .account-sub-main {
   justify-content: center;
-  width: 600px;
+  width: auto;
   height: auto;
   font-size: 20px;
   /* box-shadow: 5px 5px 1px 2px rgb(207, 207, 207); */
@@ -138,12 +142,6 @@
 .head {
   text-align: center;
   justify-content: center;
-  display: flex;
-  padding-top: 10px;
-}
-.nav-right {
-  text-align: center;
-  justify-content: right;
   display: flex;
   padding-top: 10px;
 }

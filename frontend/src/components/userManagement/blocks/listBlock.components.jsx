@@ -10,7 +10,12 @@ const BlockList = (props) => {
           <td>{index + 1}</td>
           <td>{current.name}</td>
           <td>{current.email}</td>
-          <td>{current.mobile}</td>
+          {props.heading === "Students" ? (
+            <td>{current.sid}</td>
+          ) : (
+            <td>{current.nic}</td>
+          )}
+
           <td>
             <button
               className="btn btn-primary account-button-blue"
@@ -42,10 +47,14 @@ const BlockList = (props) => {
         <Table className="table table-hover">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Mobile</th>
+              {props.heading === "Students" ? (
+                <th>Student ID</th>
+              ) : (
+                <th>Nic</th>
+              )}
               <th>Action</th>
             </tr>
           </thead>

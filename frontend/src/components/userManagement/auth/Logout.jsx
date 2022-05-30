@@ -19,7 +19,7 @@ function LogOut() {
   }
 
   return (
-    <button class="btn btn-outline-light" onClick={logOut}>
+    <button className="btn btn-outline-light" onClick={logOut}>
       Log out
     </button>
   );

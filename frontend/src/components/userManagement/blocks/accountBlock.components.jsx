@@ -1,5 +1,5 @@
 import Table from "react-bootstrap/esm/Table";
-import "./account.css"
+import "./account.css";
 
 const BlockAccount = (props) => {
   /* Destructuring the props object. */
@@ -11,113 +11,95 @@ const BlockAccount = (props) => {
     <div className="main">
       <div className="account-sub-main">
         <div>
-          {/* <div className="imgs">
-            <img src={Logo} alt="profile" className="profile" />
-          </div> */}
           <h1>{props.heading}</h1>
           <hr />
         </div>
-        <Table className="table table-hover">
+        <Table className="table table-bordered">
           <tbody>
             <tr>
-              <td className="col-sm-6">
-                <h2>Name</h2>
+              <td>
+                <h3>Name</h3>
               </td>
               <td>
-                <h2>{userData.name}</h2>
+                <h3>{userData.name}</h3>
               </td>
             </tr>
-            <tr>
-              <td className="col-sm-8">
-                <h2>Student ID</h2>
-              </td>
-              <td>
-                <h2>{userData.sid}</h2>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <h2>E-mail</h2>
-              </td>
-              <td>
-                <h2>{userData.email}</h2>
-              </td>
-            </tr>
-            <tr>
-              <td className="col-sm-4">
-                <h2>Nic</h2>
-              </td>
-              <td className="col-sm-9">
-                <h2>{userData.nic}</h2>
-              </td>
-            </tr>
-            {type === "SystemAdmin" ? (
+            {type === "Student" && (
               <>
                 <tr>
-                  <td className="col-sm-3">
-                    <h2>DoB</h2>
+                  <td>
+                    <h3>Student ID</h3>
                   </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.dobEdited}</h2>
+                  <td>
+                    <h3>{userData.sid}</h3>
                   </td>
                 </tr>
                 <tr>
-                  <td className="col-sm-3">
-                    <h2>Hometown</h2>
+                  <td>
+                    <h3>Specialization</h3>
                   </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.hometown}</h2>
+                  <td>
+                    <h3>{userData.specialization}</h3>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h3>Batch</h3>
+                  </td>
+                  <td>
+                    <h3>{userData.batch}</h3>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h3>Branch</h3>
+                  </td>
+                  <td>
+                    <h3>{userData.branch}</h3>
                   </td>
                 </tr>
               </>
-            ) : (
-              ""
             )}
-            {type === "HotelAdmin" ? (
-              <>
-                <tr>
-                  <td className="col-sm-3">
-                    <h2>DoB</h2>
-                  </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.dob}</h2>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="col-sm-3">
-                    <h2>Mobile</h2>
-                  </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.phoneNumber}</h2>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="col-sm-3">
-                    <h2>Address</h2>
-                  </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.address}</h2>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="col-sm-3">
-                    <h2>Designation</h2>
-                  </td>
-                  <td className="col-sm-9">
-                    <h2>{userData.designation}</h2>
-                  </td>
-                </tr>
-              </>
-            ) : (
-              <tr>
-                <td className="col-sm-3">
-                  <h2>Mobile</h2>
-                </td>
-                <td className="col-sm-9">
-                  <h2>{userData.mobile}</h2>
-                </td>
-              </tr>
-            )}
+            <tr>
+              <td>
+                <h3>DoB</h3>
+              </td>
+              <td>
+                <h3>{userData.dobEdited}</h3>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h3>Gender</h3>
+              </td>
+              <td>
+                <h3>{userData.gender}</h3>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h3>Mobile</h3>
+              </td>
+              <td>
+                <h3>{userData.mobile}</h3>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h3>NIC</h3>
+              </td>
+              <td>
+                <h3>{userData.nic}</h3>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h3>E-mail</h3>
+              </td>
+              <td>
+                <h3>{userData.email}</h3>
+              </td>
+            </tr>
           </tbody>
         </Table>
         <button className="btn btn-primary account-button" onClick={props.edit}>

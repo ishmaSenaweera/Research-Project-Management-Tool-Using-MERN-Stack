@@ -33,7 +33,6 @@ function AccountUser() {
       const result = await axios.delete("http://localhost:8000/account/delete");
       //await getLoggedIn();
       navigate("/");
-      console.log(result);
     } catch (err) {
       //await getLoggedIn();
       console.log(err);

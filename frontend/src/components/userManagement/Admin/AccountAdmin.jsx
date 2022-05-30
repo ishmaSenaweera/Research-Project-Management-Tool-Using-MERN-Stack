@@ -22,7 +22,6 @@ function AccountAdmin() {
         data,
       });
       navigate("/staffs");
-      console.log(result);
     } catch (err) {
       console.log(err);
     }

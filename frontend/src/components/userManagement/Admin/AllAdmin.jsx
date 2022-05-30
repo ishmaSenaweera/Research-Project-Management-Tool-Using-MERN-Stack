@@ -50,7 +50,7 @@ function AllAdmin() {
   return (
     <BlockList
       data={adminData}
-      addCustomer={addAdmin}
+      add={addAdmin}
       viewDetails={viewDetails}
       heading="Admins"
     />

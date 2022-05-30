@@ -50,9 +50,9 @@ function AllStaff() {
   return (
     <BlockList
       data={staffData}
-      addCustomer={addStaff}
+      add={addStaff}
       viewDetails={viewDetails}
-      heading="Staff"
+      heading="Staffs"
     />
   );
 }

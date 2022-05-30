@@ -19,8 +19,6 @@ function ChangePassword() {
         newPasswordVerify,
       };
 
-      console.log(updatedData);
-
       await axios.put(
         "http://localhost:8000/account/changepassword",
         updatedData

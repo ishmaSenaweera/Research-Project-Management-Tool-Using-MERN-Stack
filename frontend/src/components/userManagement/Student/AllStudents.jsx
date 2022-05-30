@@ -22,6 +22,10 @@ function AllStudents() {
   function viewDetails(params) {
     navigate("/students/account", { state: params });
   }
+  
+  function addStudent() {
+    navigate("/register");
+  }
 
   function studentList() {
     return studentsData.map((currentStudent, index) => {
@@ -50,7 +54,6 @@ function AllStudents() {
   return (
     <BlockList
       data={studentsData}
-      addCustomer={viewDetails}
       viewDetails={viewDetails}
       heading="Students"
     />

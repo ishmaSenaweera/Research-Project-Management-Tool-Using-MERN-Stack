@@ -24,21 +24,19 @@ function AccountStudent() {
         }
       );
       navigate("/students");
-      console.log(result);
     } catch (err) {
       console.log(err);
     }
   }
 
   async function updateStudent() {
-    console.log("student");
     navigate("/students/update", { state: state });
   }
 
   return (
     <BlockAccount
       userData={state}
-      heading="System Admin Account"
+      heading="Student Account"
       type="Student"
       delete={deleteStudent}
       edit={updateStudent}

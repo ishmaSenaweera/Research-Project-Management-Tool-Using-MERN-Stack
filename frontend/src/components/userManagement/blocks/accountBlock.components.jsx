@@ -6,6 +6,7 @@ const BlockAccount = (props) => {
   const { userData } = props;
   const { type } = props;
   const { heading } = props;
+  console.log(userData);
 
   return (
     <div className="main">

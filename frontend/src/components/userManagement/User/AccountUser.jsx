@@ -14,9 +14,13 @@ function AccountUser() {
   async function getData() {
     try {
       const result = await axios.get("http://localhost:8000/account/");
-
+      if (result.data.dob) {
+        const dobEdited = new Date(result.data.dob)
+          .toISOString()
+          .substring(0, 10);
+        result.data.dobEdited = dobEdited;
+      }
       setUserData(result.data);
-      console.log(userData);
     } catch (err) {
       //await getLoggedIn();
       console.log(err);
@@ -39,7 +43,7 @@ function AccountUser() {
   async function updateUser() {
     navigate("/account/update", { state: userData });
   }
-  
+
   async function changepassword() {
     navigate("/account/changepassword");
   }

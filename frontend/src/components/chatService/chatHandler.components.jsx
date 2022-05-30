@@ -19,7 +19,7 @@ function ChatHandler() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/account/");
+      const result = await axios.get("http://localhost:8000/account/");
 
       setUserData(result.data);
       joinRoom();

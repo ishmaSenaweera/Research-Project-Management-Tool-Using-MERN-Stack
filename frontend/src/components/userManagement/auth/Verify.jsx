@@ -29,7 +29,6 @@ function Verify() {
 
   return (
     <div>
-      {console.log(isVerify)}
       {isVerify === "" ? <h1>Loading...</h1> : ""}
       {isVerify === true ? <h1>Successfully Verified!</h1> : ""}
       {isVerify === false ? <h1>404 Not Found!</h1> : ""}

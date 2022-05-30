@@ -23,12 +23,6 @@ function NavBar() {
               <>
                 <Nav.Link href="/register">Register</Nav.Link>
                 <Nav.Link href="/">Login</Nav.Link>
-                {/* <Link to="/register">
-                  <button>Register</button>
-                </Link>
-                <Link to="/">
-                  <button>Login</button>
-                </Link> */}
               </>
             )}
 
@@ -37,20 +31,6 @@ function NavBar() {
                 <Nav.Link href="/students">All Students</Nav.Link>
                 <Nav.Link href="/staffs">All Staff</Nav.Link>
                 <Nav.Link href="/admins">All Admin</Nav.Link>
-                <Nav.Link href="/chat">Chat</Nav.Link>
-
-                {/* <Link to="/students">
-                  <button>All Students</button>
-                </Link>
-                <Link to="/staffs">
-                  <button>All Staff</button>
-                </Link>
-                <Link to="/admins">
-                  <button>All Admin</button>
-                </Link>
-                <Link to="/chat">
-                  <button>Chat</button>
-                </Link> */}
               </>
             ) : (
               ""
@@ -60,15 +40,20 @@ function NavBar() {
             loggedIn === "Staff" ||
             loggedIn === "Admin" ? (
               <>
-                {/* <Nav.Link href="/">Home</Nav.Link> */}
+                <Nav.Link href="/chat">Chat</Nav.Link>
+
+              </>
+            ) : (
+              ""
+            )}
+          </Nav>
+          <Nav>
+            {loggedIn === "Student" ||
+            loggedIn === "Staff" ||
+            loggedIn === "Admin" ? (
+              <>
                 <Nav.Link href="/account">Account</Nav.Link>
 
-                {/* <Link to="/account">
-                  <button>Account</button>
-                </Link>
-                <Link to="/">
-                  <button>Home</button>
-                </Link> */}
                 <LogOut />
               </>
             ) : (

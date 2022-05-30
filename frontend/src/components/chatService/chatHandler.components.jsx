@@ -7,7 +7,7 @@ import axios from "axios";
 const socket = io.connect("http://localhost:8000");
 
 function ChatHandler() {
-  const [username, setUsername] = useState("isha");
+  const [username, setUsername] = useState("");
   const [room, setRoom] = useState("123");
   const [showChat, setShowChat] = useState(false);
   const [userData, setUserData] = useState("");
@@ -19,7 +19,7 @@ function ChatHandler() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/account/");
+      const result = await axios.get("http://localhost:8000/account/");
 
       setUserData(result.data);
       joinRoom();

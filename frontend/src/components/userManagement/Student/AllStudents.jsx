@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BlockList from "../blocks/listBlock.components";
 
 function AllStudents() {
   const [studentsData, setStudentsData] = useState([]);
@@ -20,6 +21,10 @@ function AllStudents() {
 
   function viewDetails(params) {
     navigate("/students/account", { state: params });
+  }
+  
+  function addStudent() {
+    navigate("/register");
   }
 
   function studentList() {
@@ -47,22 +52,11 @@ function AllStudents() {
   }, []);
 
   return (
-    <div style={{ margin: "30px" }}>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Batch</th>
-            <th>Specialization</th>
-            <th>Branch</th>
-          </tr>
-        </thead>
-        <tbody>{studentList()}</tbody>
-      </table>
-      <hr />
-    </div>
+    <BlockList
+      data={studentsData}
+      viewDetails={viewDetails}
+      heading="Students"
+    />
   );
 }
 

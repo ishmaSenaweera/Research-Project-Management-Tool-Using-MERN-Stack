@@ -61,8 +61,8 @@ const adminRegisterSchema = Joi.object({
     .rule({ message: "Invalid E-mail address" })
     .label("E-mail"),
   password: passwordComplexity().required().label("Password"),
-  passwordVerify: passwordComplexity()
-    .valid(Joi.ref("Password"))
+  passwordVerify: Joi.string()
+    .valid(Joi.ref("password"))
     .required()
     .label("Password Verify"),
 }).unknown(true);
@@ -99,7 +99,7 @@ const staffRegisterSchema = Joi.object({
     .label("E-mail"),
   password: passwordComplexity().required().label("Password"),
   passwordVerify: passwordComplexity()
-    .valid(Joi.ref("Password"))
+    .valid(Joi.ref("password"))
     .required()
     .label("Password Verify"),
 }).unknown(true);

@@ -6,7 +6,7 @@
   display: flex;
   padding-top: 70px;
   padding-bottom: 70px;
-  background-color: #e1e3eb;
+  /* background-color: #e1e3eb; */
 }
 .sub-main {
   justify-content: center;
@@ -14,7 +14,7 @@
   box-shadow: 11px 12px 13px 12px rgb(207, 207, 207);
   padding: 50px;
   margin-bottom: 10px;
-  border-radius: 60px;
+  border-radius: 20px;
   background-color: white;
 }
 
@@ -23,25 +23,29 @@
   height: 100px;
 }
 
-input {
+.form-input {
+  text-align: center;
   width: 300px;
   height: 50px;
-  margin: 20px;
-  border-radius: 20px;
-  box-shadow: inset 0px 0px 25px 0px #888;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 5px 0px rgb(202, 197, 197);
   border: none;
   outline: none;
-  background-color: #fff;
 }
-
-.email {
-  height: 25px;
-  width: 25px;
-  font-size: 20px;
-  position: absolute;
-  padding: 14px 0 0 25px;
+.form-radio {
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 5px 0px rgb(202, 197, 197);
+  border: none;
+  outline: none;
+  padding: 10px;
+  margin: 10px;
 }
+.form-radio-space {
+  margin: 10px;
 
+}
 .name {
   padding-left: 10px;
   font-size: 20px;
@@ -60,6 +64,10 @@ input {
 .login-button {
   padding-top: 25px;
 }
+.table {
+  text-align: left;
+  border-style: solid;
+}
 .logout {
   margin: 1px 5px 0px -25px;
   width: 150px;
@@ -72,13 +80,15 @@ input {
 }
 .account-sub-main {
   justify-content: center;
-  width: 600px;
+  width: auto;
   height: auto;
   font-size: 20px;
-  box-shadow: 11px 12px 13px 12px rgb(207, 207, 207);
+  /* box-shadow: 5px 5px 1px 2px rgb(207, 207, 207); */
   padding: 50px;
   margin-bottom: 10px;
-  border-radius: 60px;
+  border-radius: 20px;
+  border-style: solid;
+  border-color: rgb(202, 202, 202);
   background-color: white;
 }
 .account-button {

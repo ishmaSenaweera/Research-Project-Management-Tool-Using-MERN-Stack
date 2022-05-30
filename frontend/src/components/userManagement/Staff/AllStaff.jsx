@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BlockList from "../blocks/listBlock.components";
 
 function AllStaff() {
   const [staffData, setStaffData] = useState([]);
@@ -47,21 +48,12 @@ function AllStaff() {
   }, []);
 
   return (
-    <div style={{ margin: "30px" }}>
-      <button onClick={addStaff}>Add</button>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Gender</th>
-          </tr>
-        </thead>
-        <tbody>{staffList()}</tbody>
-      </table>
-      <hr />
-    </div>
+    <BlockList
+      data={staffData}
+      add={addStaff}
+      viewDetails={viewDetails}
+      heading="Staffs"
+    />
   );
 }
 

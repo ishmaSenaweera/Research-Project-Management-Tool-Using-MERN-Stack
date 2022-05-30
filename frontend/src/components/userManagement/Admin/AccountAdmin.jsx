@@ -1,12 +1,18 @@
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import BlockAccount from "../blocks/accountBlock.components";
 
 function AccountAdmin() {
   const { state } = useLocation();
 
+  if (state.dob) {
+    const dobEdited = new Date(state.dob).toISOString().substring(0, 10);
+    state.dobEdited = dobEdited;
+  }
+
   const navigate = useNavigate();
 
-  async function deleteUser() {
+  async function deleteAdmin() {
     try {
       const data = {
         id: state._id,
@@ -16,52 +22,24 @@ function AccountAdmin() {
         data,
       });
       navigate("/staffs");
-      console.log(result);
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function updateUser() {
+  async function updateAdmin() {
     console.log("staff");
     navigate("/admins/update", { state: state });
   }
 
   return (
-    <div>
-      <div>
-        <h1>Admin Account = {state.name}</h1>
-      </div>
-      <div>
-        <h1>dob: </h1>
-        <h3> {state.dob}</h3>
-      </div>
-      <div>
-        <h1>email: </h1>
-        <h3> {state.email}</h3>
-      </div>
-      <div>
-        <h1>Gender: </h1>
-        <h3> {state.gender}</h3>
-      </div>
-      <div>
-        <h1>Nic: </h1>
-        <h3> {state.nic}</h3>
-      </div>
-      <div>
-        <h1>Mobile: </h1>
-        <h3> {state.mobile}</h3>
-      </div>
-      <button
-        onClick={() => {
-          if (window.confirm("Are you sure you wish to delete this account?"))
-            deleteUser();
-        }}
-      >
-        Delete
-      </button>
-      <button onClick={updateUser}>Edit</button>
-    </div>
+    <BlockAccount
+      userData={state}
+      heading="Admin Account"
+      type="Admin"
+      delete={deleteAdmin}
+      edit={updateAdmin}
+    />
   );
 }
 

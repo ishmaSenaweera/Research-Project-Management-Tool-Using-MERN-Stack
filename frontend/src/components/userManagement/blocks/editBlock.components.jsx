@@ -1,17 +1,20 @@
-import "../../../../../styles/register/register.styles.css";
-import Logo from "../../../../../../images/logo/logo.png";
 import { useState } from "react";
 
 const BlockEdit = (props) => {
   const data = props.data;
 
   /* Setting the state of the component. */
+  const [id] = useState(data._id);
   const [name, setName] = useState(data.name);
   const [mobile, setMobile] = useState(data.mobile);
   const [nic, setNic] = useState(data.nic);
   const [email, setEmail] = useState(data.email);
   const [dob, setDob] = useState(data.dobEdited);
-  const [hometown, setHometown] = useState(data.hometown);
+  const [sid, setSid] = useState(data.sid);
+  const [gender, setGender] = useState(data.gender);
+  const [specialization, setSpecialization] = useState(data.specialization);
+  const [batch, setBatch] = useState(data.batch);
+  const [branch, setBranch] = useState(data.branch);
 
   /**
    * The function edit() is called when the user clicks the submit button in the form. The function
@@ -23,12 +26,17 @@ const BlockEdit = (props) => {
 
     try {
       const editData = {
+        id,
         name,
-        email,
+        sid,
+        dob,
+        gender,
+        specialization,
+        batch,
+        branch,
         mobile,
         nic,
-        dob,
-        hometown,
+        email,
       };
       /* Calling the edit function in the parent component, passing the data from the form as an argument. */
       props.edit(editData);
@@ -42,87 +50,143 @@ const BlockEdit = (props) => {
     <div className="main">
       <div className="sub-main">
         <div>
-          <div className="imgs">
-            <img src={Logo} alt="profile" className="profile" />
-          </div>
           <div>
-            <hr />
             <h1>{props.heading}</h1>
+            <hr />
             <form onSubmit={edit}>
               <div>
-                <i className="fas fa-light fa-user" />
+                <label>Name: </label>
                 <input
                   type="text"
                   placeholder="Name"
-                  className="name"
+                  className="form-input"
+                  required
                   onChange={(e) => setName(e.target.value)}
                   value={name}
                 />
               </div>
+              {props.loggedIn === "Student" && (
+                <>
+                  <div>
+                    <label>SLIIT ID: </label>
+                    <input
+                      type="text"
+                      placeholder="SLIIT ID"
+                      className="form-input"
+                      maxLength={10}
+                      required
+                      onChange={(e) => setSid(e.target.value)}
+                      value={sid}
+                    />
+                  </div>
+                  <div>
+                    <label>Specialization: </label>
+                    <input
+                      type="text"
+                      placeholder="Specialization"
+                      className="form-input"
+                      required
+                      onChange={(e) => setSpecialization(e.target.value)}
+                      value={specialization}
+                    />
+                  </div>
+                  <div>
+                    <label>Batch: </label>
+                    <input
+                      type="text"
+                      placeholder="Batch"
+                      className="form-input"
+                      required
+                      onChange={(e) => setBatch(e.target.value)}
+                      value={batch}
+                    />
+                  </div>
+                  <div>
+                    <label>Branch: </label>
+                    <input
+                      type="text"
+                      placeholder="Branch"
+                      className="form-input"
+                      required
+                      onChange={(e) => setBranch(e.target.value)}
+                      value={branch}
+                    />
+                  </div>
+                </>
+              )}
               <div>
-                <i className="fas fa-at" />
+                <label>Date of birth: </label>
                 <input
-                  type="email"
-                  placeholder="E-mail"
-                  className="name"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  type="date"
+                  placeholder="dob"
+                  className="form-input"
+                  required
+                  onChange={(e) => setDob(e.target.value)}
+                  value={dob}
                 />
               </div>
+              <div className="form-radio-space">
+                <label>Gender: </label>
+                <span className="form-radio">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value="male"
+                    name="gender"
+                    onChange={(e) => setGender(e.target.value)}
+                    defaultChecked={data.gender === "male"}
+                  />
+                  Male
+                </span>
+                <span className="form-radio">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value="female"
+                    name="gender"
+                    onChange={(e) => setGender(e.target.value)}
+                    defaultChecked={data.gender === "female"}
+                  />
+                  Female
+                </span>
+              </div>
               <div>
-                <i className="fas fa-phone" />
+                <label>Mobile Number: </label>
                 <input
                   type="text"
                   placeholder="Mobile Number"
-                  className="name"
-                  maxLength="9"
-                  pattern="[0-9]+"
+                  className="form-input"
+                  maxLength="10"
+                  required
                   onChange={(e) => setMobile(e.target.value)}
                   value={mobile}
                 />
               </div>
               <div>
-                <i className="fas fa-id-card" />
+                <label>Nic: </label>
                 <input
                   type="text"
-                  placeholder="NIC"
-                  className="name"
+                  placeholder="Nic"
+                  className="form-input"
                   maxLength="11"
-                  pattern="[0-9]+"
+                  required
                   onChange={(e) => setNic(e.target.value)}
                   value={nic}
                 />
               </div>
-              {props.heading === "Edit System Admin" ||
-              props.loggedIn === "SystemAdmin" ? (
-                <>
-                  <div>
-                    <i className="fas fa-calendar" />
-                    <input
-                      type="date"
-                      placeholder="DoB"
-                      className="name"
-                      onChange={(e) => setDob(e.target.value)}
-                      value={dob}
-                    />
-                  </div>
-                  <div>
-                    <i className="fas fa-home" />
-                    <input
-                      type="text"
-                      placeholder="Hometown"
-                      className="name"
-                      onChange={(e) => setHometown(e.target.value)}
-                      value={hometown}
-                    />
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
+              <div>
+                <label>E-mail: </label>
+                <input
+                  type="email"
+                  placeholder="E-mail"
+                  className="form-input"
+                  disabled
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+              </div>
               <div className="login-button">
                 <button className="button" type="submit">
-                  <i className="fas fa-solid fa-user-plus"></i>
                   {props.heading}
                 </button>
               </div>

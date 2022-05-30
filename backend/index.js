@@ -46,7 +46,6 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
-    console.log("send message" + data.room);
   });
 
   socket.on("disconnect", () => {
@@ -75,6 +74,7 @@ app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
+app.use("/chat", require("./routers/userManagement/chat.router"));
 
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 

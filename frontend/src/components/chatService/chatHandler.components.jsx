@@ -3,42 +3,75 @@ import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import Chat from "./chat.components";
 import axios from "axios";
+import { Table } from "react-bootstrap";
 
 const socket = io.connect("http://localhost:8000");
 
 function ChatHandler() {
   const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("123");
+  const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
-  const [userData, setUserData] = useState("");
 
   const joinRoom = () => {
-    socket.emit("join_room", room);
-    setShowChat(true);
+    if (username !== "" && room !== "") {
+      socket.emit("join_room", room);
+      setShowChat(true);
+    }
   };
 
   async function getData() {
     try {
       const result = await axios.get("http://localhost:8000/account/");
+      const group = await axios.get("http://localhost:8000/chat/find-group");
 
-      setUserData(result.data);
-      joinRoom();
+      setUsername(result.data.name);
+      setRoom(group.data.gid);
     } catch (err) {
-      //await getLoggedIn();
+      alert("Error! Group not found!");
       console.log(err);
     }
   }
-  
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <div className="App">
-      {showChat ? (
-        <Chat socket={socket} username={userData.name} room={room} />
+      {!showChat ? (
+        <div className="list">
+          <div className="list-sub-table">
+            <div className="head">
+              <h1>Chat List</h1>
+            </div>
+            <hr />
+            <Table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Group Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{room}</td>
+                  {room && (
+                    <td>
+                      <button
+                        className="btn btn-primary account-button-blue"
+                        onClick={joinRoom}
+                      >
+                        Join
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+        </div>
       ) : (
-        <h1>Connecting...</h1>
+        <Chat socket={socket} username={username} room={room} />
       )}
     </div>
   );

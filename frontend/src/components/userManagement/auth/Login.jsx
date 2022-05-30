@@ -31,25 +31,32 @@ function Login() {
   return (
     <div className="main">
       <div className="sub-main">
-        <h1>Log in to your account </h1>
+        <h1>Log in</h1>
+        <hr/>
         <form onSubmit={login}>
-          <div className="">
+          <label>E-mail</label>
+          <div>
             <input
               type="email"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
+              className="form-input"
             />
           </div>
-          <div className="">
+          <label>Password</label>
+          <div>
             <input
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              className="form-input"
             />
           </div>
-          <button className="btn btn-primary" type="submit">Log in</button>
+          <button className="btn btn-primary" type="submit">
+            Log in
+          </button>
         </form>
       </div>
     </div>

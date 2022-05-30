@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 import BlockAccount from "../blocks/accountBlock.components";
@@ -22,7 +22,6 @@ function AccountUser() {
       }
       setUserData(result.data);
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }
@@ -31,10 +30,9 @@ function AccountUser() {
     try {
       console.log("delete user");
       const result = await axios.delete("http://localhost:8000/account/delete");
-      //await getLoggedIn();
+      
       navigate("/");
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }

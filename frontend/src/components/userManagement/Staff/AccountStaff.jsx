@@ -18,7 +18,7 @@ function AccountStaff() {
         id: state._id,
       };
 
-      const result = await axios.delete("http://localhost:8000/staff/delete", {
+      await axios.delete("http://localhost:8000/staff/delete", {
         data,
       });
       navigate("/staffs");

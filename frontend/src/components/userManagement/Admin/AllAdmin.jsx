@@ -14,7 +14,6 @@ function AllAdmin() {
 
       setAdminData(result.data);
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }
@@ -25,22 +24,6 @@ function AllAdmin() {
 
   function addAdmin() {
     navigate("/admins/add");
-  }
-
-  function adminList() {
-    return adminData.map((currentAdmin, index) => {
-      return (
-        <tr key={index}>
-          <td>{index + 1}</td>
-          <td>{currentAdmin.name}</td>
-          <td>{currentAdmin.email}</td>
-          <td>{currentAdmin.gender}</td>
-          <td>
-            <button onClick={viewDetails.bind(this, currentAdmin)}>View</button>
-          </td>
-        </tr>
-      );
-    });
   }
 
   useEffect(() => {

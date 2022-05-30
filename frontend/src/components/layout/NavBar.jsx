@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import AuthContext from "../context/LoginContext";
 import LogOut from "../userManagement/auth/Logout";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 function NavBar() {
   const { loggedIn, getLoggedIn } = useContext(AuthContext);

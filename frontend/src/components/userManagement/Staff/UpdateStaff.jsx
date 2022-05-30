@@ -11,10 +11,10 @@ function UpdateStaff() {
     try {
       await axios.put("http://localhost:8000/staff/update", editedData);
       alert("Updated Successfully");
-      //await getLoggedIn();
+
       navigate("/staffs");
     } catch (err) {
-      //await getLoggedIn();
+
       console.error(err);
     }
   }

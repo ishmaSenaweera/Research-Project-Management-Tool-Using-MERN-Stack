@@ -1,18 +1,10 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 import BlockRegister from "../blocks/registerBlock.components";
 
 function AddStaff() {
-  const [name, setName] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [nic, setNic] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordVerify, setPasswordVerify] = useState("");
 
   const navigate = useNavigate();
   const { getLoggedIn } = useContext(AuthContext);

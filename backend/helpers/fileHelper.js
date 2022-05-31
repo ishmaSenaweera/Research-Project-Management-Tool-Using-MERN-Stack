@@ -20,6 +20,7 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(null, false);
   }
+  cb(new Error('Something is wrong!'))
 };
 
 const templates = multer({ storage: storage, fileFilter: fileFilter });

@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 
 const { Server } = require("socket.io");
-
 
 dotenv.config();
 
@@ -78,5 +78,6 @@ app.use("/account", require("./routers/userManagement/user.router"));
 
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 
-
 app.use("/groups", require("./routers/studentManagement/createGroup.router"));
+
+app.use("/templates", express.static(path.join(__dirname, "templates")));

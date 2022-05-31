@@ -6,8 +6,10 @@ const {
 } = require("../../controllers/fileUploader.controller");
 const templateRouter = express.Router();
 
-templateRouter.post("/singleFile", templates.single("file"), (req, res) => {
-  singleFileUpload;
-});
+templateRouter.post(
+  "/singleFile",
+  templates.single("file"),
+  singleFileUpload
+);
 
 module.exports = templateRouter;

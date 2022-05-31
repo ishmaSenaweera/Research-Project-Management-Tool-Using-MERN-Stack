@@ -2,29 +2,28 @@
 const multer = require("multer");
 const path = require("path");
 
-const storage = multer.diskStorage({
+const templateStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "templates");
   },
-  fileName: (req, file, cb) => {
-    cb(
-      null,
-      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
-    );
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname)
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "application/pdf" ||
-    file.mimetype === "application/msword"
-  ) {
+const templateFilter = (req, file, cb) => {
+  const ext = path.extname(file.originalname);
+  const allowed = [".pdf", ".docx"];
+  if (allowed.includes(ext)) {
     cb(null, true);
   } else {
-    cb(new Error("Not a PDF/MSWord File!!"), false);
+    cb(null, false);
+    cb(new Error("Only .pdf or .docx formats are allowed!"));
   }
-  cb(new Error("Something is wrong!"));
 };
 
-const templates = multer({ storage: storage, fileFilter: fileFilter });
+const templates = multer({
+  storage: templateStorage,
+  fileFilter: templateFilter,
+});
 module.exports = { templates };

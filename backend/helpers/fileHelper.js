@@ -15,12 +15,15 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "application/pdf") {
+  if (
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "application/msword"
+  ) {
     cb(null, true);
   } else {
-    cb(null, false);
+    cb(new Error("Not a PDF/MSWord File!!"), false);
   }
-  cb(new Error('Something is wrong!'))
+  cb(new Error("Something is wrong!"));
 };
 
 const templates = multer({ storage: storage, fileFilter: fileFilter });

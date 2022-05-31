@@ -11,10 +11,9 @@ function UpdateStudent() {
     try {
       await axios.put("http://localhost:8000/student/update", editedData);
       alert("Updated Successfully");
-      //await getLoggedIn();
+
       navigate("/students");
     } catch (err) {
-      //await getLoggedIn();
       console.error(err);
     }
   }

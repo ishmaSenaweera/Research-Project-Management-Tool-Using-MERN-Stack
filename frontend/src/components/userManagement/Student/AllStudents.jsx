@@ -14,37 +14,12 @@ function AllStudents() {
 
       setStudentsData(result.data);
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }
 
   function viewDetails(params) {
     navigate("/students/account", { state: params });
-  }
-  
-  function addStudent() {
-    navigate("/register");
-  }
-
-  function studentList() {
-    return studentsData.map((currentStudent, index) => {
-      return (
-        <tr key={index}>
-          <td>{index + 1}</td>
-          <td>{currentStudent.name}</td>
-          <td>{currentStudent.email}</td>
-          <td>{currentStudent.batch}</td>
-          <td>{currentStudent.specialization}</td>
-          <td>{currentStudent.branch}</td>
-          <td>
-            <button onClick={viewDetails.bind(this, currentStudent)}>
-              View
-            </button>
-          </td>
-        </tr>
-      );
-    });
   }
 
   useEffect(() => {

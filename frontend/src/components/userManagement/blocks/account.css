@@ -33,6 +33,17 @@
   border: none;
   outline: none;
 }
+.search-input {
+  text-align: center;
+  width: 300px;
+  height: 50px;
+  float: right;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 5px 0px rgb(202, 197, 197);
+  border: none;
+  outline: none;
+}
 .form-radio {
   text-align: center;
   border-radius: 5px;
@@ -44,7 +55,6 @@
 }
 .form-radio-space {
   margin: 10px;
-
 }
 .name {
   padding-left: 10px;
@@ -61,23 +71,12 @@
   font-size: 25px;
   border: none;
 }
-.login-button {
-  padding-top: 25px;
-}
+
 .table {
   text-align: left;
   border-style: solid;
 }
-.logout {
-  margin: 1px 5px 0px -25px;
-  width: 150px;
-  height: 50px;
-  border-radius: 20px;
-  background-color: #000000;
-  color: rgb(81, 164, 237);
-  font-size: 20px;
-  border: none;
-}
+
 .account-sub-main {
   justify-content: center;
   width: auto;
@@ -115,7 +114,7 @@
   border: none;
 }
 .account-button-blue-add {
-  margin: 0px 0px 0px 20px;
+  margin: 0px 20px 0px 20px;
   min-width: 100px;
   width: auto;
   height: 50px;

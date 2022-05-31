@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 
 const { Server } = require("socket.io");
-
 
 dotenv.config();
 
@@ -46,7 +46,6 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
-    console.log("send message" + data.room);
   });
 
   socket.on("disconnect", () => {
@@ -75,8 +74,12 @@ app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
+app.use("/chat", require("./routers/userManagement/chat.router"));
 
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 
-
 app.use("/groups", require("./routers/studentManagement/createGroup.router"));
+
+// template files routers
+app.use("/templates", express.static(path.join(__dirname, "templates")));
+app.use("/api", require("./routers/templateManagements/fileUpload.router"));

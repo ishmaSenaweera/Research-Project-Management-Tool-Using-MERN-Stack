@@ -24,10 +24,9 @@ function ChangePassword() {
         updatedData
       );
       alert("Changed Password Successfully");
-      //await getLoggedIn();
+
       navigate("/");
     } catch (err) {
-      //await getLoggedIn();
       console.error(err);
     }
   }

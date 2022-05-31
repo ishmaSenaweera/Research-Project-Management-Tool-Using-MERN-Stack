@@ -17,7 +17,7 @@ function AccountStudent() {
       const data = {
         id: state._id,
       };
-      const result = await axios.delete(
+      await axios.delete(
         "http://localhost:8000/student/delete",
         {
           data,

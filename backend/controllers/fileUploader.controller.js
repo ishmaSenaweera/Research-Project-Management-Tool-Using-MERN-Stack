@@ -1,5 +1,6 @@
 "use strict";
-const SingleFile = require("../models/templateManagement/template.model");
+const SingleFile = require("../models/templateManagement/singleTemplate.model");
+const MultipleFile = require("../models/templateManagement/multipleTemplates.model");
 
 const singleFileUpload = async (req, res, next) => {
   try {
@@ -11,6 +12,32 @@ const singleFileUpload = async (req, res, next) => {
     });
     await file.save();
     return res.status(201).send("File Uploaded Successfully!");
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+};
+
+const multipleFileUpload = async (req, res, next) => {
+  try {
+    let filesArray = [];
+    req.files.forEach((element) => {
+      const file = {
+        fileName: element.originalname,
+        filePath: element.path,
+        fileType: element.mimetype,
+        fileSize: fileSizeFormatter(element.size, 2),
+      };
+      filesArray.push(file);
+    });
+
+    const multipleFiles = new MultipleFile({
+      title: req.body.title,
+      files: filesArray,
+    });
+
+    await multipleFiles.save();
+
+    return res.status(201).send("Files Uploaded Successfully!");
   } catch (error) {
     return res.status(400).send(error.message);
   }
@@ -28,4 +55,4 @@ const fileSizeFormatter = (bytes, decimal) => {
   );
 };
 
-module.exports = { singleFileUpload };
+module.exports = { singleFileUpload, multipleFileUpload };

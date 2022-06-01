@@ -7,18 +7,18 @@ const templateStorage = multer.diskStorage({
     cb(null, "templates");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname)
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const templateFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname);
-  const allowed = [".pdf", ".docx"];
+  const allowed = [".pdf", ".docx", ".ppt", ".pptx"];
   if (allowed.includes(ext)) {
     cb(null, true);
   } else {
     cb(null, false);
-    cb(new Error("Only .pdf or .docx formats are allowed!"));
+    cb(new Error("This File Format is Not Allowed!"));
   }
 };
 

@@ -2,7 +2,6 @@
 const SingleFile = require("../models/templateManagement/singleTemplate.model");
 const MultipleFile = require("../models/templateManagement/multipleTemplates.model");
 
-
 /** Uploading Files */
 
 // Uploading a Single File
@@ -48,6 +47,29 @@ const multipleFileUpload = async (req, res, next) => {
   }
 };
 
+/** Getting Files */
+
+// Getting All Single Files
+const getAllSingleFiles = async (req, res, next) => {
+  try {
+    const singleFiles = await SingleFile.find();
+    return res.status(200).send(singleFiles);
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+};
+
+// Getting All Multiple Files
+const getAllMultipleFiles = async (req, res, next) => {
+  try {
+    const multipleFiles = await MultipleFile.find();
+    return res.status(200).send(multipleFiles);
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+};
+
+
 /** Function to Format File Size Which Comes in Bytes */
 const fileSizeFormatter = (bytes, decimal) => {
   if (bytes === 0) {
@@ -61,4 +83,4 @@ const fileSizeFormatter = (bytes, decimal) => {
   );
 };
 
-module.exports = { singleFileUpload, multipleFileUpload };
+module.exports = { singleFileUpload, multipleFileUpload, getAllSingleFiles, getAllMultipleFiles };

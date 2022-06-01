@@ -21,8 +21,8 @@ import AccountAdmin from "../userManagement/Admin/AccountAdmin";
 import UpdateAdmin from "../userManagement/Admin/UpdateAdmin";
 import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
-import AddGroup from "../studentManagement/addGroup";
-import AllGroups from "../studentManagement/allGroups";
+import AddGroup from "../groupsManagement/addGroup";
+import AllGroups from "../groupsManagement/allGroups";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);

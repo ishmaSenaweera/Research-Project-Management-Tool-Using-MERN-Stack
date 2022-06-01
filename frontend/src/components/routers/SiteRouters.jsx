@@ -21,6 +21,8 @@ import AccountAdmin from "../userManagement/Admin/AccountAdmin";
 import UpdateAdmin from "../userManagement/Admin/UpdateAdmin";
 import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
+import AddGroup from "../groupsManagement/addGroup";
+import AllGroups from "../groupsManagement/allGroups";
 import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
 
 function SiteRouters() {
@@ -71,6 +73,8 @@ function SiteRouters() {
               <Route path="/admins/add" element={<AddAdmin />} />
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
+              
+
               <Route path="*" element={<Home />} />
             </>
           ) : (
@@ -82,6 +86,8 @@ function SiteRouters() {
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
+              <Route path="/addGroup" element={<AddGroup/>}/>
+              <Route path="/allGroups" element={<AllGroups />} />
 
               <Route path="*" element={<Home />} />
             </>

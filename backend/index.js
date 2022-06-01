@@ -82,4 +82,4 @@ app.use("/groups", require("./routers/studentManagement/createGroup.router"));
 
 // template files routers
 app.use("/templates", express.static(path.join(__dirname, "templates")));
-app.use("/api", require("./routers/templateManagements/fileUpload.router"));
+app.use("/api", require("./routers/projectManagements/fileUpload.router"));

@@ -1,12 +1,12 @@
 "use strict";
 const express = require("express");
-const { templates } = require("../../helpers/fileHelper");
+const { templates } = require("../../helpers/projectManagement/fileHelper");
 const {
   singleFileUpload,
   multipleFileUpload,
   getAllSingleFiles,
   getAllMultipleFiles
-} = require("../../controllers/fileUploader.controller");
+} = require("../../controllers/projectManagement/fileUploader.controller");
 const templateRouter = express.Router();
 
 templateRouter.post("/singleFile", templates.single("file"), singleFileUpload);

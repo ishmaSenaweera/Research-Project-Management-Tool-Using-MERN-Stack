@@ -10,4 +10,5 @@ const multipleFileSchema = new mongoose.Schema(
   }
 );
 
+// Exporting Multiple Templates Model
 module.exports = mongoose.model("multipleTemplates", multipleFileSchema);

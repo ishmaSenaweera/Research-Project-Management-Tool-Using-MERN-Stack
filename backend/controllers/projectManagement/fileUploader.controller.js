@@ -1,6 +1,6 @@
 "use strict";
-const SingleFile = require("../models/templateManagement/singleTemplate.model");
-const MultipleFile = require("../models/templateManagement/multipleTemplates.model");
+const SingleFile = require("../../models/projectManagement/singleTemplate.model");
+const MultipleFile = require("../../models/projectManagement/multipleTemplates.model");
 
 /** Uploading Files */
 

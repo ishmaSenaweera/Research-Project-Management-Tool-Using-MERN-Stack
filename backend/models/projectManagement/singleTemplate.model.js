@@ -12,4 +12,5 @@ const singleFileSchema = new mongoose.Schema(
   }
 );
 
+// Exporting Single Template Model
 module.exports = mongoose.model("singleTemplate", singleFileSchema);

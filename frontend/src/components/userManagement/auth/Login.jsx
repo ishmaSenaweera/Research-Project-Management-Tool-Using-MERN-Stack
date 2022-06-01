@@ -17,9 +17,7 @@ function Login() {
         password,
       };
 
-      await axios.get("http:///localhost:8000/auth/login", {
-        params: loginData,
-      });
+      await axios.post("http://localhost:8000/auth/login", loginData);
       await getLoggedIn();
       //navigate("/home");
     } catch (err) {
@@ -32,7 +30,7 @@ function Login() {
     <div className="main">
       <div className="sub-main">
         <h1>Log in</h1>
-        <hr/>
+        <hr />
         <form onSubmit={login}>
           <label>E-mail</label>
           <div>

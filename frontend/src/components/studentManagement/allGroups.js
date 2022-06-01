@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Groups from "../../../../backend/models/studentManagement/createGroup.model";
+
 
 export default function AllGroups() {
   const [groups, setGroups] = useState([]);

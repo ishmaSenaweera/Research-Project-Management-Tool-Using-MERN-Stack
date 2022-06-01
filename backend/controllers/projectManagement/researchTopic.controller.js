@@ -1,5 +1,5 @@
 const ResearchTopic = require("../../models/projectManagement/researchTopic.model");
-const Groups = require("../../models/studentManagement/createGroup.model");
+const Groups = require("../../models/groupManagement/createGroup.model");
 
 // Save Research Topic
 const saveResearchTopic = async (req, res) => {

@@ -79,7 +79,7 @@ app.use("/chat", require("./routers/userManagement/chat.router"));
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 
 // group routers
-app.use("/groups", require("./routers/studentManagement/createGroup.router"));
+app.use("/groups", require("./routers/groupManagement/createGroup.router"));
 
 // template files routers
 app.use("/templates", express.static(path.join(__dirname, "templates")));

@@ -2,6 +2,10 @@
 const SingleFile = require("../models/templateManagement/singleTemplate.model");
 const MultipleFile = require("../models/templateManagement/multipleTemplates.model");
 
+
+/** Uploading Files */
+
+// Uploading a Single File
 const singleFileUpload = async (req, res, next) => {
   try {
     const file = new SingleFile({
@@ -17,6 +21,7 @@ const singleFileUpload = async (req, res, next) => {
   }
 };
 
+// Uploading Multiple Files
 const multipleFileUpload = async (req, res, next) => {
   try {
     let filesArray = [];
@@ -43,6 +48,7 @@ const multipleFileUpload = async (req, res, next) => {
   }
 };
 
+/** Function to Format File Size Which Comes in Bytes */
 const fileSizeFormatter = (bytes, decimal) => {
   if (bytes === 0) {
     return "0 Bytes";

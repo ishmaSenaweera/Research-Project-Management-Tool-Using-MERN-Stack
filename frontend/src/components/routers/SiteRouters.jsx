@@ -21,6 +21,7 @@ import AccountAdmin from "../userManagement/Admin/AccountAdmin";
 import UpdateAdmin from "../userManagement/Admin/UpdateAdmin";
 import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
+import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -38,6 +39,9 @@ function SiteRouters() {
               <Route path="/" element={<Login />} />
 
               <Route path="*" element={<Login />} />
+
+              // Staff View
+              <Route path="/templates" element={<FileUploadScreen />} />
             </>
           ) : (
             ""

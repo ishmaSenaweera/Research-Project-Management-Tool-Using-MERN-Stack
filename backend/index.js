@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-var schemeRoutes = require("./routers/markingscheme/markingrouter");
+//var schemeRoutes = require("./routers/markingscheme/markingrouter");
 
 const { Server } = require("socket.io");
 

@@ -22,6 +22,7 @@ import UpdateAdmin from "../userManagement/Admin/UpdateAdmin";
 import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../studentManagement/addGroup";
+import AllGroups from "../studentManagement/allGroups";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -68,6 +69,8 @@ function SiteRouters() {
               <Route path="/admins/add" element={<AddAdmin />} />
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
+              
+
               <Route path="*" element={<Home />} />
             </>
           ) : (
@@ -80,7 +83,8 @@ function SiteRouters() {
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
               <Route path="/addGroup" element={<AddGroup/>}/>
-              
+              <Route path="/allgroups" element={<AllGroups />} />
+
               <Route path="*" element={<Home />} />
             </>
           ) : (

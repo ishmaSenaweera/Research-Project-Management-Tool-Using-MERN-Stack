@@ -83,7 +83,7 @@ function SiteRouters() {
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
               <Route path="/addGroup" element={<AddGroup/>}/>
-              <Route path="/allgroups" element={<AllGroups />} />
+              <Route path="/allGroups" element={<AllGroups />} />
 
               <Route path="*" element={<Home />} />
             </>

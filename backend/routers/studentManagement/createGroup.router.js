@@ -76,7 +76,7 @@ router.route("/").post(async (req,res)=>{
 router.route("/").get(async (req,res)=>{
     const allgroups = await Groups.find();
     if(allgroups){
-        return res.status(200).json({msg:"all groups fetched",allgroups});
+        return res.status(200).json({msg:"all groups fetched",allgroups:allgroups});
     }
     else{
         return res.status(400).json({msg:"no groups found"});

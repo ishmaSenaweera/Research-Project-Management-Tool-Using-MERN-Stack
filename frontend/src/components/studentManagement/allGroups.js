@@ -9,9 +9,10 @@ export default function AllGroups() {
     console.log("use eff");
     axios.get("http://localhost:8000/groups/").then(res => {
       console.log("res", res);
-      setGroups(res.data);
-      
+      setGroups(res.data.allgroups);
+      console.log(groups)
     });
+    
   }, []);
 
 
@@ -29,7 +30,7 @@ export default function AllGroups() {
         </tr>
       </thead>
       <tbody>
-          {groups.map(group => (
+          {groups && groups.map(group => (
             <tr>
               <td>{group.gid}</td>
               <td>{group.student1}</td>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./group.css";
 
 export default function AddGroup() {
     const [student1, setStudnet1] = useState("");

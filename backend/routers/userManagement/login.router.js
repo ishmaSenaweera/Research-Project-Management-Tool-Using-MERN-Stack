@@ -10,10 +10,10 @@ const func = require("../../utils/functions.util.js");
 const valid = require("../../utils/validation.util");
 
 // log in
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     // validate
-    const validated = await valid.loginSchema.validateAsync(req.query);
+    const validated = await valid.loginSchema.validateAsync(req.body);
 
     const user = await func.findUser({ email: validated.email });
     const existingUser = user.existingUser;

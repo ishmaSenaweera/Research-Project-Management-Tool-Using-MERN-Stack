@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BlockList from "../blocks/listBlock.components";
 
 function AllStaff() {
   const [staffData, setStaffData] = useState([]);
@@ -13,7 +14,7 @@ function AllStaff() {
 
       setStaffData(result.data);
     } catch (err) {
-      //await getLoggedIn();
+
       console.log(err);
     }
   }
@@ -26,42 +27,17 @@ function AllStaff() {
     navigate("/staffs/add");
   }
 
-  function staffList() {
-    return staffData.map((currentStaff, index) => {
-      return (
-        <tr key={index}>
-          <td>{index + 1}</td>
-          <td>{currentStaff.name}</td>
-          <td>{currentStaff.email}</td>
-          <td>{currentStaff.gender}</td>
-          <td>
-            <button onClick={viewDetails.bind(this, currentStaff)}>View</button>
-          </td>
-        </tr>
-      );
-    });
-  }
-
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <div style={{ margin: "30px" }}>
-      <button onClick={addStaff}>Add</button>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Gender</th>
-          </tr>
-        </thead>
-        <tbody>{staffList()}</tbody>
-      </table>
-      <hr />
-    </div>
+    <BlockList
+      data={staffData}
+      add={addStaff}
+      viewDetails={viewDetails}
+      heading="Staffs"
+    />
   );
 }
 

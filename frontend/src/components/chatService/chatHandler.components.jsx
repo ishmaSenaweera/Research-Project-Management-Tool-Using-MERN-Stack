@@ -2,6 +2,8 @@ import "./chat.css";
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import Chat from "./chat.components";
+import axios from "axios";
+import { Table } from "react-bootstrap";
 
 const socket = io.connect("http://localhost:8000");
 
@@ -11,40 +13,66 @@ function ChatHandler() {
   const [showChat, setShowChat] = useState(false);
 
   const joinRoom = () => {
-    // if (username !== "" && room !== "") {
-    socket.emit("join_room", room);
-    setShowChat(true);
-    // }
+    if (username !== "" && room !== "") {
+      socket.emit("join_room", room);
+      setShowChat(true);
+    }
   };
 
+  async function getData() {
+    try {
+      const result = await axios.get("http://localhost:8000/account/");
+      const group = await axios.get("http://localhost:8000/chat/find-group");
+
+      setUsername(result.data.name);
+      setRoom(group.data.gid);
+    } catch (err) {
+      alert("Error! Group not found!");
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
-    joinRoom();
+    getData();
   }, []);
 
   return (
     <div className="App">
-      {/* {!showChat ? (
-        <div className="joinChatContainer">
-          <h3>Join A Chat</h3>
-          <input
-            type="text"
-            placeholder="John..."
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Room ID..."
-            onChange={(event) => {
-              setRoom(event.target.value);
-            }}
-          />
-          <button onClick={joinRoom}>Join A Room</button>
+      {!showChat ? (
+        <div className="list">
+          <div className="list-sub-table">
+            <div className="head">
+              <h1>Chat List</h1>
+            </div>
+            <hr />
+            <Table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Group Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{room}</td>
+                  {room && (
+                    <td>
+                      <button
+                        className="btn btn-primary account-button-blue"
+                        onClick={joinRoom}
+                      >
+                        Join
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              </tbody>
+            </Table>
+          </div>
         </div>
-      ) : ( */}
-      <Chat socket={socket} username={"username"} room="test" />
-      {/* )} */}
+      ) : (
+        <Chat socket={socket} username={username} room={room} />
+      )}
     </div>
   );
 }

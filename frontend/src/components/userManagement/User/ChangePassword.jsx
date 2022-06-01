@@ -19,17 +19,14 @@ function ChangePassword() {
         newPasswordVerify,
       };
 
-      console.log(updatedData);
-
       await axios.put(
         "http://localhost:8000/account/changepassword",
         updatedData
       );
       alert("Changed Password Successfully");
-      //await getLoggedIn();
+
       navigate("/");
     } catch (err) {
-      //await getLoggedIn();
       console.error(err);
     }
   }

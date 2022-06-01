@@ -78,6 +78,7 @@ app.use("/chat", require("./routers/userManagement/chat.router"));
 
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 
+// group routers
 app.use("/groups", require("./routers/studentManagement/createGroup.router"));
 
 // template files routers

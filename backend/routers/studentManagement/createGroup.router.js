@@ -18,6 +18,7 @@ router.route("/").post(async (req,res)=>{
         res.status(400).json({
             message: "Duplicate student"
         });
+        return;
     }
     //////////////////////////////////////////////////////////
 
@@ -25,7 +26,8 @@ router.route("/").post(async (req,res)=>{
     for(let i=0;i<students.length;i++){
         const s = await Student.findOne({sid:students[i]})
         if(!s){
-            return res.status(400).json({msg:"student not found"})
+            res.status(400).json({msg:"student not found"})
+            return;
         }
     }
     // if(!researchTopic){
@@ -52,8 +54,8 @@ router.route("/").post(async (req,res)=>{
         student3:students[2],
         student4:students[3],
     });
-    await inserted.save();
-    if(inserted){
+    const newgrp = await inserted.save();
+    if(newgrp){
         return res.status(200).json({msg:"group added"});
     }
     else{

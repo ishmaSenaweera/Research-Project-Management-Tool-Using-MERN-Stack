@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import "./App.css";
 import axios from "axios";
 import MaterialTable from "material-table";
 import ButterToast, { Cinnamon } from "butter-toast";

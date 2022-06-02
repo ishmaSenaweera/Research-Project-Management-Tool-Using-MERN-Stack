@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import "./App.css";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import axios from "axios";
 import MaterialTable from "material-table";

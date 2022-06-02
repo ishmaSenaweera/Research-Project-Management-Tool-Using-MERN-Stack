@@ -1,7 +1,56 @@
 import { useState } from "react";
+import axios from "axios";
 
 function FileUploadScreen() {
   const [submissionType, setSubmissionType] = useState("singleFile");
+  const [singleFile, setSingleFile] = useState("");
+  const [multipleFile, setMultipleFile] = useState("");
+  const [title, setTitle] = useState("");
+
+  const singleFileChange = (e) => {
+    setSingleFile(e.target.files[0]);
+  };
+
+  const multipleFileChange = (e) => {
+    setMultipleFile(e.target.files);
+  };
+
+  const uploadSingleFile = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", singleFile);
+      await axios
+        .post("http://localhost:8000/api/singleFile", formData)
+        .then((res) => alert(res.data))
+        .catch(() => alert("This File Format is Not Allowed!"));
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  };
+
+  const uploadMultipleFiles = async () => {
+    try {
+      if (multipleFile.length !== 0 && title !== "") {
+        const formData = new FormData();
+        formData.append("title", title);
+        for (let i = 0; i < multipleFile.length; i++) {
+          formData.append("files", multipleFile[i]);
+        }
+        await axios
+          .post("http://localhost:8000/api/multipleFiles", formData)
+          .then((res) => alert(res.data))
+          .catch(() => alert("This File Format is Not Allowed!"));
+      } else if (title === "") {
+        alert("Please Enter a Title");
+      } else {
+        alert("Please Select Files");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  };
 
   return (
     <div className="container">
@@ -43,46 +92,71 @@ function FileUploadScreen() {
           </div>
           <div className="row align-self-center justify-content-center mt-5">
             {submissionType === "singleFile" ? (
-              <div className="row justify-content-center">
-                <div className="col-4 ">
-                  <label className="form-label">Single Template</label>
-                  <input
-                    className="form-control form-control-lg"
-                    id="formFileLg"
-                    type="file"
-                  />
+              <form>
+                <div className="row justify-content-center">
+                  <div className="col-4 ">
+                    <label className="form-label">Single File Uploader</label>
+                    <input
+                      className="form-control form-control-lg"
+                      id="formFileLg"
+                      type="file"
+                      onChange={(event) => {
+                        singleFileChange(event);
+                      }}
+                    />
+                  </div>
+                  <div className="m-5">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => uploadSingleFile()}
+                    >
+                      Upload
+                    </button>
+                  </div>
                 </div>
-                <div className="mt-4">
-                  <button className="btn btn-secondary" type="button">
-                    Upload
-                  </button>
-                </div>
-              </div>
+              </form>
             ) : (
-              <div className="row col-10 justify-content-center">
-                <div className="col-4">
-                  <label className="form-label">Title</label>
-                  <input
-                    type="txt"
-                    className="form-control form-control-lg"
-                    id="exampleFormControlInput1"
-                    placeholder="Template Title"
-                  />
+              <form>
+                <div className="row col-10 justify-content-center">
+                  <div className="col-4">
+                    <label className="form-label">Title</label>
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      id="validationDefault01"
+                      placeholder="Template Title"
+                      required
+                      onChange={(event) => {
+                        setTitle(event.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="col-6">
+                    <label className="form-label">
+                      Multiple Files Uploader
+                    </label>
+                    <input
+                      className="form-control form-control-lg"
+                      id="formFileLg"
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        multipleFileChange(event);
+                      }}
+                    />
+                  </div>
+                  <div className="m-5">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => uploadMultipleFiles()}
+                    >
+                      Upload
+                    </button>
+                  </div>
                 </div>
-                <div className="col-6">
-                  <label className="form-label">Multiple Templates</label>
-                  <input
-                    className="form-control form-control-lg"
-                    id="formFileLg"
-                    type="file"
-                  />
-                </div>
-                <div className="mt-4">
-                  <button className="btn btn-secondary" type="button">
-                    Upload
-                  </button>
-                </div>
-              </div>
+              </form>
             )}
           </div>
         </div>

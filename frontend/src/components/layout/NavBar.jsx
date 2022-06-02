@@ -41,6 +41,8 @@ function NavBar() {
             loggedIn === "Admin" ? (
               <>
                 <Nav.Link href="/chat">Chat</Nav.Link>
+                <Nav.Link href="/addGroup">Create Group</Nav.Link>
+
 
               </>
             ) : (

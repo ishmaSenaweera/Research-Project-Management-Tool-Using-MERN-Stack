@@ -1,5 +1,5 @@
 const { userAccess } = require("../../middleware/accessChecker");
-const Groups = require("../../models/studentManagement/createGroup.model");
+const Groups = require("../../models/groupManagement/createGroup.model");
 
 const router = require("express").Router();
 

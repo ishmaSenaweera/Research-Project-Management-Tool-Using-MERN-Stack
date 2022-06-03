@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
+import AuthContext from "../context/LoginContext";
 import BlockRegister from "../Blocks/registerBlock.components";
 
 function AddStaff() {

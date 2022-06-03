@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
+import AuthContext from "../context/LoginContext";
 import BlockEdit from "../Blocks/editBlock.components";
 
 function UpdateUser() {

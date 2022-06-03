@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --verbose",
     "start": "node index",
     "dev": "nodemon index"
   },
@@ -20,9 +21,12 @@
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.9",
-    "nodemailer": "^6.7.3"
+    "multer": "^1.4.4-lts.1",
+    "nodemailer": "^6.7.3",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
+    "jest": "^28.1.0",
     "nodemon": "^2.0.15"
   }
 }

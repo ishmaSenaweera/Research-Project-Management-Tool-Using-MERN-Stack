@@ -5,7 +5,6 @@ async function sentEmail(email, subject, text) {
   try {
     const handler = nodemailer.createTransport({
       host: process.env.HOST,
-      service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
       secure: Boolean(process.env.SECURE),
       auth: {
@@ -31,7 +30,7 @@ async function sentEmail(email, subject, text) {
 //send email verification
 async function sendVeri(email, name, id, token) {
   try {
-    const url = `Dear ${name},\nVerify your email address \n${process.env.BASE_URL}login/verify/${id}/${token}`;
+    const url = `Dear ${name},\nVerify your email address \n${process.env.BASE_URL}verify/${id}/${token}`;
     const result = await sentEmail(email, "Email Verification", url);
 
     return result;

@@ -24,8 +24,6 @@ import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
 import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
-import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
-import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
 import FileShowScreen from "../projectManagement/templates/fileShowScreen";
 import ResearchTopicAdd from "../projectManagement/researchTopic/researchTopicAdd";
 import ResearchTopicView from "../projectManagement/researchTopic/researchTopicView";
@@ -40,14 +38,12 @@ function SiteRouters() {
         <NavBar />
         <Routes>
           <Route path="/verify/:id/:token" element={<Verify />} />
-          <Route path="/chat" element={<ChatHandler />} />
 
           {loggedIn === false ? (
             <>
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Login />} />
-              <Route path="*" element={<Login />} />             
-              
+              <Route path="*" element={<Login />} />
             </>
           ) : (
             ""
@@ -97,6 +93,8 @@ function SiteRouters() {
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
               <Route path="/req" element={<ReqSupervisor />} />
+
+              <Route path="/chat" element={<ChatHandler />} />
 
               <Route
                 path="/researchTopic/save"

@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import AuthContext from "../../context/LoginContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { getLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   async function login(e) {
     e.preventDefault();
@@ -18,8 +18,7 @@ function Login() {
       };
 
       await axios.post("http://localhost:8000/auth/login", loginData);
-      await getLoggedIn();
-      //navigate("/home");
+      navigate("/");
     } catch (err) {
       console.error(err.response.data.errorMessage);
       alert(err.response.data.errorMessage);
@@ -36,7 +35,7 @@ function Login() {
           <div>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="E-mail"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               className="form-input"
@@ -52,9 +51,11 @@ function Login() {
               className="form-input"
             />
           </div>
-          <button className="btn btn-primary" type="submit">
-            Log in
-          </button>
+          <div>
+            <button className="button" type="submit">
+              Log In
+            </button>
+          </div>
         </form>
       </div>
     </div>

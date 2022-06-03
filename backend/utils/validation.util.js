@@ -137,7 +137,7 @@ const changePasswordSchema = Joi.object({
   password: passwordComplexity().required().label("Password"),
   newPassword: passwordComplexity().required().label("New Password"),
   newPasswordVerify: passwordComplexity()
-    .valid(Joi.ref("New Password"))
+    .valid(Joi.ref("newPassword"))
     .required()
     .label("New Password Verify"),
 }).unknown(true);

@@ -5,7 +5,6 @@ async function sentEmail(email, subject, text) {
   try {
     const handler = nodemailer.createTransport({
       host: process.env.HOST,
-      service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
       secure: Boolean(process.env.SECURE),
       auth: {

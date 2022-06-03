@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../userManagement/Home";
 import NavBar from "../layout/NavBar";
-import Login from "../userManagement/auth/Login";
+import Login from "../userManagement/Authentication/Login";
 import Register from "../userManagement/Student/Register";
-import Verify from "../userManagement/auth/Verify";
-import AuthContext from "../context/LoginContext";
+import Verify from "../userManagement/Authentication/Verify";
+import AuthContext from "../userManagement/context/LoginContext";
 import AccountUser from "../userManagement/User/AccountUser";
 import UpdateUser from "../userManagement/User/UpdateUser";
 import AllStudents from "../userManagement/Student/AllStudents";
@@ -27,6 +27,10 @@ import AddScheme from "../markingscheme/AddScheme";
 import AllSchemes from "../markingscheme/AllSchemes";
 import SendFeedback from "../markingscheme/SendFeedback";
 import StudentView from "../markingscheme/StudentView";
+import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
+import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
+import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
+import FileShowScreen from "../projectManagement/templates/fileShowScreen";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -42,8 +46,15 @@ function SiteRouters() {
             <>
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Login />} />
-
               <Route path="*" element={<Login />} />
+
+              // Staff View
+              <Route path="/templates" element={<FileUploadScreen />} />
+
+              // Both
+              <Route path="/templates/view" element={<SingleFileScreen />} />
+              <Route path="/templates/views" element={<MultipleFileScreen />} />
+              <Route path="/templates/show" element={<FileShowScreen />} />
             </>
           ) : (
             ""
@@ -95,7 +106,26 @@ function SiteRouters() {
               <Route path="/SendFeedback" element={<SendFeedback />} />
               <Route path="/StudentView" element={<StudentView />} />
 
+              <Route
+                path="/account/changepassword"
+                element={<ChangePassword />}
+              />
+
+              <Route path="/addGroup" element={<AddGroup />} />
+              <Route path="/allGroups" element={<AllGroups />} />
+
+              <Route path="/templates/view" element={<SingleFileScreen />} />
+
               <Route path="*" element={<Home />} />
+            </>
+          ) : (
+            ""
+          )}
+
+          {loggedIn === "Staff" ? (
+            <>
+              // Only Staff members
+              <Route path="/templates" element={<FileUploadScreen />} />
             </>
           ) : (
             ""

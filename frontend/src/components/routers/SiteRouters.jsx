@@ -30,6 +30,7 @@ import FileShowScreen from "../projectManagement/templates/fileShowScreen";
 import ResearchTopicAdd from "../projectManagement/researchTopic/researchTopicAdd";
 import ResearchTopicView from "../projectManagement/researchTopic/researchTopicView";
 import ResearchTopicEdit from "../projectManagement/researchTopic/researchTopicEdit";
+import ReqSupervisor from "../groupsManagement/requestSup";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -95,6 +96,7 @@ function SiteRouters() {
 
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
+              <Route path="/req" element={<ReqSupervisor />} />
 
               <Route
                 path="/researchTopic/save"

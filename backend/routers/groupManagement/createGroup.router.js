@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const Groups = require("../../models/groupManagement/createGroup.model");
+const Staff = require("../../models/userManagement/staff.model");
 const Student = require("../../models/userManagement/student.model");
+
+const Topic = require("../../models/projectManagement/researchTopic.model");
+const SupervisorGroup = require("../../models/groupManagement/superviosrGroup.model");
+
 
 router.route("/").post(async (req,res)=>{
     const student1 = req.body.student1;
@@ -30,12 +35,9 @@ router.route("/").post(async (req,res)=>{
             return;
         }
     }
-    // if(!researchTopic){
-    //     return res.status(400).json({msg:"research topic not found"})
-    // }
     
     let code = Math.random().toString(36).substring(2,8);
-    const gid = "G -" + code.toLocaleUpperCase();
+    const gid = "G-" + code.toLocaleUpperCase();
 
     const gr = await Groups.findOne({gid:gid});
     if(gr){
@@ -118,10 +120,43 @@ router.route("/get/:id").get(async(req,res)=> {
         console.log(err.message);
         res.status(500).send({status: "Error with fetch user", error : err.message});
     })
-})
+});
+
+router.route("/supervisor").get(async(req,res)=>{
+    const staff = await Staff.find({} , {name:1,email:1, _id:1});
+    if(staff){
+        return res.status(200).json({msg:"all staff fetched",staff});
+    }
+    else{
+        return res.status(200).json({msg:"no staff found", staff:[]});
+    }
+});
+
+router.route("/supervisor/request/topic").post(async(req,res)=>{
+    const { supervisorid, groupid} = req.body;
+    //const supervisor = await Staff.findById(supervisorid);
+    
+/*     const group = await Groups.findById(groupid);
+    if(!supervisor){
+        return res.status(400).json({msg:"supervisor not found"});
+    }
+    if(!group){
+        return res.status(400).json({msg:"group not found"});
+    } */
+    
+    //insert into supervisor group
+    const inserted = await SupervisorGroup.create({
+        supervisorid:supervisorid,
+        groupid:groupid,
+    });
+    const newgrp = await inserted.save();
+    if(newgrp){
+        return res.status(200).json({msg:"request sent"});
+    }
+    else{
+        return res.status(400).json({msg:"request not sent"});
+    }
+    
+});
 
 module.exports = router;
-
-setTimeout(()=>{
-    
-},1000)

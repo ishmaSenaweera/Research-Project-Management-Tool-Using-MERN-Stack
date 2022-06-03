@@ -17,7 +17,7 @@ function NavBar() {
     <div>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Sliit</Navbar.Brand>
+          <Navbar.Brand href="/">SLIIT</Navbar.Brand>
           <Nav className="me-auto">
             {loggedIn === false && (
               <>
@@ -35,6 +35,13 @@ function NavBar() {
             ) : (
               ""
             )}
+            {loggedIn === "Staff" || loggedIn === "Admin" ? (
+              <>
+                <Nav.Link href="/templates">Templates</Nav.Link>
+              </>
+            ) : (
+              ""
+            )}
 
             {loggedIn === "Student" ||
             loggedIn === "Staff" ||
@@ -42,8 +49,7 @@ function NavBar() {
               <>
                 <Nav.Link href="/chat">Chat</Nav.Link>
                 <Nav.Link href="/addGroup">Create Group</Nav.Link>
-
-
+                <Nav.Link href="/templates/show">Templates</Nav.Link>
               </>
             ) : (
               ""

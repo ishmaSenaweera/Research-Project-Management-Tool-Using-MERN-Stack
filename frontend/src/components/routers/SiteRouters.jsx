@@ -23,6 +23,10 @@ import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
+import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
+import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
+import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
+import FileShowScreen from "../projectManagement/templates/fileShowScreen";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -38,8 +42,15 @@ function SiteRouters() {
             <>
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Login />} />
-
               <Route path="*" element={<Login />} />
+
+              // Staff View
+              <Route path="/templates" element={<FileUploadScreen />} />
+
+              // Both
+              <Route path="/templates/view" element={<SingleFileScreen />} />
+              <Route path="/templates/views" element={<MultipleFileScreen />} />
+              <Route path="/templates/show" element={<FileShowScreen />} />
             </>
           ) : (
             ""
@@ -80,14 +91,27 @@ function SiteRouters() {
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
+
               <Route
                 path="/account/changepassword"
                 element={<ChangePassword />}
               />
+
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
 
+              <Route path="/templates/view" element={<SingleFileScreen />} />
+
               <Route path="*" element={<Home />} />
+            </>
+          ) : (
+            ""
+          )}
+
+          {loggedIn === "Staff" ? (
+            <>
+              // Only Staff members
+              <Route path="/templates" element={<FileUploadScreen />} />
             </>
           ) : (
             ""

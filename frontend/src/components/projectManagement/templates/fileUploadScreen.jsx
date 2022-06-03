@@ -31,7 +31,7 @@ function FileUploadScreen() {
           .post("http://localhost:8000/api/singleFile", formData)
           .then((res) => {
             alert(res.data);
-            navigate("/templates/view");
+            navigate("/templates/show");
           })
           .catch(() => alert("This File Format is Not Allowed!"));
       } else {
@@ -58,7 +58,7 @@ function FileUploadScreen() {
           .then((res) => {
             {
               alert(res.data);
-              navigate("/templates/views");
+              navigate("/templates/show");
             }
           })
           .catch(() => alert("This File Format is Not Allowed!"));

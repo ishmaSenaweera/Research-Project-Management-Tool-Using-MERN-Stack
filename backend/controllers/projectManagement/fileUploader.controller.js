@@ -87,9 +87,39 @@ const fileSizeFormatter = (bytes, decimal) => {
   );
 };
 
+// Delete Single File
+const deleteSingleFile = async (req, res) => {
+  try {
+    SingleFile.findByIdAndDelete(req.params.id).exec((err, data) => {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
+      return res.status(200).send("Deleted!");
+    });
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+};
+
+// Delete Multiple Files
+const deleteMultipleFiles = async (req, res) => {
+  try {
+    MultipleFile.findByIdAndDelete(req.params.id).exec((err, data) => {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
+      return res.status(200).send("Deleted!");
+    });
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   singleFileUpload,
   multipleFileUpload,
   getAllSingleFiles,
   getAllMultipleFiles,
+  deleteSingleFile,
+  deleteMultipleFiles,
 };

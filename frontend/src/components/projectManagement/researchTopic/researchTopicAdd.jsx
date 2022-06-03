@@ -43,6 +43,7 @@ function ResearchTopicAdd() {
           .then((res) => {
             if (res.status === 200) {
               alert(res.data);
+              window.location.reload();
             }
           });
       } catch (error) {
@@ -61,6 +62,7 @@ function ResearchTopicAdd() {
           .then((res) => {
             if (res.status === 200) {
               alert(res.data);
+              window.location.reload();
             }
           });
       } catch (error) {

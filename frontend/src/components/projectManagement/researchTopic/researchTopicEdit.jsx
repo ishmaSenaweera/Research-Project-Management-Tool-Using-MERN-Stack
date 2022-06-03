@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Dropdown } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ResearchTopicEdit() {
   const { state } = useLocation();
@@ -9,6 +8,7 @@ function ResearchTopicEdit() {
   const [researchTopic, setResearchTopic] = useState(state.researchTopic);
   const [status, setStatus] = useState(state.status);
   const [feedBack, setFeedBack] = useState(state.feedBack);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
@@ -31,6 +31,7 @@ function ResearchTopicEdit() {
         .then((res) => {       
           if (res.status === 200) {         
             alert(res.data);
+            navigate("/researchTopic/view")
           }
         });
     } catch (error) {

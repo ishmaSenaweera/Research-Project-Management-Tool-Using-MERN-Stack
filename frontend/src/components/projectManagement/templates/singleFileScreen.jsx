@@ -27,6 +27,25 @@ function SingleFileScreen() {
     getSingleFileData();
   }, []);
 
+  async function deleteSingleTemplates(details) {
+    try {
+      if (window.confirm("This File Will Be Deleted!")) {
+        await axios
+          .delete(`http://localhost:8000/api/singleFile/delete/${details._id}`)
+          .then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              alert(res.data);
+              window.location.reload();
+            }
+          });
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+
   if (loading) {
     return (
       <div className="position-absolute top-50 start-50 translate-middle">
@@ -51,8 +70,14 @@ function SingleFileScreen() {
               </a>
             </td>
             <td>{item.fileMessage}</td>
-            <td>Edit</td>
-            <td>Delete</td>
+            <td>
+              <button
+                className="btn btn-danger"
+                onClick={deleteSingleTemplates.bind(this, item)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         );
       }

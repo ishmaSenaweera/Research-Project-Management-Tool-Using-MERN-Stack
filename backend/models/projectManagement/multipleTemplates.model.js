@@ -4,6 +4,8 @@ const multipleFileSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     files: [Object],
+    fileVisibility: { type: String, required: true },    
+    fileMessage: { type: String },
   },
   {
     timestamps: true,

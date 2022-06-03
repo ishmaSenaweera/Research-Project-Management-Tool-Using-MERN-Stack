@@ -1,16 +1,13 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
 
 function SingleFileScreen() {
   const { loggedIn } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [dataList, setDataList] = useState([]);
-  const [isHidden, setIsHidden] = useState(false);
-
-  function hideRow(data) {   
-    setIsHidden(true);
-  }
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getSingleFileData() {
@@ -20,6 +17,7 @@ function SingleFileScreen() {
           .then((res) => {
             if (res.status === 200) {
               setDataList(res.data);
+              console.log(res.data);
             }
             setLoading(false);
           });
@@ -35,45 +33,44 @@ function SingleFileScreen() {
     return (
       <div className="position-absolute top-50 start-50 translate-middle">
         <div className="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Loading...</span>
         </div>
       </div>
     );
   } else {
     fileList = dataList.map((item, index) => {
-      return (
-        <tr key={index}>
-          {isHidden === false && (
-            <>
-              <td>
-                <a
-                  href={`http://localhost:8000/${item.filePath}`}
-                  download={``}
-                >
-                  {item.fileName}
-                </a>
-              </td>
-              <td>
-                <div className="form-check form-switch">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"                            
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    onChange={() => hideRow(this, index)}
-                  />
-                  <label className="form-check-label">
-                    Hide
-                  </label>
-                </div>
-              </td>
-              <td>
-               Delete
-              </td>
-            </>
-          )}
-        </tr>
-      );
+      if (loggedIn === "Staff") {
+        return (
+          <tr key={index}>
+            <td>
+              <a
+                href={`http://localhost:8000/${item.filePath}`}
+                download={``}
+                style={{ textDecoration: "none" }}
+              >
+                {item.fileName}
+              </a>
+            </td>
+            <td>Edit</td>
+            <td>Delete</td>
+          </tr>
+        );
+      }
+      if (item.fileVisibility === "Both" && loggedIn === "Student") {
+        return (
+          <tr key={index}>
+            <td>
+              <a
+                href={`http://localhost:8000/${item.filePath}`}
+                download={``}
+                style={{ textDecoration: "none" }}
+              >
+                {item.fileName}
+              </a>
+            </td>
+          </tr>
+        );
+      }
     });
   }
 

@@ -1,11 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function FileUploadScreen() {
   const [submissionType, setSubmissionType] = useState("singleFile");
   const [singleFile, setSingleFile] = useState("");
   const [multipleFile, setMultipleFile] = useState("");
   const [title, setTitle] = useState("");
+  const [visibility, setVisibility] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const singleFileChange = (e) => {
     setSingleFile(e.target.files[0]);
@@ -17,15 +21,21 @@ function FileUploadScreen() {
 
   const uploadSingleFile = async () => {
     try {
-      if (singleFile.length !== 0) {
+      if (singleFile.length !== 0 && title !== "" && visibility !== "") {
         const formData = new FormData();
         formData.append("file", singleFile);
+        formData.append("fileVisibility", visibility);
+        formData.append("fileTopic", title);
+        formData.append("fileMessage", message);
         await axios
           .post("http://localhost:8000/api/singleFile", formData)
-          .then((res) => alert(res.data))
+          .then((res) => {
+            alert(res.data);
+            navigate("/templates/view");
+          })
           .catch(() => alert("This File Format is Not Allowed!"));
       } else {
-        alert("Please Select a File");
+        alert("Missing Fields");
       }
     } catch (error) {
       console.error(error);
@@ -35,18 +45,25 @@ function FileUploadScreen() {
 
   const uploadMultipleFiles = async () => {
     try {
-      if (multipleFile.length !== 0 && title !== "") {
+      if (multipleFile.length !== 0 && title !== "" && visibility !== "") {
         const formData = new FormData();
         formData.append("title", title);
+        formData.append("fileVisibility", visibility);
+        formData.append("fileMessage", message);
         for (let i = 0; i < multipleFile.length; i++) {
           formData.append("files", multipleFile[i]);
         }
         await axios
           .post("http://localhost:8000/api/multipleFiles", formData)
-          .then((res) => alert(res.data))
+          .then((res) => {
+            {
+              alert(res.data);
+              navigate("/templates/views");
+            }
+          })
           .catch(() => alert("This File Format is Not Allowed!"));
-      } else if (title === "") {
-        alert("Please Enter a Title");
+      } else if (title === "" || visibility === "") {
+        alert("Missing Fields");
       } else {
         alert("Please Select Files");
       }
@@ -58,7 +75,7 @@ function FileUploadScreen() {
 
   return (
     <div className="container">
-      <h1 className="text-center mt-3">Upload Templates</h1>
+      <h1 className="text-center mt-3 mb-3">Upload Templates</h1>
       <div className="card p-4 mt-4">
         <div className="col align-items-center justify-content-center">
           <div className="card-header">
@@ -95,12 +112,24 @@ function FileUploadScreen() {
             </div>
           </div>
         </div>
-        <div className="row text-center mt-5">
+        <div className="row text-center mt-3">
           <div className="card-body">
             <div className="row align-self-center mt-5">
               {submissionType === "singleFile" ? (
                 <form>
                   <div className="row justify-content-center">
+                    <div className="col-2 ">
+                      <label className="form-label">Topic</label>
+                      <input
+                        className="form-control form-control-lg"
+                        id="formFileLg"
+                        type="text"
+                        onChange={(event) => {
+                          setTitle(event.target.value);
+                        }}
+                      />
+                    </div>
+
                     <div className="col-4 ">
                       <label className="form-label">Single File Uploader</label>
                       <input
@@ -112,6 +141,55 @@ function FileUploadScreen() {
                         }}
                       />
                     </div>
+
+                    <div className="form-check form-check-inline align-items-center justify-content-center">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio1"
+                        value="Staff"
+                        onChange={(event) => {
+                          setVisibility(event.target.value);
+                        }}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="inlineRadio1"
+                      >
+                        Staff Only
+                      </label>
+                    </div>
+
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio2"
+                        value="Both"
+                        onChange={(event) => {
+                          setVisibility(event.target.value);
+                        }}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="inlineRadio2"
+                      >
+                        Both
+                      </label>
+                    </div>
+
+                    <label className="form-label">Message</label>
+                    <textarea
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="5"
+                      onChange={(event) => {
+                        setMessage(event.target.value);
+                      }}
+                    />
+
                     <div className="m-5">
                       <button
                         className="btn btn-secondary"
@@ -139,6 +217,7 @@ function FileUploadScreen() {
                         }}
                       />
                     </div>
+
                     <div className="col-6">
                       <label className="form-label">
                         Multiple Files Uploader
@@ -153,6 +232,55 @@ function FileUploadScreen() {
                         }}
                       />
                     </div>
+
+                    <div className="form-check form-check-inline align-items-center justify-content-center">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio1"
+                        value="Staff"
+                        onChange={(event) => {
+                          setVisibility(event.target.value);
+                        }}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="inlineRadio1"
+                      >
+                        Staff Only
+                      </label>
+                    </div>
+
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio2"
+                        value="Both"
+                        onChange={(event) => {
+                          setVisibility(event.target.value);
+                        }}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="inlineRadio2"
+                      >
+                        Both
+                      </label>
+                    </div>
+
+                    <label className="form-label">Message</label>
+                    <textarea
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="5"
+                      onChange={(event) => {
+                        setMessage(event.target.value);
+                      }}
+                    />
+
                     <div className="m-5">
                       <button
                         className="btn btn-secondary"

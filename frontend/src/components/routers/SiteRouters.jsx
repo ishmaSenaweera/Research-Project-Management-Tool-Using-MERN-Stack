@@ -25,6 +25,8 @@ import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
 import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
 import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
+import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
+import FileShowScreen from "../projectManagement/templates/fileShowScreen";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -47,6 +49,8 @@ function SiteRouters() {
 
               // Both
               <Route path="/templates/view" element={<SingleFileScreen />} />
+              <Route path="/templates/views" element={<MultipleFileScreen />} />
+              <Route path="/templates/show" element={<FileShowScreen />} />
             </>
           ) : (
             ""
@@ -89,6 +93,8 @@ function SiteRouters() {
               <Route path="/account/update" element={<UpdateUser />} />
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
+
+              <Route path="/templates/view" element={<SingleFileScreen />} />
 
               <Route path="*" element={<Home />} />
             </>

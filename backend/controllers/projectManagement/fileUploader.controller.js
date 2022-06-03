@@ -12,6 +12,9 @@ const singleFileUpload = async (req, res, next) => {
       filePath: req.file.path,
       fileType: req.file.mimetype,
       fileSize: fileSizeFormatter(req.file.size, 2),
+      fileVisibility: req.body.fileVisibility,
+      fileTopic: req.body.fileTopic,
+      fileMessage: req.body.fileMessage,
     });
     await file.save();
     return res.status(201).send("File Uploaded Successfully!");
@@ -37,6 +40,8 @@ const multipleFileUpload = async (req, res, next) => {
     const multipleFiles = new MultipleFile({
       title: req.body.title,
       files: filesArray,
+      fileVisibility: req.body.fileVisibility,
+      fileMessage: req.body.fileMessage,
     });
 
     await multipleFiles.save();
@@ -69,7 +74,6 @@ const getAllMultipleFiles = async (req, res, next) => {
   }
 };
 
-
 /** Function to Format File Size Which Comes in Bytes */
 const fileSizeFormatter = (bytes, decimal) => {
   if (bytes === 0) {
@@ -83,4 +87,9 @@ const fileSizeFormatter = (bytes, decimal) => {
   );
 };
 
-module.exports = { singleFileUpload, multipleFileUpload, getAllSingleFiles, getAllMultipleFiles };
+module.exports = {
+  singleFileUpload,
+  multipleFileUpload,
+  getAllSingleFiles,
+  getAllMultipleFiles,
+};

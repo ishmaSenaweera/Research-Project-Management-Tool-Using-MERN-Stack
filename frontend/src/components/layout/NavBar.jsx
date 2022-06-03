@@ -31,6 +31,18 @@ function NavBar() {
                 <Nav.Link href="/students">All Students</Nav.Link>
                 <Nav.Link href="/staffs">All Staff</Nav.Link>
                 <Nav.Link href="/admins">All Admin</Nav.Link>
+                <Nav.Link href="/allGroups">All Groups</Nav.Link>
+
+              </>
+            ) : (
+              ""
+            )}
+
+            {loggedIn === "Student" ? (
+              <>
+                <Nav.Link href="/addGroup">Create Group</Nav.Link>
+                <Nav.Link href="/req">Request Supervisor</Nav.Link>
+
               </>
             ) : (
               ""
@@ -50,6 +62,7 @@ function NavBar() {
                 <Nav.Link href="/chat">Chat</Nav.Link>
                 <Nav.Link href="/addGroup">Create Group</Nav.Link>
                 <Nav.Link href="/templates/show">Templates</Nav.Link>
+
               </>
             ) : (
               ""

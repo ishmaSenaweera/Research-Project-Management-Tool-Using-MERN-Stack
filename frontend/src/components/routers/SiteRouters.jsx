@@ -27,6 +27,7 @@ import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
 import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
 import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
 import FileShowScreen from "../projectManagement/templates/fileShowScreen";
+import ReqSupervisor from "../groupsManagement/requestSup";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -99,6 +100,7 @@ function SiteRouters() {
 
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
+              <Route path="/req" element={<ReqSupervisor />} />
 
               <Route path="/templates/view" element={<SingleFileScreen />} />
 

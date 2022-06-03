@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import axios from "axios";
 import {
@@ -14,33 +14,19 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import validator from "validator";
 
-const initialState = {
-  email: "",
-  message: "",
-};
+function SendFeedback() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-class SendFeedback extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
-
-  handleChange = (e) => {
-    const isCheckbox = e.target.type === "checkbox";
-    this.setState({
-      [e.target.name]: isCheckbox ? e.target.checked : e.target.value,
-    });
+  const onClear = () => {
+    setEmail("");
+    setMessage("");
   };
 
-  onClear() {
-    this.setState(initialState);
-  }
-
-  validation = async () => {
-    console.log(this.state.email);
+  const validation = async () => {
     var Error = false;
 
-    if (this.state.email === "") {
+    if (email === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -53,7 +39,7 @@ class SendFeedback extends React.Component {
       });
       Error = true;
     } else {
-      if (!validator.isEmail(this.state.email)) {
+      if (!validator.isEmail(email)) {
         ButterToast.raise({
           content: (
             <Cinnamon.Crisp
@@ -68,7 +54,7 @@ class SendFeedback extends React.Component {
       }
     }
 
-    if (this.state.message === "") {
+    if (message === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -89,115 +75,107 @@ class SendFeedback extends React.Component {
     return true;
   };
 
-  SubmitForm = async (e) => {
+  const SubmitForm = async (e) => {
     e.preventDefault();
 
-    this.validation().then(async (res) => {
-      console.log(res);
-      if (res) {
-        console.log(this.state);
-        const url = "http://localhost:1234/scheme/email";
-        const data = JSON.stringify({
-          email: this.state.email,
-          subject: " feedback about Your Submitted Document/presentation",
-          message: this.state.message,
-        });
-        console.log(data);
-        await axios
-          .post(url, data, {
-            headers: { "Content-Type": "application/json" },
-          })
-          .then((res) => {
-            console.log(res.data);
-            this.setState(initialState);
-            ButterToast.raise({
-              content: (
-                <Cinnamon.Crisp
-                  title="Success!"
-                  content="Send Successful!"
-                  scheme={Cinnamon.Crisp.SCHEME_GREEN}
-                  icon={<CheckCircleOutlineIcon />}
-                />
-              ),
-            });
+    if (validation()) {
+      const url = "http://localhost:8000/scheme/email";
+      const data = JSON.stringify({
+        email: email,
+        subject: "Your Submitted Document",
+        message: message,
+      });
+      console.log(data);
+      await axios
+        .post(url, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          console.log(res.data);
+          onClear();
+          ButterToast.raise({
+            content: (
+              <Cinnamon.Crisp
+                title="Success!"
+                content="Send Successful!"
+                scheme={Cinnamon.Crisp.SCHEME_GREEN}
+                icon={<CheckCircleOutlineIcon />}
+              />
+            ),
           });
-      }
-    });
+        });
+    }
   };
 
-  render() {
-    return (
-      <div className="App">
-        <Typography gutterBottom variant="h3" align="center">
-          Feedback
-        </Typography>
-        <Grid>
-          <Card
-            style={{ maxWidth: 450, padding: "20px 5px", margin: "0 auto" }}
-          >
-            <CardContent>
-              <Typography gutterBottom variant="h5">
-                Send Feedback
-              </Typography>
-              <br />
-              <form autoComplete="off" onSubmit={this.SubmitForm}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="text"
-                      placeholder="Email"
-                      label="Email"
-                      variant="outlined"
-                      name="email"
-                      value={this.state.email}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      type="text"
-                      placeholder="Message"
-                      label="Message"
-                      variant="outlined"
-                      name="message"
-                      multiline
-                      rows={4}
-                      value={this.state.message}
-                      onChange={this.handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Send
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => this.onClear()}
-                      fullWidth
-                    >
-                      Clear
-                    </Button>
-                  </Grid>
+  return (
+    <div className="App">
+      <Typography gutterBottom variant="h3" align="center">
+        Feedback
+      </Typography>
+      <Grid>
+        <Card style={{ maxWidth: 450, padding: "20px 5px", margin: "0 auto" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5">
+              Send Feedback
+            </Typography>
+            <br />
+            <form autoComplete="off" onSubmit={SubmitForm}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    placeholder="Email"
+                    label="Email"
+                    variant="outlined"
+                    name="email"
+                    value={email}
+                    onChange={setEmail}
+                    fullWidth
+                  />
                 </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
-      </div>
-    );
-  }
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    placeholder="Message"
+                    label="Message"
+                    variant="outlined"
+                    name="message"
+                    multiline
+                    rows={4}
+                    value={message}
+                    onChange={setMessage}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Send
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => this.onClear()}
+                    fullWidth
+                  >
+                    Clear
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+    </div>
+  );
 }
 
 export default SendFeedback;

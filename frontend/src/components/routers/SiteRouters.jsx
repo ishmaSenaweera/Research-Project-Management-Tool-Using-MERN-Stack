@@ -23,7 +23,7 @@ import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
-import Add from "../markingscheme/AddScheme";
+import AddScheme from "../markingscheme/AddScheme";
 import AllScheme from "../markingscheme/AllSchemes";
 import SendFeedback from "../markingscheme/SendFeedback";
 import StudentView from "../markingscheme/StudentView";
@@ -73,7 +73,7 @@ function SiteRouters() {
               <Route path="/admins/add" element={<AddAdmin />} />
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
-              <Route path="/addScheme" element={<Add />} />
+              <Route path="/addScheme" element={<AddScheme />} />
               <Route path="/allSchemes" element={<AllScheme />} />
 
               <Route path="*" element={<Home />} />

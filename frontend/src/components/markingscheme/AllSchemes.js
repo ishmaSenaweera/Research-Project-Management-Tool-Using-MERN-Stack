@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import MaterialTable from "material-table";
@@ -6,35 +6,28 @@ import ButterToast, { Cinnamon } from "butter-toast";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
-const initialState = {
-  id: "",
-  name: "",
-  lecturer_in_charge: "",
-  module_name: "",
-  creativity: "",
-  concept: "",
-  quality: "",
-  scheme: [],
-};
+function AllScheme() {
+  const [scheme, setScheme] = useState([]);
 
-class AllScheme extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+  useEffect(() => onReload(), []);
 
-  componentDidMount() {
-    const url = "http://localhost:1234/scheme";
-    axios
-      .get(url)
-      .then((response) => this.setState({ scheme: response["data"] }));
-  }
+  const onReload = () => {
+    const url = "http://localhost:8000/scheme";
+    axios.get(url).then((response) => setScheme(response["data"]));
+  };
 
-  validation = async () => {
+  const validation = (
+    name,
+    lecturer_in_charge,
+    module_name,
+    creativity,
+    concept,
+    content
+  ) => {
     console.log("bb");
     var Error = false;
 
-    if (this.state.name === "") {
+    if (name === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -48,7 +41,7 @@ class AllScheme extends React.Component {
       Error = true;
     }
 
-    if (this.state.lecturer_in_charge === "") {
+    if (lecturer_in_charge === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -62,7 +55,7 @@ class AllScheme extends React.Component {
       Error = true;
     }
 
-    if (this.state.module_name === "") {
+    if (module_name === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -76,7 +69,7 @@ class AllScheme extends React.Component {
       Error = true;
     }
 
-    if (this.state.creativity === "") {
+    if (creativity === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -89,7 +82,7 @@ class AllScheme extends React.Component {
       });
       Error = true;
     } else {
-      if (this.state.creativity * 1 > 100 || this.state.creativity * 1 < 1) {
+      if (creativity * 1 > 100 || creativity * 1 < 1) {
         ButterToast.raise({
           content: (
             <Cinnamon.Crisp
@@ -104,7 +97,7 @@ class AllScheme extends React.Component {
       }
     }
 
-    if (this.state.concept === "") {
+    if (concept === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -117,7 +110,7 @@ class AllScheme extends React.Component {
       });
       Error = true;
     } else {
-      if (this.state.concept * 1 > 100 || this.state.concept * 1 < 1) {
+      if (concept * 1 > 100 || concept * 1 < 1) {
         ButterToast.raise({
           content: (
             <Cinnamon.Crisp
@@ -132,7 +125,7 @@ class AllScheme extends React.Component {
       }
     }
 
-    if (this.state.quality === "") {
+    if (content === "") {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -145,7 +138,7 @@ class AllScheme extends React.Component {
       });
       Error = true;
     } else {
-      if (this.state.quality * 1 > 100 || this.state.quality * 1 < 1) {
+      if (content * 1 > 100 || content * 1 < 1) {
         ButterToast.raise({
           content: (
             <Cinnamon.Crisp
@@ -160,13 +153,7 @@ class AllScheme extends React.Component {
       }
     }
 
-    if (
-      !Error &&
-      this.state.creativity * 1 +
-        this.state.concept * 1 +
-        this.state.quality * 1 !==
-        100
-    ) {
+    if (!Error && creativity * 1 + concept * 1 + content * 1 !== 100) {
       ButterToast.raise({
         content: (
           <Cinnamon.Crisp
@@ -187,46 +174,50 @@ class AllScheme extends React.Component {
     return true;
   };
 
-  SubmitForm = async () => {
-    this.validation().then(async (res) => {
-      console.log(res);
-      if (res) {
-        console.log(this.state);
-        const url = "http://localhost:1234/scheme/" + this.state.id;
-        const data = JSON.stringify({
-          name: this.state.name,
-          lecturer_in_charge: this.state.lecturer_in_charge,
-          module_name: this.state.module_name,
-          creativity: this.state.creativity,
-          concept: this.state.concept,
-          quality: this.state.quality,
-        });
-        console.log(data);
-        await axios
-          .put(url, data, {
-            headers: { "Content-Type": "application/json" },
-          })
-          .then((res) => {
-            console.log(res.data);
-            this.componentDidMount();
-            this.setState(initialState);
-            ButterToast.raise({
-              content: (
-                <Cinnamon.Crisp
-                  title="Success!"
-                  content="Update Successful!"
-                  scheme={Cinnamon.Crisp.SCHEME_GREEN}
-                  icon={<CheckCircleOutlineIcon />}
-                />
-              ),
-            });
+  const SubmitForm = async (newRow, oldRow) => {
+    if (
+      validation(
+        newRow["name"],
+        newRow["lecturer_in_charge"],
+        newRow["module_name"],
+        newRow["creativity"],
+        newRow["concept"],
+        newRow["quality"]
+      )
+    ) {
+      const url = "http://localhost:8000/scheme/" + oldRow["_id"];
+      const data = JSON.stringify({
+        name: newRow["name"],
+        lecturer_in_charge: newRow["lecturer_in_charge"],
+        module_name: newRow["module_name"],
+        creativity: newRow["creativity"],
+        concept: newRow["concept"],
+        quality: newRow["quality"],
+      });
+      console.log(data);
+      await axios
+        .put(url, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          console.log(res.data);
+          onReload();
+          ButterToast.raise({
+            content: (
+              <Cinnamon.Crisp
+                title="Success!"
+                content="Update Successful!"
+                scheme={Cinnamon.Crisp.SCHEME_GREEN}
+                icon={<CheckCircleOutlineIcon />}
+              />
+            ),
           });
-      }
-    });
+        });
+    }
   };
 
-  onDelete(id) {
-    const url = "http://localhost:1234/scheme/";
+  const onDelete = (id) => {
+    const url = "http://localhost:8000/scheme/";
     axios.delete(url + id).then((res) => {
       ButterToast.raise({
         content: (
@@ -238,64 +229,50 @@ class AllScheme extends React.Component {
           />
         ),
       });
-      this.componentDidMount();
+      onReload();
     });
-  }
+  };
 
-  render() {
-    const { scheme } = this.state;
-    console.log(scheme);
-    const columns = [
-      { title: "Name", field: "name" },
-      { title: "Lecturer in charge", field: "lecturer_in_charge" },
-      { title: "Module Name", field: "module_name" },
-      { title: "Marks for Creativity", field: "creativity", type: "numeric" },
-      { title: "Marks for Using Concept", field: "concept", type: "numeric" },
-      {
-        title: "Marks for Quality of the Content",
-        field: "quality",
-        type: "numeric",
-      },
-    ];
-    return (
-      <div>
-        <MaterialTable
-          title="Marking Scheme Table"
-          columns={columns}
-          data={scheme}
-          options={{
-            filtering: true,
-            sorting: true,
-            actionsColumnIndex: -1,
-          }}
-          editable={{
-            onRowUpdate: (newRow, oldRow) =>
-              new Promise(async (resolve, reject) => {
-                console.log(newRow);
-                await this.setState({
-                  id: oldRow._id,
-                  name: newRow.name,
-                  lecturer_in_charge: newRow.lecturer_in_charge,
-                  module_name: newRow.module_name,
-                  creativity: newRow.creativity,
-                  concept: newRow.concept,
-                  quality: newRow.quality,
-                });
-                this.SubmitForm();
-                console.log(oldRow._id);
-                setTimeout(() => resolve(), 300);
-              }),
-            onRowDelete: (selectedRow) =>
-              new Promise((resolve, reject) => {
-                console.log(selectedRow);
-                this.onDelete(selectedRow._id);
-                setTimeout(() => resolve(), 300);
-              }),
-          }}
-        />
-      </div>
-    );
-  }
+  const columns = [
+    { title: "Name", field: "name" },
+    { title: "Lecturer in charge", field: "lecturer_in_charge" },
+    { title: "Module Name", field: "module_name" },
+    { title: "Marks for Creativity", field: "creativity", type: "numeric" },
+    { title: "Marks for Using Concept", field: "concept", type: "numeric" },
+    {
+      title: "Marks for Quality of the Content",
+      field: "quality",
+      type: "numeric",
+    },
+  ];
+  return (
+    <div>
+      <MaterialTable
+        title="Marking Scheme Table"
+        columns={columns}
+        data={scheme}
+        options={{
+          filtering: true,
+          sorting: true,
+          actionsColumnIndex: -1,
+        }}
+        editable={{
+          onRowUpdate: (newRow, oldRow) =>
+            new Promise(async (resolve, reject) => {
+              SubmitForm(newRow, oldRow);
+              console.log(oldRow._id);
+              setTimeout(() => resolve(), 300);
+            }),
+          onRowDelete: (selectedRow) =>
+            new Promise((resolve, reject) => {
+              console.log(selectedRow);
+              onDelete(selectedRow._id);
+              setTimeout(() => resolve(), 300);
+            }),
+        }}
+      />
+    </div>
+  );
 }
 
 export default AllScheme;

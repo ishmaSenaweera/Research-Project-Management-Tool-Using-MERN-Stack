@@ -31,8 +31,6 @@ function NavBar() {
                 <Nav.Link href="/students">All Students</Nav.Link>
                 <Nav.Link href="/staffs">All Staff</Nav.Link>
                 <Nav.Link href="/admins">All Admin</Nav.Link>
-                <Nav.Link href="/addScheme">Add scheme</Nav.Link>
-                <Nav.Link href="/allSchemes">All schemes</Nav.Link>
               </>
             ) : (
               ""
@@ -44,8 +42,8 @@ function NavBar() {
               <>
                 <Nav.Link href="/chat">Chat</Nav.Link>
                 <Nav.Link href="/addGroup">Create Group</Nav.Link>
-                <Nav.Link href="/StudentView">View marking schemes</Nav.Link>
-                <Nav.Link href="/SendFeedback">Send feedback</Nav.Link>
+
+
               </>
             ) : (
               ""

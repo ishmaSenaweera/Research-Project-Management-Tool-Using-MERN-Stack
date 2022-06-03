@@ -12,6 +12,8 @@ import {
 import ButterToast, { Cinnamon } from "butter-toast";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import { toast } from "react-toastify";
+
 
 const initialState = {
   name: "",
@@ -27,6 +29,7 @@ class Add extends React.Component {
     super(props);
     this.state = initialState;
   }
+ 
 
   handleChange = (e) => {
     const isCheckbox = e.target.type === "checkbox";
@@ -197,13 +200,14 @@ class Add extends React.Component {
   };
 
   SubmitForm = async (e) => {
+    console.log("submit handler");
     e.preventDefault();
 
     this.validation().then(async (res) => {
       console.log(res);
       if (res) {
         console.log(this.state);
-        const url = "http://localhost:1234/scheme/";
+        const url = "http://localhost:8000/scheme/";
         const data = JSON.stringify({
           name: this.state.name,
           lecturer_in_charge: this.state.lecturer_in_charge,
@@ -213,24 +217,44 @@ class Add extends React.Component {
           quality: this.state.quality,
         });
         console.log(data);
-        await axios
-          .post(url, data, {
-            headers: { "Content-Type": "application/json" },
-          })
-          .then((res) => {
-            console.log(res.data);
-            this.setState(initialState);
-            ButterToast.raise({
-              content: (
-                <Cinnamon.Crisp
-                  title="Success!"
-                  content="Insert Successful!"
-                  scheme={Cinnamon.Crisp.SCHEME_GREEN}
-                  icon={<CheckCircleOutlineIcon />}
-                />
-              ),
-            });
+        // await axios
+        //   .post(url, data, {
+        //     headers: { "Content-Type": "application/json" },
+        //   })
+        //   .then((res) => {
+        //     console.log("Sucess", res.data);
+        //     this.setState(initialState);
+        //     ButterToast.raise({
+        //       content: (
+        //         <Cinnamon.Crisp
+        //           title="Success!"
+        //           content="Insert Successful!"
+        //           scheme={Cinnamon.Crisp.SCHEME_GREEN}
+        //           icon={<CheckCircleOutlineIcon />}
+        //         />
+        //       ),
+        //     });
+        //   });
+        const res = await axios.post(url, data, {
+          headers: { "Content-Type": "application/json" },
+        });
+        console.log({ res });
+        if (res.status === 200) {
+          console.log("received data");
+          toast.success("Insert successful");
+          ButterToast.raise({
+            content: (
+              <Cinnamon.Crisp
+                title="Success!"
+                content="Insert Successful!"
+                scheme={Cinnamon.Crisp.SCHEME_GREEN}
+                icon={<CheckCircleOutlineIcon />}
+              />
+
+            ),
           });
+          
+        }
       }
     });
   };

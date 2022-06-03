@@ -42,7 +42,7 @@ const BlockAccount = (props) => {
                     <h3>{userData.specialization}</h3>
                   </td>
                 </tr>
-                <tr key="4">
+                <tr key={4}>
                   <td>
                     <h3>Batch</h3>
                   </td>
@@ -50,7 +50,7 @@ const BlockAccount = (props) => {
                     <h3>{userData.batch}</h3>
                   </td>
                 </tr>
-                <tr key="5">
+                <tr key={5}>
                   <td>
                     <h3>Branch</h3>
                   </td>
@@ -60,7 +60,7 @@ const BlockAccount = (props) => {
                 </tr>
               </>
             )}
-            <tr key="6">
+            <tr key={6}>
               <td>
                 <h3>Date of birth</h3>
               </td>
@@ -68,7 +68,7 @@ const BlockAccount = (props) => {
                 <h3>{userData.dobEdited}</h3>
               </td>
             </tr>
-            <tr key="7">
+            <tr key={7}>
               <td>
                 <h3>Gender</h3>
               </td>
@@ -76,7 +76,7 @@ const BlockAccount = (props) => {
                 <h3>{userData.gender}</h3>
               </td>
             </tr>
-            <tr key="8">
+            <tr key={8}>
               <td>
                 <h3>Mobile</h3>
               </td>
@@ -84,7 +84,7 @@ const BlockAccount = (props) => {
                 <h3>{userData.mobile}</h3>
               </td>
             </tr>
-            <tr key="9">
+            <tr key={9}>
               <td>
                 <h3>NIC</h3>
               </td>
@@ -92,7 +92,7 @@ const BlockAccount = (props) => {
                 <h3>{userData.nic}</h3>
               </td>
             </tr>
-            <tr key="10">
+            <tr key={10}>
               <td>
                 <h3>E-mail</h3>
               </td>
@@ -100,7 +100,7 @@ const BlockAccount = (props) => {
                 <h3>{userData.email}</h3>
               </td>
             </tr>
-            <tr key="11">
+            <tr key={11}>
               <td>
                 <h3>Verified</h3>
               </td>

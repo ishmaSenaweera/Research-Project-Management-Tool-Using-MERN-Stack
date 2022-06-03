@@ -18,20 +18,17 @@ export default function ReqSupervisor() {
     }
     , []);
 
-
-  
-
     return (
         <div className="main">
         <div className="sub-main">
         <div>
           <div>
-            <h1>Request supervisor</h1>
+            <h1>Request Supervisor</h1>
         <form>
             <div class="form-group">
-                <label for="text1">Select Supervisor ID </label>
+                <label for="text1">Select Supervisor</label><hr/>
                     {/* create a  dropdown menu for the supervisor id and name */}
-                <select class="form-control" id="text1" onChange={(e) => setSupervisorId(e.target.value)}>
+                <select class="form-input" onChange={(e) => setSupervisorId(e.target.value)}>
                     <option value="0">Select Supervisor</option>
 
                     {supervisors.map(supervisor => (
@@ -43,7 +40,7 @@ export default function ReqSupervisor() {
             </div>
 
             <div class="form-group">
-                <label for="text2">Group ID</label>
+                <label for="text2">Group ID</label><hr/>
                 <input
                     type="text"
                     className="form-input"

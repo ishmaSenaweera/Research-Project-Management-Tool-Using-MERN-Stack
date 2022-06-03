@@ -75,8 +75,8 @@ function FileUploadScreen() {
 
   return (
     <div className="container">
-      <h1 className="text-center mt-3 mb-3">Upload Templates</h1>
-      <div className="card p-4 mt-4">
+      <h1 className="text-center mt-3">Upload Templates</h1>
+      <div className="card p-4 mt-4 mb-5">
         <div className="col align-items-center justify-content-center">
           <div className="card-header">
             <div className="form-check form-check-inline align-items-center justify-content-center">
@@ -114,11 +114,11 @@ function FileUploadScreen() {
         </div>
         <div className="row text-center mt-3">
           <div className="card-body">
-            <div className="row align-self-center mt-5">
+            <div className="row mt-5">
               {submissionType === "singleFile" ? (
                 <form>
-                  <div className="row justify-content-center">
-                    <div className="col-2 ">
+                  <div className="row">
+                    <div className="col-4">
                       <label className="form-label">Topic</label>
                       <input
                         className="form-control form-control-lg"
@@ -142,32 +142,33 @@ function FileUploadScreen() {
                       />
                     </div>
 
-                    <div className="form-check form-check-inline align-items-center justify-content-center">
+                    <div className="col mt-3">
+                      <div>
+                        <label className="me-3">Visibility</label>
+                      </div>
                       <input
                         className="form-check-input"
                         type="radio"
                         name="inlineRadioOptions"
                         id="inlineRadio1"
-                        value="Staff"
+                        value="Both"
                         onChange={(event) => {
                           setVisibility(event.target.value);
                         }}
                       />
                       <label
-                        className="form-check-label"
+                        className="form-check-label me-2"
                         htmlFor="inlineRadio1"
                       >
-                        Staff Only
+                        Student
                       </label>
-                    </div>
 
-                    <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
                         type="radio"
                         name="inlineRadioOptions"
                         id="inlineRadio2"
-                        value="Both"
+                        value="Staff"
                         onChange={(event) => {
                           setVisibility(event.target.value);
                         }}
@@ -176,10 +177,12 @@ function FileUploadScreen() {
                         className="form-check-label"
                         htmlFor="inlineRadio2"
                       >
-                        Both
+                        Staff Only
                       </label>
                     </div>
+                  </div>
 
+                  <div className="mt-3">
                     <label className="form-label">Message</label>
                     <textarea
                       className="form-control"
@@ -189,16 +192,16 @@ function FileUploadScreen() {
                         setMessage(event.target.value);
                       }}
                     />
+                  </div>
 
-                    <div className="m-5">
-                      <button
-                        className="btn btn-secondary"
-                        type="button"
-                        onClick={() => uploadSingleFile()}
-                      >
-                        Upload
-                      </button>
-                    </div>
+                  <div className="m-5">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => uploadSingleFile()}
+                    >
+                      Upload
+                    </button>
                   </div>
                 </form>
               ) : (
@@ -218,7 +221,7 @@ function FileUploadScreen() {
                       />
                     </div>
 
-                    <div className="col-6">
+                    <div className="col-5">
                       <label className="form-label">
                         Multiple Files Uploader
                       </label>
@@ -233,32 +236,33 @@ function FileUploadScreen() {
                       />
                     </div>
 
-                    <div className="form-check form-check-inline align-items-center justify-content-center">
+                    <div className="col mt-3">
+                      <div>
+                        <label className="me-3">Visibility</label>
+                      </div>
                       <input
                         className="form-check-input"
                         type="radio"
                         name="inlineRadioOptions"
                         id="inlineRadio1"
-                        value="Staff"
+                        value="Both"
                         onChange={(event) => {
                           setVisibility(event.target.value);
                         }}
                       />
                       <label
-                        className="form-check-label"
+                        className="form-check-label me-2"
                         htmlFor="inlineRadio1"
                       >
-                        Staff Only
+                        Student
                       </label>
-                    </div>
 
-                    <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
                         type="radio"
                         name="inlineRadioOptions"
                         id="inlineRadio2"
-                        value="Both"
+                        value="Staff"
                         onChange={(event) => {
                           setVisibility(event.target.value);
                         }}
@@ -267,10 +271,12 @@ function FileUploadScreen() {
                         className="form-check-label"
                         htmlFor="inlineRadio2"
                       >
-                        Both
+                        Staff Only
                       </label>
                     </div>
+                  </div>
 
+                  <div className="mt-5 mb-4">
                     <label className="form-label">Message</label>
                     <textarea
                       className="form-control"
@@ -280,16 +286,16 @@ function FileUploadScreen() {
                         setMessage(event.target.value);
                       }}
                     />
+                  </div>
 
-                    <div className="m-5">
-                      <button
-                        className="btn btn-secondary"
-                        type="button"
-                        onClick={() => uploadMultipleFiles()}
-                      >
-                        Upload
-                      </button>
-                    </div>
+                  <div className="m-auto">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => uploadMultipleFiles()}
+                    >
+                      Upload
+                    </button>
                   </div>
                 </form>
               )}

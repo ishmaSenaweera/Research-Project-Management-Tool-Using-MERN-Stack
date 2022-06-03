@@ -1,13 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "../../userManagement/context/LoginContext";
 
 function SingleFileScreen() {
   const { loggedIn } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [dataList, setDataList] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function getSingleFileData() {
@@ -42,6 +40,7 @@ function SingleFileScreen() {
       if (loggedIn === "Staff") {
         return (
           <tr key={index}>
+            <td>{item.fileTopic}</td>
             <td>
               <a
                 href={`http://localhost:8000/${item.filePath}`}
@@ -51,6 +50,7 @@ function SingleFileScreen() {
                 {item.fileName}
               </a>
             </td>
+            <td>{item.fileMessage}</td>
             <td>Edit</td>
             <td>Delete</td>
           </tr>
@@ -59,6 +59,7 @@ function SingleFileScreen() {
       if (item.fileVisibility === "Both" && loggedIn === "Student") {
         return (
           <tr key={index}>
+            <td>{item.fileTopic}</td>
             <td>
               <a
                 href={`http://localhost:8000/${item.filePath}`}
@@ -68,6 +69,7 @@ function SingleFileScreen() {
                 {item.fileName}
               </a>
             </td>
+            <td>{item.fileMessage}</td>
           </tr>
         );
       }
@@ -76,16 +78,9 @@ function SingleFileScreen() {
 
   return (
     <div className="container px-4">
-      <div className="card mt-4">
-        <div className="card-header">
-          <h4>Template Structures Documents</h4>
-        </div>
-        <div className="card-body">
-          <table className="table table-bordered">
-            <tbody>{fileList}</tbody>
-          </table>
-        </div>
-      </div>
+      <table className="table table-bordered">
+        <tbody>{fileList}</tbody>
+      </table>
     </div>
   );
 }

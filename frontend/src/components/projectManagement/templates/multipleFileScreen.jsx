@@ -38,63 +38,56 @@ function MultipleFileScreen() {
     );
   } else {
     fileList = dataList.map((item, index) => {
-      return (
-        <tr key={item._id}>
-          {isHidden === false && (
-            <>
-              <td>{item.title}</td>
-              <td>
-                
-                    {item.files.map((file, index) =>
-                        <div className="col-10" key={index}>
-                            <a
-                                href={`http://localhost:8000/${file.filePath}`}
-                                download={``}
-                            >
-                                {file.fileName}
-                            </a>
-                        </div>
-                    )}
-               
-              </td>
-              {loggedIn === "Staff" ? (
-                <>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckDefault"
-                        onChange={() => hideRow(this, index)}
-                      />
-                      <label className="form-check-label">Hide</label>
-                    </div>
-                  </td>
-                  <td>Delete</td>{" "}
-                </>
-              ) : (
-                ""
-              )}
-            </>
-          )}
-        </tr>
-      );
+      if (loggedIn === "Staff") {
+        return (
+          <tr key={item._id}>
+            <td>{item.title}</td>
+            <td>
+              {item.files.map((file, index) => (
+                <div className="col-10" key={index}>
+                  <a
+                    href={`http://localhost:8000/${file.filePath}`}
+                    download={``}
+                  >
+                    {file.fileName}
+                  </a>
+                </div>
+              ))}
+            </td>
+            <td>{item.fileMessage}</td>
+            <td>Edit</td>
+            <td>Delete</td>
+          </tr>
+        );
+      }
+      if (item.fileVisibility === "Both" && loggedIn === "Student") {
+        return (
+          <tr key={item._id}>
+            <td>{item.title}</td>
+            <td>
+              {item.files.map((file, index) => (
+                <div className="col-10" key={index}>
+                  <a
+                    href={`http://localhost:8000/${file.filePath}`}
+                    download={``}
+                  >
+                    {file.fileName}
+                  </a>
+                </div>
+              ))}
+            </td>
+            <td>{item.fileMessage}</td>
+          </tr>
+        );
+      }
     });
   }
 
   return (
     <div className="container px-4">
-      <div className="card mt-4">
-        <div className="card-header">
-          <h4>Template Structures Documents</h4>
-        </div>
-        <div className="card-body">
-          <table className="table table-bordered">
-            <tbody>{fileList}</tbody>
-          </table>
-        </div>
-      </div>
+      <table className="table table-bordered">
+        <tbody>{fileList}</tbody>
+      </table>
     </div>
   );
 }

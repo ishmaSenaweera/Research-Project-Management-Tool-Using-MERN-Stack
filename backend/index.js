@@ -69,12 +69,13 @@ mongoose.connect(
 
 // set up routes
 
+//User management routes
 app.use("/auth", require("./routers/userManagement/login.router"));
 app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));
 app.use("/staff", require("./routers/userManagement/staff.router"));
 app.use("/account", require("./routers/userManagement/user.router"));
-app.use("/chat", require("./routers/userManagement/chat.router"));
+app.use("/chat", require("./routers/chatManagement/chat.router"));
 
 app.use("/scheme", require("./routers/markingscheme/markingrouter"));
 

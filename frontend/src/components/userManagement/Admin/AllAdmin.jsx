@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BlockList from "../blocks/listBlock.components";
+import BlockList from "../Blocks/listBlock.components";
 
 function AllAdmin() {
   const [adminData, setAdminData] = useState([]);

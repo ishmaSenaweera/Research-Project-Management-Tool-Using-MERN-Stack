@@ -6,7 +6,7 @@
   "scripts": {
     "build": "parcel build src/index.js",
     "start": "parcel src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "react-scripts test --verbose"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,10 @@
     "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
-    "parcel": "^2.0.0-rc.0"
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "jest": "^28.1.0",
+    "parcel": "^2.0.0-rc.0",
+    "react-scripts": "^5.0.1"
   }
 }

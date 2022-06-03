@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import BlockAccount from "../blocks/accountBlock.components";
+import BlockAccount from "../Blocks/accountBlock.components";
 
 function AccountStaff() {
   const { state } = useLocation();
@@ -14,6 +14,10 @@ function AccountStaff() {
 
   async function deleteStaff() {
     try {
+      if (!window.confirm("Are you sure you wish to delete this account?")) {
+        return;
+      }
+
       const data = {
         id: state._id,
       };

@@ -12,8 +12,6 @@ import {
 import ButterToast, { Cinnamon } from "butter-toast";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { toast } from "react-toastify";
-
 
 function AddScheme() {
   const [name, setName] = useState("");

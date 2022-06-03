@@ -24,7 +24,7 @@ import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
 import AddScheme from "../markingscheme/AddScheme";
-import AllScheme from "../markingscheme/AllSchemes";
+import AllSchemes from "../markingscheme/AllSchemes";
 import SendFeedback from "../markingscheme/SendFeedback";
 import StudentView from "../markingscheme/StudentView";
 
@@ -74,7 +74,9 @@ function SiteRouters() {
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
               <Route path="/addScheme" element={<AddScheme />} />
-              <Route path="/allSchemes" element={<AllScheme />} />
+              <Route path="/allSchemes" element={<AllSchemes />} />
+              <Route path="/StudentView" element={<StudentView />} />
+              <Route path="/SendFeedback" element={<SendFeedback />} />
 
               <Route path="*" element={<Home />} />
             </>

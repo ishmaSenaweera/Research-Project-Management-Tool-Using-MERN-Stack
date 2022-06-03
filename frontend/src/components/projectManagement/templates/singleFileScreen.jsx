@@ -37,7 +37,7 @@ function SingleFileScreen() {
     );
   } else {
     fileList = dataList.map((item, index) => {
-      if (loggedIn === "Staff") {
+      if (loggedIn === "Staff" || loggedIn === "Admin") {
         return (
           <tr key={index}>
             <td>{item.fileTopic}</td>

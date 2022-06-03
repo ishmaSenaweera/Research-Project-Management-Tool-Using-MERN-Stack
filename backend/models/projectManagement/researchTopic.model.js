@@ -4,7 +4,7 @@ const researchTopicSchema = new mongoose.Schema(
   {
     groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'groups', required: true  },
     researchTopic: { type: String, required: true },
-    status: { type: String, required: true },
+    status: { type: String },
     feedBack: { type: String },
   },
   {

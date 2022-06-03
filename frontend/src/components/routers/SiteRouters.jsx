@@ -27,6 +27,9 @@ import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
 import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
 import MultipleFileScreen from "../projectManagement/templates/multipleFileScreen";
 import FileShowScreen from "../projectManagement/templates/fileShowScreen";
+import ResearchTopicAdd from "../projectManagement/researchTopic/researchTopicAdd";
+import ResearchTopicView from "../projectManagement/researchTopic/researchTopicView";
+import ResearchTopicEdit from "../projectManagement/researchTopic/researchTopicEdit";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -42,15 +45,8 @@ function SiteRouters() {
             <>
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Login />} />
-              <Route path="*" element={<Login />} />
-
-              // Staff View
-              <Route path="/templates" element={<FileUploadScreen />} />
-
-              // Both
-              <Route path="/templates/view" element={<SingleFileScreen />} />
-              <Route path="/templates/views" element={<MultipleFileScreen />} />
-              <Route path="/templates/show" element={<FileShowScreen />} />
+              <Route path="*" element={<Login />} />             
+              
             </>
           ) : (
             ""
@@ -100,7 +96,10 @@ function SiteRouters() {
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
 
-              <Route path="/templates/view" element={<SingleFileScreen />} />
+              <Route
+                path="/researchTopic/save"
+                element={<ResearchTopicAdd />}
+              />
 
               <Route path="*" element={<Home />} />
             </>
@@ -108,10 +107,26 @@ function SiteRouters() {
             ""
           )}
 
-          {loggedIn === "Staff" ? (
+          {loggedIn === "Staff" || loggedIn === "Admin" ? (
             <>
-              // Only Staff members
               <Route path="/templates" element={<FileUploadScreen />} />
+              <Route
+                path="/researchTopic/view"
+                element={<ResearchTopicView />}
+              />
+              <Route
+                path="/researchTopic/edit"
+                element={<ResearchTopicEdit />}
+              />
+            </>
+          ) : (
+            ""
+          )}
+          {loggedIn === "Staff" ||
+          loggedIn === "Admin" ||
+          loggedIn === "Student" ? (
+            <>
+              <Route path="/templates/show" element={<FileShowScreen />} />
             </>
           ) : (
             ""

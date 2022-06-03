@@ -38,7 +38,7 @@ function MultipleFileScreen() {
     );
   } else {
     fileList = dataList.map((item, index) => {
-      if (loggedIn === "Staff") {
+      if (loggedIn === "Staff" || loggedIn === "Admin" ) {
         return (
           <tr key={item._id}>
             <td>{item.title}</td>

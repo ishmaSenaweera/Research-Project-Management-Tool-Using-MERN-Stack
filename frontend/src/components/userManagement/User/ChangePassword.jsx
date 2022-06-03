@@ -28,42 +28,56 @@ function ChangePassword() {
       navigate("/");
     } catch (err) {
       console.error(err);
+      alert(err.response.data.errorMessage);
     }
   }
 
   return (
-    <div>
-      <h1>Change Password</h1>
-      <form onSubmit={update}>
-        <div>
-          <label>Existing Password: </label>
-          <input
-            type="password"
-            placeholder="Existing Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </div>
-        <div>
-          <label>New Password: </label>
-          <input
-            type="password"
-            placeholder="New Password"
-            onChange={(e) => setNewPassword(e.target.value)}
-            value={newPassword}
-          />
-        </div>
-        <div>
-          <label>Verify New Password: </label>
-          <input
-            type="password"
-            placeholder="Verify New Password"
-            onChange={(e) => setNewPasswordVerify(e.target.value)}
-            value={newPasswordVerify}
-          />
-        </div>
-        <button type="submit">Change</button>
-      </form>
+    <div className="main">
+      <div className="sub-main">
+        <h1>Change Password</h1>
+        <hr />
+        <form onSubmit={update}>
+          <div>
+            <label>Existing Password: </label>
+            <input
+              type="password"
+              placeholder="Existing Password"
+              className="form-input"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+          </div>
+          <div>
+            <label>New Password: </label>
+            <input
+              type="password"
+              placeholder="New Password"
+              className="form-input"
+              required
+              onChange={(e) => setNewPassword(e.target.value)}
+              value={newPassword}
+            />
+          </div>
+          <div>
+            <label>Verify New Password: </label>
+            <input
+              type="password"
+              placeholder="Verify New Password"
+              className="form-input"
+              required
+              onChange={(e) => setNewPasswordVerify(e.target.value)}
+              value={newPasswordVerify}
+            />
+          </div>
+          <div className="login-button">
+            <button className="button" type="submit">
+              Change Password
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

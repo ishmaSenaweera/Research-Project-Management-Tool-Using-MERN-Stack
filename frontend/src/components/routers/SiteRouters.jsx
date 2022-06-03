@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../userManagement/Home";
 import NavBar from "../layout/NavBar";
-import Login from "../userManagement/auth/Login";
+import Login from "../userManagement/Authentication/Login";
 import Register from "../userManagement/Student/Register";
-import Verify from "../userManagement/auth/Verify";
+import Verify from "../userManagement/Authentication/Verify";
 import AuthContext from "../context/LoginContext";
 import AccountUser from "../userManagement/User/AccountUser";
 import UpdateUser from "../userManagement/User/UpdateUser";
@@ -91,6 +91,12 @@ function SiteRouters() {
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
+
+              <Route
+                path="/account/changepassword"
+                element={<ChangePassword />}
+              />
+
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
 

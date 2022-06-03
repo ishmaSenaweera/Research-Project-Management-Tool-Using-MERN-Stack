@@ -1,31 +1,40 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+import React from "react";
+import "../App.css";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import axios from "axios";
 import MaterialTable from "material-table";
 import ButterToast, { Cinnamon } from "butter-toast";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
-function StudentView() {
-  const [scheme, setScheme] = useState([]);
+const initialState = {
+  id: "",
+  scheme: [],
+};
 
-  useEffect(() => onReload(), []);
+class StudentView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
 
-  const onReload = () => {
-    const url = "http://localhost:8000/scheme";
-    axios.get(url).then((response) => setScheme(response["data"]));
-  };
+  componentDidMount() {
+    const url = "http://localhost:1234/scheme";
+    axios
+      .get(url)
+      .then((response) => this.setState({ scheme: response["data"] }));
+  }
 
-  const generatePdf = async (id) => {
+  generatePdf = async (id) => {
     const doc = new jsPDF("p", "pt", "a4");
 
     doc.setFontSize(15);
     doc.text("Marking Scheme Report", 40, 40);
     var data;
 
-    const url = "http://localhost:8000/scheme/" + id;
+    const url = "http://localhost:1234/scheme/" + id;
     await axios
       .get(url, {
         headers: { "Content-Type": "application/json" },
@@ -78,43 +87,64 @@ function StudentView() {
     doc.save("Marking_Scheme_Report.pdf");
   };
 
-  const columns = [
-    { title: "Name", field: "name" },
-    { title: "Lecturer in charge", field: "lecturer_in_charge" },
-    { title: "Module Name", field: "module_name" },
-    { title: "Marks for Creativity", field: "creativity", type: "numeric" },
-    { title: "Marks for Using Concept", field: "concept", type: "numeric" },
-    {
-      title: "Marks for Quality of the Content",
-      field: "quality",
-      type: "numeric",
-    },
-  ];
-  return (
-    <div>
-      <MaterialTable
-        title="Marking Scheme Table"
-        columns={columns}
-        data={scheme}
-        options={{
-          filtering: true,
-          sorting: true,
-          actionsColumnIndex: -1,
-        }}
-        actions={[
-          {
-            icon: () => <GetAppIcon />,
-            tooltip: "Download PDF",
-            onClick: (e, data) => {
-              console.log(data._id);
-              generatePdf(data._id);
+  onDelete(id) {
+    const url = "http://localhost:1234/scheme/";
+    axios.delete(url + id).then((res) => {
+      ButterToast.raise({
+        content: (
+          <Cinnamon.Crisp
+            title="Success!"
+            content="Delete Successful!"
+            scheme={Cinnamon.Crisp.SCHEME_GREEN}
+            icon={<CheckCircleOutlineIcon />}
+          />
+        ),
+      });
+      this.componentDidMount();
+    });
+  }
+
+  render() {
+    const { scheme } = this.state;
+    console.log(scheme);
+    const columns = [
+      { title: "Name", field: "name" },
+      { title: "Lecturer in charge", field: "lecturer_in_charge" },
+      { title: "Module Name", field: "module_name" },
+      { title: "Marks for Creativity", field: "creativity", type: "numeric" },
+      { title: "Marks for Using Concept", field: "concept", type: "numeric" },
+      {
+        title: "Marks for Quality of the Content",
+        field: "quality",
+        type: "numeric",
+      },
+    ];
+    return (
+      <div>
+        <MaterialTable
+          title="Marking Scheme Table"
+          columns={columns}
+          data={scheme}
+          options={{
+            filtering: true,
+            sorting: true,
+            actionsColumnIndex: -1,
+          }}
+          actions={[
+            {
+              icon: () => <GetAppIcon />,
+              tooltip: "Download PDF",
+              onClick: (e, data) => {
+                console.log(data._id);
+                this.generatePdf(data._id);
+              },
+              // isFreeAction:true
             },
-            // isFreeAction:true
-          },
-        ]}
-      />
-    </div>
-  );
+          ]}
+        />
+      </div>
+    );
+  }
 }
 
 export default StudentView;

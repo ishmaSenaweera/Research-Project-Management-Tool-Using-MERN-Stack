@@ -23,10 +23,6 @@ import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
-import AddScheme from "../markingscheme/AddScheme";
-import AllSchemes from "../markingscheme/AllSchemes";
-import SendFeedback from "../markingscheme/SendFeedback";
-import StudentView from "../markingscheme/StudentView";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -73,10 +69,7 @@ function SiteRouters() {
               <Route path="/admins/add" element={<AddAdmin />} />
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
-              <Route path="/addScheme" element={<AddScheme />} />
-              <Route path="/allSchemes" element={<AllSchemes />} />
-              <Route path="/StudentView" element={<StudentView />} />
-              <Route path="/SendFeedback" element={<SendFeedback />} />
+              
 
               <Route path="*" element={<Home />} />
             </>
@@ -89,11 +82,8 @@ function SiteRouters() {
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
-              <Route path="/addGroup" element={<AddGroup />} />
+              <Route path="/addGroup" element={<AddGroup/>}/>
               <Route path="/allGroups" element={<AllGroups />} />
-
-              <Route path="/SendFeedback" element={<SendFeedback />} />
-              <Route path="/StudentView" element={<StudentView />} />
 
               <Route path="*" element={<Home />} />
             </>

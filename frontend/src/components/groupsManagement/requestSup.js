@@ -64,6 +64,7 @@ export default function ReqSupervisor() {
                         groupid: groupId
                     }).then(res => {
                         console.log(res);
+                        alert("Request sent successfully!");
                     }
                     ).catch(err => {
                         console.log(err);

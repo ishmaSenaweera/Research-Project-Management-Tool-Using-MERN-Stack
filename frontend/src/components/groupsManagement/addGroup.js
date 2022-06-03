@@ -26,6 +26,7 @@ export default function AddGroup() {
         axios.post(url, data).then(res => {
             console.log(res);
             console.log(res.data);
+            alert("Group created successfully!");
 
             window.location.href = "/allGroups";
 

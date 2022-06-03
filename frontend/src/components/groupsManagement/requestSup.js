@@ -24,6 +24,7 @@ export default function ReqSupervisor() {
         <div>
           <div>
             <h1>Request Supervisor</h1>
+            
         <form>
             <div class="form-group">
                 <label for="text1">Select Supervisor</label><hr/>
@@ -32,15 +33,15 @@ export default function ReqSupervisor() {
                     <option value="0">Select Supervisor</option>
 
                     {supervisors.map(supervisor => (
-                        <option key={supervisor.id} value={supervisor.id}> {`${supervisor.email}`}</option>
+                        <option key={supervisor.id} value={supervisor.id}> {`${supervisor.name}`}</option>
                     ))}
                 </select>
                 
 
             </div>
-
+            <hr/>
             <div class="form-group">
-                <label for="text2">Group ID</label><hr/>
+                <label for="text2">Group ID</label>
                 <input
                     type="text"
                     className="form-input"

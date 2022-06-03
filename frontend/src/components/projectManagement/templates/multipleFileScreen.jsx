@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import AuthContext from "../../context/LoginContext";
+import AuthContext from "../../userManagement/context/LoginContext";
 
 function MultipleFileScreen() {
   const { loggedIn } = useContext(AuthContext);

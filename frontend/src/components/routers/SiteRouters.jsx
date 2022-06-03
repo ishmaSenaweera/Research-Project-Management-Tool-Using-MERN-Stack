@@ -5,7 +5,7 @@ import NavBar from "../layout/NavBar";
 import Login from "../userManagement/Authentication/Login";
 import Register from "../userManagement/Student/Register";
 import Verify from "../userManagement/Authentication/Verify";
-import AuthContext from "../context/LoginContext";
+import AuthContext from "../userManagement/context/LoginContext";
 import AccountUser from "../userManagement/User/AccountUser";
 import UpdateUser from "../userManagement/User/UpdateUser";
 import AllStudents from "../userManagement/Student/AllStudents";

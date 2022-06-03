@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/LoginContext";
+import AuthContext from "../../userManagement/context/LoginContext";
 
 function SingleFileScreen() {
   const { loggedIn } = useContext(AuthContext);

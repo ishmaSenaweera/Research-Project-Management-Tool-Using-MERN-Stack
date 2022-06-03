@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import AuthContext from "../context/LoginContext";
+import AuthContext from "../userManagement/context/LoginContext";
 import LogOut from "../userManagement/Authentication/Logout";
 import { Container, Nav, Navbar } from "react-bootstrap";
 

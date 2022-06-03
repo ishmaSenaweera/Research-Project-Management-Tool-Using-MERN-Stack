@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BlockList from "../blocks/listBlock.components";
 
 function AllAdmin() {
   const [adminData, setAdminData] = useState([]);
@@ -9,11 +10,10 @@ function AllAdmin() {
 
   async function getData() {
     try {
-      const result = await axios.get("http://localhost:5000/admin/");
+      const result = await axios.get("http://localhost:8000/admin/");
 
       setAdminData(result.data);
     } catch (err) {
-      //await getLoggedIn();
       console.log(err);
     }
   }
@@ -26,42 +26,17 @@ function AllAdmin() {
     navigate("/admins/add");
   }
 
-  function adminList() {
-    return adminData.map((currentAdmin, index) => {
-      return (
-        <tr key={index}>
-          <td>{index + 1}</td>
-          <td>{currentAdmin.name}</td>
-          <td>{currentAdmin.email}</td>
-          <td>{currentAdmin.gender}</td>
-          <td>
-            <button onClick={viewDetails.bind(this, currentAdmin)}>View</button>
-          </td>
-        </tr>
-      );
-    });
-  }
-
-  useEffect(async () => {
-    await getData();
+  useEffect(() => {
+    getData();
   }, []);
 
   return (
-    <div style={{ margin: "30px" }}>
-      <button onClick={addAdmin}>Add</button>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Gender</th>
-          </tr>
-        </thead>
-        <tbody>{adminList()}</tbody>
-      </table>
-      <hr />
-    </div>
+    <BlockList
+      data={adminData}
+      add={addAdmin}
+      viewDetails={viewDetails}
+      heading="Admins"
+    />
   );
 }
 

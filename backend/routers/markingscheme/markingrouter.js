@@ -1,7 +1,7 @@
 const express = require("express");
 var router = express.Router();
 var ObjectID = require("mongoose").Types.ObjectId;
-var { scheme } = require("../models/scheme");
+var { scheme } = require("../../models/MarkingScheme/scheme");
 const nodemailer = require("nodemailer");
 
 router.get("/", (req, res) => {

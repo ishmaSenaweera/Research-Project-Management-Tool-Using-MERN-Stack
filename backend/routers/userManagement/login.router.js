@@ -6,8 +6,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Token = require("../../models/userManagement/token.model");
 const email = require("../../utils/email.util");
-const func = require("../../utils/func.util.js");
-const valid = require("../../utils/valid.util");
+const func = require("../../utils/functions.util.js");
+const valid = require("../../utils/validation.util");
 
 // log in
 router.post("/login", async (req, res) => {
@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     if (err.isJoi === true) {
       console.error(err);
-      return res.status(422).send({ errormessage: err.details[0].message });
+      return res.status(422).send({ errorMessage: err.details[0].message });
     } else {
       console.error(err);
       res.status(500).send(err);

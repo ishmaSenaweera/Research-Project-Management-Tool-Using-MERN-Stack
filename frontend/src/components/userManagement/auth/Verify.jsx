@@ -10,7 +10,7 @@ function Verify() {
 
   async function verifyUrl() {
     try {
-      const url = `http://localhost:5000/auth/verify/${param.id}/${param.token}`;
+      const url = `http://localhost:8000/auth/verify/${param.id}/${param.token}`;
       await axios.get(url);
 
       setIsVerify(true);
@@ -29,7 +29,6 @@ function Verify() {
 
   return (
     <div>
-      {console.log(isVerify)}
       {isVerify === "" ? <h1>Loading...</h1> : ""}
       {isVerify === true ? <h1>Successfully Verified!</h1> : ""}
       {isVerify === false ? <h1>404 Not Found!</h1> : ""}

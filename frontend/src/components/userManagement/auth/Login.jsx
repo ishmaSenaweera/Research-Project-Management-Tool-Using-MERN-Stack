@@ -17,35 +17,46 @@ function Login() {
         password,
       };
 
-      const result = await axios.post(
-        "http:///localhost:5000/auth/login",
-        loginData
-      );
+      await axios.post("http://localhost:8000/auth/login", loginData);
       await getLoggedIn();
       //navigate("/home");
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data.errorMessage);
+      alert(err.response.data.errorMessage);
     }
   }
 
   return (
-    <div>
-      <h1>Log in to your account</h1>
-      <form onSubmit={login}>
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-        <button type="submit">Log in</button>
-      </form>
+    <div className="main">
+      <div className="sub-main">
+        <h1>Log in</h1>
+        <hr />
+        <form onSubmit={login}>
+          <label>E-mail</label>
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              className="form-input"
+            />
+          </div>
+          <label>Password</label>
+          <div>
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="form-input"
+            />
+          </div>
+          <button className="btn btn-primary" type="submit">
+            Log in
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -24,6 +24,7 @@ import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
 import FileUploadScreen from "../projectManagement/templates/fileUploadScreen";
+import SingleFileScreen from "../projectManagement/templates/singleFileScreen";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -39,11 +40,13 @@ function SiteRouters() {
             <>
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Login />} />
-
               <Route path="*" element={<Login />} />
 
               // Staff View
               <Route path="/templates" element={<FileUploadScreen />} />
+
+              // Both
+              <Route path="/templates/view" element={<SingleFileScreen />} />
             </>
           ) : (
             ""
@@ -73,8 +76,6 @@ function SiteRouters() {
               <Route path="/admins/add" element={<AddAdmin />} />
               <Route path="/admins/update" element={<UpdateAdmin />} />
 
-              
-
               <Route path="*" element={<Home />} />
             </>
           ) : (
@@ -86,10 +87,19 @@ function SiteRouters() {
               <Route path="/" element={<Home />} />
               <Route path="/account" element={<AccountUser />} />
               <Route path="/account/update" element={<UpdateUser />} />
-              <Route path="/addGroup" element={<AddGroup/>}/>
+              <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/allGroups" element={<AllGroups />} />
 
               <Route path="*" element={<Home />} />
+            </>
+          ) : (
+            ""
+          )}
+
+          {loggedIn === "Staff" ? (
+            <>
+              // Only Staff members
+              <Route path="/templates" element={<FileUploadScreen />} />
             </>
           ) : (
             ""

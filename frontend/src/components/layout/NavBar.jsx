@@ -47,9 +47,17 @@ function NavBar() {
             ) : (
               ""
             )}
-            {loggedIn === "Staff" || loggedIn === "Admin" ? (
+            {loggedIn === "Student" ? (
               <>
-                <Nav.Link href="/templates">Templates</Nav.Link>
+                <Nav.Link href="/researchTopic/save">Research Topics</Nav.Link>
+              </>
+            ) : (
+              ""
+            )}
+            {loggedIn === "Staff" || loggedIn === "Admin" ? (
+              <>               
+                <Nav.Link href="/templates">Add Templates</Nav.Link>
+                <Nav.Link href="/researchTopic/view">Research Topics</Nav.Link>
               </>
             ) : (
               ""
@@ -60,9 +68,13 @@ function NavBar() {
             loggedIn === "Admin" ? (
               <>
                 <Nav.Link href="/chat">Chat</Nav.Link>
-                <Nav.Link href="/addGroup">Create Group</Nav.Link>
-                <Nav.Link href="/templates/show">Templates</Nav.Link>
-
+               
+                <Nav.Link href="/addGroup">Create Group</Nav.Link>      
+                <Nav.Link href="/templates/show">Templates</Nav.Link>   
+                                
+                <Nav.Link href="/StudentView">View marking schemes</Nav.Link>
+                <Nav.Link href="/SendFeedback">Send feedback</Nav.Link>
+                
               </>
             ) : (
               ""
@@ -74,7 +86,6 @@ function NavBar() {
             loggedIn === "Admin" ? (
               <>
                 <Nav.Link href="/account">Account</Nav.Link>
-
                 <LogOut />
               </>
             ) : (

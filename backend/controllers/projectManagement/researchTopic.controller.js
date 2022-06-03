@@ -3,6 +3,7 @@ const Groups = require("../../models/groupManagement/createGroup.model");
 
 // Save Research Topic
 const saveResearchTopic = async (req, res) => {
+  console.log(req.body)
   try {
     const newResearchTopic = new ResearchTopic(req.body);
     const availability = await ResearchTopic.findOne({
@@ -46,8 +47,8 @@ const getAllResearchTopic = async (req, res) => {
 // Get Research Topic of a Group
 const getResearchTopic = async (req, res) => {
   try {
-    const id = req.params.id;
-    const result = await ResearchTopic.findById(id);
+    const id = req.params.id;  
+    const result = await ResearchTopic.findOne({groupId: id});  
     res.status(200).json(result);
   } catch (error) {
     return res.status(400).send(error.message);
@@ -98,4 +99,5 @@ module.exports = {
   getAllResearchTopic,
   updateResearchTopic,
   deleteResearchTopic,
+  getResearchTopic,
 };

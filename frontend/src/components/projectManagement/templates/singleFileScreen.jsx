@@ -1,13 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "../../userManagement/context/LoginContext";
 
 function SingleFileScreen() {
   const { loggedIn } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [dataList, setDataList] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function getSingleFileData() {
@@ -29,6 +27,25 @@ function SingleFileScreen() {
     getSingleFileData();
   }, []);
 
+  async function deleteSingleTemplates(details) {
+    try {
+      if (window.confirm("This File Will Be Deleted!")) {
+        await axios
+          .delete(`http://localhost:8000/api/singleFile/delete/${details._id}`)
+          .then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              alert(res.data);
+              window.location.reload();
+            }
+          });
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+
   if (loading) {
     return (
       <div className="position-absolute top-50 start-50 translate-middle">
@@ -39,9 +56,10 @@ function SingleFileScreen() {
     );
   } else {
     fileList = dataList.map((item, index) => {
-      if (loggedIn === "Staff") {
+      if (loggedIn === "Staff" || loggedIn === "Admin") {
         return (
           <tr key={index}>
+            <td>{item.fileTopic}</td>
             <td>
               <a
                 href={`http://localhost:8000/${item.filePath}`}
@@ -51,14 +69,22 @@ function SingleFileScreen() {
                 {item.fileName}
               </a>
             </td>
-            <td>Edit</td>
-            <td>Delete</td>
+            <td>{item.fileMessage}</td>
+            <td>
+              <button
+                className="btn btn-danger"
+                onClick={deleteSingleTemplates.bind(this, item)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         );
       }
       if (item.fileVisibility === "Both" && loggedIn === "Student") {
         return (
           <tr key={index}>
+            <td>{item.fileTopic}</td>
             <td>
               <a
                 href={`http://localhost:8000/${item.filePath}`}
@@ -68,6 +94,7 @@ function SingleFileScreen() {
                 {item.fileName}
               </a>
             </td>
+            <td>{item.fileMessage}</td>
           </tr>
         );
       }
@@ -76,16 +103,9 @@ function SingleFileScreen() {
 
   return (
     <div className="container px-4">
-      <div className="card mt-4">
-        <div className="card-header">
-          <h4>Template Structures Documents</h4>
-        </div>
-        <div className="card-body">
-          <table className="table table-bordered">
-            <tbody>{fileList}</tbody>
-          </table>
-        </div>
-      </div>
+      <table className="table table-bordered">
+        <tbody>{fileList}</tbody>
+      </table>
     </div>
   );
 }

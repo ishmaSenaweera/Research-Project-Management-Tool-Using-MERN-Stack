@@ -28,6 +28,27 @@ function MultipleFileScreen() {
     getMultipleFileData();
   }, []);
 
+  async function deleteMultipleTemplates(details) {
+    try {
+      if (window.confirm("This File Will Be Deleted!")) {
+        await axios
+          .delete(
+            `http://localhost:8000/api/multipleFiles/delete/${details._id}`
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              alert(res.data);
+              window.location.reload();
+            }
+          });
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+
   if (loading) {
     return (
       <div className="position-absolute top-50 start-50 translate-middle">
@@ -38,63 +59,62 @@ function MultipleFileScreen() {
     );
   } else {
     fileList = dataList.map((item, index) => {
-      return (
-        <tr key={item._id}>
-          {isHidden === false && (
-            <>
-              <td>{item.title}</td>
-              <td>
-                
-                    {item.files.map((file, index) =>
-                        <div className="col-10" key={index}>
-                            <a
-                                href={`http://localhost:8000/${file.filePath}`}
-                                download={``}
-                            >
-                                {file.fileName}
-                            </a>
-                        </div>
-                    )}
-               
-              </td>
-              {loggedIn === "Staff" ? (
-                <>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckDefault"
-                        onChange={() => hideRow(this, index)}
-                      />
-                      <label className="form-check-label">Hide</label>
-                    </div>
-                  </td>
-                  <td>Delete</td>{" "}
-                </>
-              ) : (
-                ""
-              )}
-            </>
-          )}
-        </tr>
-      );
+      if (loggedIn === "Staff" || loggedIn === "Admin") {
+        return (
+          <tr key={item._id}>
+            <td>{item.title}</td>
+            <td>
+              {item.files.map((file, index) => (
+                <div className="col-10" key={index}>
+                  <a
+                    href={`http://localhost:8000/${file.filePath}`}
+                    download={``}
+                  >
+                    {file.fileName}
+                  </a>
+                </div>
+              ))}
+            </td>
+            <td>{item.fileMessage}</td>
+            <td>
+              <button
+                className="btn btn-danger"
+                onClick={deleteMultipleTemplates.bind(this, item)}
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        );
+      }
+      if (item.fileVisibility === "Both" && loggedIn === "Student") {
+        return (
+          <tr key={item._id}>
+            <td>{item.title}</td>
+            <td>
+              {item.files.map((file, index) => (
+                <div className="col-10" key={index}>
+                  <a
+                    href={`http://localhost:8000/${file.filePath}`}
+                    download={``}
+                  >
+                    {file.fileName}
+                  </a>
+                </div>
+              ))}
+            </td>
+            <td>{item.fileMessage}</td>
+          </tr>
+        );
+      }
     });
   }
 
   return (
     <div className="container px-4">
-      <div className="card mt-4">
-        <div className="card-header">
-          <h4>Template Structures Documents</h4>
-        </div>
-        <div className="card-body">
-          <table className="table table-bordered">
-            <tbody>{fileList}</tbody>
-          </table>
-        </div>
-      </div>
+      <table className="table table-bordered">
+        <tbody>{fileList}</tbody>
+      </table>
     </div>
   );
 }

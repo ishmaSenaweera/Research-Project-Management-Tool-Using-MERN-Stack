@@ -51,9 +51,11 @@ function Login() {
               className="form-input"
             />
           </div>
-          <button className="btn btn-primary" type="submit">
-            Log In
-          </button>
+          <div>
+            <button className="button" type="submit">
+              Log In
+            </button>
+          </div>
         </form>
       </div>
     </div>

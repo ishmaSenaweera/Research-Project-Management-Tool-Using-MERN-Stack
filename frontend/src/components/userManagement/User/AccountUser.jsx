@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/LoginContext";
-import BlockAccount from "../blocks/accountBlock.components";
+import BlockAccount from "../Blocks/accountBlock.components";
 
 function AccountUser() {
   const { loggedIn } = useContext(AuthContext);
@@ -28,8 +28,12 @@ function AccountUser() {
 
   async function deleteUser() {
     try {
+      if (!window.confirm("Are you sure you wish to delete this account?")) {
+        return;
+      }
+
       console.log("delete user");
-      const result = await axios.delete("http://localhost:8000/account/delete");
+      await axios.delete("http://localhost:8000/account/delete");
       
       navigate("/");
     } catch (err) {

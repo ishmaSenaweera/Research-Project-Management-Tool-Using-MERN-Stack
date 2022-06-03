@@ -69,6 +69,7 @@ mongoose.connect(
 
 // set up routes
 
+//User management routes
 app.use("/auth", require("./routers/userManagement/login.router"));
 app.use("/admin", require("./routers/userManagement/admin.router"));
 app.use("/student", require("./routers/userManagement/student.router"));

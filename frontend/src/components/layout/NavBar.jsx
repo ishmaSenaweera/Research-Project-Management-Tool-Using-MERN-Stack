@@ -41,6 +41,7 @@ function NavBar() {
             {loggedIn === "Student" ? (
               <>
                 <Nav.Link href="/addGroup">Create Group</Nav.Link>
+                <Nav.Link href="/req">Request Supervisor</Nav.Link>
 
               </>
             ) : (

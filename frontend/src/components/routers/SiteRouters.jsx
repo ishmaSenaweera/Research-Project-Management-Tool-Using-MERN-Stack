@@ -23,6 +23,7 @@ import AddAdmin from "../userManagement/Admin/AddAdmin";
 import ChatHandler from "../chatService/chatHandler.components";
 import AddGroup from "../groupsManagement/addGroup";
 import AllGroups from "../groupsManagement/allGroups";
+import ReqSupervisor from "../groupsManagement/requestSup";
 
 function SiteRouters() {
   const { loggedIn } = useContext(AuthContext);
@@ -84,6 +85,7 @@ function SiteRouters() {
               <Route path="/account/update" element={<UpdateUser />} />
               <Route path="/addGroup" element={<AddGroup/>}/>
               <Route path="/allGroups" element={<AllGroups />} />
+              <Route path="/req" element={<ReqSupervisor />} />
 
               <Route path="*" element={<Home />} />
             </>

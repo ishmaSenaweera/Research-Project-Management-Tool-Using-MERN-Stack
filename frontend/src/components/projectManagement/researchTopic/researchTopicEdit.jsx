@@ -9,6 +9,7 @@ function ResearchTopicEdit() {
   const [status, setStatus] = useState(state.status);
   const [feedBack, setFeedBack] = useState(state.feedBack);
   const navigate = useNavigate();
+  console.log("status", status)
 
   useEffect(() => {
     async function getData() {
@@ -85,8 +86,11 @@ function ResearchTopicEdit() {
                     padding: "5px",
                     borderRadius: "10px",
                   }}
+                  value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
+                  <optgroup label="Status Types"></optgroup>
+                  <option value=""></option>
                   <option value="Pending">Pending</option>
                   <option value="Accepted">Accepted</option>
                   <option value="Rejected">Rejected</option>

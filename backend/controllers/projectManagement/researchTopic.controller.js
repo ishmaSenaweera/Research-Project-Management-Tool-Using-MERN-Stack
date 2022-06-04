@@ -3,8 +3,11 @@ const Groups = require("../../models/groupManagement/createGroup.model");
 
 // Save Research Topic
 const saveResearchTopic = async (req, res) => {
-  console.log(req.body)
+  
   try {
+    if(req.body.groupId === ""){
+      return res.status(400).send("Required Field Missing!");
+    }
     const newResearchTopic = new ResearchTopic(req.body);
     const availability = await ResearchTopic.findOne({
       groupId: req.body.groupId,

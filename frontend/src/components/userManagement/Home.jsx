@@ -1,7 +1,14 @@
-import React from 'react';
+import React from "react";
+import "./home.css";
+import homeImage from "../../../images/home.jpeg";
 
 function Home() {
-    return ( <h1>Home</h1> );
+  return (
+    <div className="container mb-5">
+      <h1 className="home-title-style">Research Management Tool</h1>
+      <img src={homeImage} className="home-image-style"></img>
+    </div>
+  );
 }
 
 export default Home;

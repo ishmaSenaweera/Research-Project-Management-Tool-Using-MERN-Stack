@@ -4,10 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function Verify() {
   const [isVerify, setIsVerify] = useState("");
+  /* A hook that is used to get the parameters from the url. */
   const param = useParams();
 
   const navigate = useNavigate();
 
+  /**
+   * It takes the id and token from the url and sends a get request to the server to verify the user.
+   */
   async function verifyUrl() {
     try {
       const url = `http://localhost:8000/auth/verify/${param.id}/${param.token}`;
@@ -23,6 +27,7 @@ function Verify() {
     }
   }
 
+  /* Calling the function verifyUrl() when the component is mounted. */
   useEffect(() => {
     verifyUrl();
   }, []);

@@ -7,6 +7,9 @@ function UpdateStudent() {
 
   const navigate = useNavigate();
 
+/**
+ * It takes the edited data from the form and sends it to the server to update the database.
+ */
   async function edit(editedData) {
     try {
       await axios.put("http://localhost:8000/student/update", editedData);
@@ -19,6 +22,7 @@ function UpdateStudent() {
   }
 
   return (
+/* A component that is used to edit the data. */
     <BlockEdit
       data={state}
       edit={edit}

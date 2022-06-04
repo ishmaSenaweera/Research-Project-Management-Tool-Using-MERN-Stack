@@ -16,6 +16,11 @@ function ChatHandler() {
   const [group, setGroup] = useState([]);
   const [showChat, setShowChat] = useState(false);
 
+  /**
+   * When the user clicks on a button, the function will set the room state to the value of the button's
+   * id, and if the username and room states are not empty, it will emit a join_room event to the server,
+   * and set the showChat state to true.
+   */
   const joinRoom = (gid) => {
     setRoom(gid);
     if (username !== "" && room !== "") {
@@ -24,6 +29,9 @@ function ChatHandler() {
     }
   };
 
+  /**
+   * It gets the username and group from the database and sets the state of the username and group.
+   */
   async function getData() {
     try {
       const result = await axios.get("http://localhost:8000/account/");
@@ -41,6 +49,10 @@ function ChatHandler() {
     }
   }
 
+  /**
+   * It returns a table row for each group in the group array.
+   * @returns A list of table rows.
+   */
   function groupList() {
     return group.map((current, index) => {
       return (
@@ -60,6 +72,7 @@ function ChatHandler() {
     });
   }
 
+  /* Calling the getData function when the component is mounted. */
   useEffect(() => {
     getData();
   }, []);
@@ -86,6 +99,7 @@ function ChatHandler() {
           </div>
         </div>
       ) : (
+        /* Rendering the Chat component. */
         <Chat socket={socket} username={username} room={room} />
       )}
     </div>

@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
-// validate student registration
+/* A schema for validating the student registration form. */
 const studentRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   sid: Joi.string().length(10).required().label("Student ID"),
@@ -26,7 +26,7 @@ const studentRegisterSchema = Joi.object({
     .label("Password Verify"),
 });
 
-// validate student update
+/* A schema for validating the student update form. */
 const studentUpdateSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   sid: Joi.string().length(10).required().label("Student ID"),
@@ -46,7 +46,7 @@ const studentUpdateSchema = Joi.object({
     .label("E-mail"),
 }).unknown(true);
 
-// validate admin registration
+/* This is a schema for validating the admin registration form. */
 const adminRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   dob: Joi.string().required().label("DoB"),
@@ -67,7 +67,7 @@ const adminRegisterSchema = Joi.object({
     .label("Password Verify"),
 }).unknown(true);
 
-// validate admin update
+/* A schema for validating the admin update form. */
 const adminUpdateSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   dob: Joi.string().required().label("DoB"),
@@ -83,7 +83,7 @@ const adminUpdateSchema = Joi.object({
     .label("E-mail"),
 }).unknown(true);
 
-// validate staff registration
+/* This is a schema for validating the staff registration form. */
 const staffRegisterSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   dob: Joi.date().required().label("DoB"),
@@ -104,7 +104,7 @@ const staffRegisterSchema = Joi.object({
     .label("Password Verify"),
 }).unknown(true);
 
-// validate staff update
+/* A schema for validating the staff update form. */
 const staffUpdateSchema = Joi.object({
   name: Joi.string().min(2).max(30).required().label("Name"),
   dob: Joi.date().required().label("DoB"),
@@ -120,7 +120,7 @@ const staffUpdateSchema = Joi.object({
     .label("E-mail"),
 }).unknown(true);
 
-// validate login
+/* This is a schema for validating the login form. */
 const loginSchema = Joi.object({
   email: Joi.string()
     .min(5)
@@ -132,7 +132,7 @@ const loginSchema = Joi.object({
   password: passwordComplexity().required().label("Password"),
 });
 
-// validate change password
+/* This is a schema for validating the change password form. */
 const changePasswordSchema = Joi.object({
   password: passwordComplexity().required().label("Password"),
   newPassword: passwordComplexity().required().label("New Password"),

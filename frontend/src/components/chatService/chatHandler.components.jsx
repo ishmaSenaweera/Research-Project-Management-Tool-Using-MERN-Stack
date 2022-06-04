@@ -37,7 +37,8 @@ function ChatHandler() {
       const result = await axios.get("http://localhost:8000/account/");
       if (loggedIn === "Student") {
         const group = await axios.get("http://localhost:8000/chat/find-group");
-        setGroup(group.data.allgroups);
+        console.log(group);
+        setGroup(group.data);
       } else {
         const group = await axios.get("http://localhost:8000/groups/");
         setGroup(group.data.allgroups);
@@ -94,7 +95,26 @@ function ChatHandler() {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>{groupList()}</tbody>
+              {loggedIn !== "Student" ? (
+                <tbody>{groupList()}</tbody>
+              ) : (
+                <tbody>
+                  {group && (
+                    <tr>
+                      <td>1</td>
+                      <td>{group.gid}</td>
+                      <td>
+                        <button
+                          className="btn btn-primary account-button-blue"
+                          onClick={joinRoom.bind(this, group.gid)}
+                        >
+                          Join
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              )}
             </Table>
           </div>
         </div>

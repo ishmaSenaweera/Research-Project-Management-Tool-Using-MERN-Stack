@@ -146,6 +146,7 @@ async function updateStudent(id, validated) {
   try {
     await Student.findByIdAndUpdate(id, {
       name: validated.name,
+      sid: validated.sid,
       dob: validated.DoB,
       gender: validated.gender,
       specialization: validated.specialization,

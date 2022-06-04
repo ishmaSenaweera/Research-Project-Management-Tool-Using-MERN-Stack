@@ -93,8 +93,6 @@ function SiteRouters() {
               <Route path="/addGroup" element={<AddGroup />} />
               <Route path="/req" element={<ReqSupervisor />} />
 
-              <Route path="/chat" element={<ChatHandler />} />
-
               <Route
                 path="/researchTopic/save"
                 element={<ResearchTopicAdd />}
@@ -127,6 +125,7 @@ function SiteRouters() {
           loggedIn === "Student" ? (
             <>
               <Route path="/templates/show" element={<FileShowScreen />} />
+              <Route path="/chat" element={<ChatHandler />} />
             </>
           ) : (
             ""

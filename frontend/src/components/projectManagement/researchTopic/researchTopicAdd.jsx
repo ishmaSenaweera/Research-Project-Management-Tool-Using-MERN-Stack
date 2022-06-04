@@ -18,8 +18,7 @@ function ResearchTopicAdd() {
           axios
             .get(`http://localhost:8000/research-topic/details/${res.data._id}`)
             .then((res) => {
-              setDetails(res.data);
-              console.log(res.data);
+              setDetails(res.data);              
               setResearchTopic(res.data.researchTopic);
               setStatus(res.data.status);
               setFeedBack(res.data.feedBack);
@@ -64,9 +63,13 @@ function ResearchTopicAdd() {
               alert(res.data);
               window.location.reload();
             }
+            else{
+              alert(res.data);
+            }          
+            
           });
       } catch (error) {
-        console.error(error);
+        console.log(error);
         alert(error.response.data);
       }
     }

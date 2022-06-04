@@ -6,8 +6,10 @@ const BlockList = (props) => {
   const [search, setSearch] = useState("");
 
   function customerList() {
+    /* Returning the data in the form of a table. */
     return data.map((current, index) => {
       const name = current.name;
+      /* Checking if the name contains the search string or if the search string is empty. */
       if (name.toLowerCase().includes(search.toLowerCase()) || search === "") {
         return (
           <tr key={index}>
@@ -37,12 +39,12 @@ const BlockList = (props) => {
   return (
     <div className="list">
       <div className="list-sub-table">
-          <input
-            type="text"
-            placeholder="Search"
-            className="search-input"
-            onChange={(e) => setSearch(e.target.value)}
-          ></input>
+        <input
+          type="text"
+          placeholder="Search"
+          className="search-input"
+          onChange={(e) => setSearch(e.target.value)}
+        ></input>
         <div className="head">
           <h1>{props.heading}</h1>
           {props.heading !== "Students" && (

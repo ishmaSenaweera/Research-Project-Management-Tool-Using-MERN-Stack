@@ -12,6 +12,10 @@ function AccountStaff() {
 
   const navigate = useNavigate();
 
+/**
+ * It deletes a staff member from the database.
+ * @returns the deleteStaff function.
+ */
   async function deleteStaff() {
     try {
       if (!window.confirm("Are you sure you wish to delete this account?")) {
@@ -31,12 +35,17 @@ function AccountStaff() {
     }
   }
 
+/**
+ * When the user clicks the update button, navigate to the update page and pass the state as a
+ * parameter.
+ */
   async function updateStaff() {
     console.log("staff");
     navigate("/staffs/update", { state: state });
   }
 
   return (
+/* A component that is being called. */
     <BlockAccount
       userData={state}
       heading="Staff Account"

@@ -12,6 +12,10 @@ function AccountStudent() {
 
   const navigate = useNavigate();
 
+  /**
+   * It deletes a student from the database.
+   * @returns the deleteStudent function.
+   */
   async function deleteStudent() {
     try {
       if (!window.confirm("Are you sure you wish to delete this account?")) {
@@ -20,23 +24,25 @@ function AccountStudent() {
       const data = {
         id: state._id,
       };
-      await axios.delete(
-        "http://localhost:8000/student/delete",
-        {
-          data,
-        }
-      );
+      await axios.delete("http://localhost:8000/student/delete", {
+        data,
+      });
       navigate("/students");
     } catch (err) {
       console.log(err);
     }
   }
 
+  /**
+   * When the user clicks the update button, navigate to the update page and pass the state as a
+   * parameter.
+   */
   async function updateStudent() {
     navigate("/students/update", { state: state });
   }
 
   return (
+    /* A component that is being called. */
     <BlockAccount
       userData={state}
       heading="Student Account"

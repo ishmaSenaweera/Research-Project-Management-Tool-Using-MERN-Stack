@@ -8,10 +8,14 @@ function Login() {
 
   const navigate = useNavigate();
 
+  /**
+   * When the user clicks the submit button, prevent the default action, then send a POST request to the
+   * server with the user's email and password, and if successful, navigate to the home page.
+   */
   async function login(e) {
     e.preventDefault();
-
     try {
+      /* Creating an object with the email and password. */
       const loginData = {
         email,
         password,

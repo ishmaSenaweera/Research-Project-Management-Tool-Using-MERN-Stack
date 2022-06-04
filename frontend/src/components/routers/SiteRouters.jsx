@@ -91,7 +91,6 @@ function SiteRouters() {
               />
 
               <Route path="/addGroup" element={<AddGroup />} />
-              <Route path="/allGroups" element={<AllGroups />} />
               <Route path="/req" element={<ReqSupervisor />} />
 
               <Route path="/chat" element={<ChatHandler />} />
@@ -109,6 +108,7 @@ function SiteRouters() {
 
           {loggedIn === "Staff" || loggedIn === "Admin" ? (
             <>
+              <Route path="/allGroups" element={<AllGroups />} />
               <Route path="/templates" element={<FileUploadScreen />} />
               <Route
                 path="/researchTopic/view"

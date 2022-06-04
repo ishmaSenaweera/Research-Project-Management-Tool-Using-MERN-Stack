@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 
 function Chat({ socket, username, room }) {
+  /* A way to declare a state variable in React. */
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
+  /**
+   * When the user clicks the send button, the message is sent to the server and the message is added to
+   * the message list.
+   */
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -23,6 +28,8 @@ function Chat({ socket, username, room }) {
     }
   };
 
+  /* A React hook that is called after every render. It is used to perform side effects in function
+components. */
   useEffect(() => {
     console.log(username, room);
     socket.on("receive_message", (data) => {
